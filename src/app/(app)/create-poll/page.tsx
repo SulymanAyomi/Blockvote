@@ -4,35 +4,24 @@ import { useState } from "react";
 import Section1 from "./form/section1";
 import Section2 from "./form/section2";
 import Section3 from "./form/section3";
-import { PollOptionsSection } from "./form/section-4";
+import { PollOptionsSection } from "./form/section4";
 
 const CreatePoll = () => {
-  const [data, setData] = useState({
-    title: "",
-    startDate: undefined,
-    startTime: "",
-    endTime: "",
-    endDate: undefined,
-    img: "",
-    type: "",
-    restriction: "",
-    timeZone: "",
-  });
   const steps = [
     {
-      name: "ID",
+      name: "section 1",
     },
     {
-      name: "OTP",
+      name: "section 2",
     },
     {
-      name: "personal",
+      name: "section 3",
     },
     {
-      name: "confirm",
+      name: "section 4",
     },
   ];
-  const [currentStep, setCurrentStep] = useState(3);
+  const [currentStep, setCurrentStep] = useState(0);
   const [showPrev, setShowPrev] = useState(false);
 
   const nextStep = () => {
@@ -55,7 +44,7 @@ const CreatePoll = () => {
       {currentStep === 0 && <Section1 onNext={nextStep} />}
       {currentStep === 1 && <Section2 onNext={nextStep} />}
       {currentStep === 2 && <Section3 onNext={nextStep} />}
-      {currentStep === 3 && <PollOptionsSection onNext={nextStep} />}
+      {currentStep === 3 && <PollOptionsSection />}
     </div>
   );
 };

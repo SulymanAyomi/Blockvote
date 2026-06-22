@@ -38,11 +38,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { usePollData } from "@/context/pollData";
 
 interface Section2Props {
   onNext: () => void;
 }
 const Section2 = ({ onNext }: Section2Props) => {
+  const { pollData, setPollData } = usePollData();
+
   const form = useForm<z.infer<typeof pollSection2Schema>>({
     resolver: zodResolver(pollSection2Schema),
     defaultValues: {
@@ -52,6 +55,10 @@ const Section2 = ({ onNext }: Section2Props) => {
   });
 
   function onSubmit(data: z.infer<typeof pollSection2Schema>) {
+    setPollData((prev) => ({
+      ...prev,
+      ...data,
+    }));
     toast("You submitted the following values:", {
       description: (
         <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
@@ -72,52 +79,6 @@ const Section2 = ({ onNext }: Section2Props) => {
   return (
     <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
-        <Controller
-          name="votingType"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Voting Type</FieldLabel>
-              <Select onValueChange={field.onChange}>
-                <SelectTrigger className="w-full bg-brand-ash">
-                  <SelectValue placeholder="Select title" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select voting type</SelectLabel>
-                    {VOTING_TYPES.map((v) => (
-                      <SelectItem value={v}>{v.toUpperCase()}</SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name="maxSelections"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Max Selections</FieldLabel>
-              <Select onValueChange={field.onChange}>
-                <SelectTrigger className="w-full bg-brand-ash">
-                  <SelectValue placeholder="Select title" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select voting type</SelectLabel>
-                    {[1, 2, 3, 4, 5].map((v) => (
-                      <SelectItem value={`${v}`}>{v}</SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
         <Controller
           name="votingRestriction"
           control={form.control}
@@ -164,29 +125,7 @@ const Section2 = ({ onNext }: Section2Props) => {
             </Field>
           )}
         />
-        <Controller
-          name="maxSelections"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Max Selections</FieldLabel>
-              <Select onValueChange={field.onChange}>
-                <SelectTrigger className="w-full bg-brand-ash">
-                  <SelectValue placeholder="Select title" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Select voting type</SelectLabel>
-                    {[1, 2, 3, 4, 5].map((v) => (
-                      <SelectItem value={`${v}`}>{v}</SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
+
         <Controller
           name="anonymousVoting"
           control={form.control}

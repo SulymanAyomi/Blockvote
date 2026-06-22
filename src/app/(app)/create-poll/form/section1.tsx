@@ -22,17 +22,22 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import { usePollData } from "@/context/pollData";
 
 interface Section1Props {
   onNext: () => void;
 }
 
 const Section1 = ({ onNext }: Section1Props) => {
+  const { pollData, setPollData } = usePollData();
   const inputRef = useRef<HTMLInputElement>(null);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      form.setValue("coverImage", file);
+      form.setValue("coverImage", file, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
     }
   };
 
@@ -41,14 +46,22 @@ const Section1 = ({ onNext }: Section1Props) => {
     defaultValues: {
       title: "",
       description: "",
+      coverImage: undefined,
     },
   });
 
   function onSubmit(data: z.infer<typeof pollSection1Schema>) {
+    console.log(data);
+    setPollData((prev) => ({
+      ...prev,
+      title: data.title,
+      description: data.description,
+      coverImage: data.coverImage,
+    }));
     toast("You submitted the following values:", {
       description: (
         <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
-          <code>{JSON.stringify(data, null, 2)}</code>
+          <code>{JSON.stringify(pollData, null, 2)}</code>
         </pre>
       ),
       position: "bottom-right",
@@ -69,12 +82,12 @@ const Section1 = ({ onNext }: Section1Props) => {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
+              <FieldLabel htmlFor={field.name}>Title</FieldLabel>
               <Input
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}
-                placeholder="Login button not working on mobile"
+                placeholder="Poll title"
                 autoComplete="off"
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -93,14 +106,14 @@ const Section1 = ({ onNext }: Section1Props) => {
                 <InputGroupTextarea
                   {...field}
                   id="form-rhf-demo-description"
-                  placeholder="I'm having an issue with the login button on mobile."
+                  placeholder="Poll description."
                   rows={6}
                   className="min-h-24 resize-none bg-transparent rounded-md"
                   aria-invalid={fieldState.invalid}
                 />
                 <InputGroupAddon align="block-end">
                   <InputGroupText className="tabular-nums">
-                    {field.value.length}/100 characters
+                    {field.value.length}/150 characters
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
@@ -135,7 +148,7 @@ const Section1 = ({ onNext }: Section1Props) => {
                   </Avatar>
                 )}
                 <div className="flex flex-col">
-                  <p className="text-sm">Project Icon</p>
+                  <p className="text-sm">Poll Icon</p>
                   <p className="text-sm text-muted-foreground">
                     JPG, PNG, SVG or JPEG, max 1mb
                   </p>
@@ -155,7 +168,7 @@ const Section1 = ({ onNext }: Section1Props) => {
                       size="xs"
                       className="w-fit mt-2"
                       onClick={() => {
-                        field.onChange(null);
+                        field.onChange(undefined);
                         if (inputRef.current) {
                           inputRef.current.value = "";
                         }

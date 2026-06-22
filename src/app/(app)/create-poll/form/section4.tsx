@@ -43,7 +43,10 @@ import { useEffect, useRef, useState } from "react";
 import { ResponsiveModal } from "@/components/responsive-modal";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
-import { candidateSchema } from "@/features/elections/new-poll/schema";
+import {
+  candidateSchema,
+  pollOptionsSchema,
+} from "@/features/elections/new-poll/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   InputGroup,
@@ -52,6 +55,9 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 import z from "zod";
+import { DatePicker } from "@/components/date-picker";
+import { usePollData } from "@/context/pollData";
+import { toast } from "sonner";
 
 const MIN_ITEMS = 2;
 
@@ -64,13 +70,13 @@ interface CandidateProps {
   candidateImage: File | string;
   DOB: Date;
   partyName: string;
-  partyImage: File | string | null;
+  partyImage: File | string;
 }
 
 interface OptionsProps {
   id: string;
   label: string;
-  image: File | string | null;
+  image: File | string;
 }
 
 function FilePreview({ file }: { file: File | string | null }) {
@@ -92,17 +98,21 @@ function FilePreview({ file }: { file: File | string | null }) {
 
   if (!url) {
     return (
-      <Avatar className="size-18">
+      <Avatar className="size-10">
         <AvatarFallback>
-          <ImageIcon className="size-9 text-neutral-400" />
+          <ImageIcon className="size-7 text-neutral-400" />
         </AvatarFallback>
       </Avatar>
     );
   }
 
   return (
-    <div className="size-10 relative rounded-md overflow-hidden">
-      <Image src={url} fill alt="preview" className="object-cover" />
+    <div className="size-10 relative rounded-full overflow-hidden">
+      <img
+        src={url}
+        alt="preview"
+        className="object-cover w-full h-full rounded-full"
+      />
     </div>
   );
 }
@@ -172,6 +182,7 @@ function EmptyState() {
 }
 
 export function PollOptionsSection() {
+  const { pollData, setPollData } = usePollData();
   const [pollType, setPollType] = useState("");
   const [isOpenOption, setIsOpenOption] = useState(false);
   const [isOpenCandidate, setIsOpenCandidate] = useState(false);
@@ -216,6 +227,48 @@ export function PollOptionsSection() {
     const payload = pollType === "Candidate" ? candidateData : optionData;
     // TODO: replace with your actual submit logic (API call, parent callback, etc.)
     console.log("Saving poll", { pollType, payload });
+    if (pollType === "Candidate") {
+      setPollData((prev) => ({
+        ...prev,
+        pollType: "Candidate",
+        candidates: candidateData,
+      }));
+      if (candidateData.length < 2) {
+        toast.error(
+          "Candidates less than 2. Please add more candidates to continue!",
+        );
+        return;
+      }
+    } else {
+      setPollData((prev) => ({
+        ...prev,
+        pollType: "Options",
+        options: optionData,
+      }));
+
+      if (optionData.length < 2) {
+        toast.error(
+          "Options less than 2. Please add more options to continue!",
+        );
+        return;
+      }
+    }
+
+    console.log(pollData);
+    toast("You submitted the following values:", {
+      description: (
+        <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
+          <code>{JSON.stringify(pollData, null, 2)}</code>
+        </pre>
+      ),
+      position: "bottom-right",
+      classNames: {
+        content: "flex flex-col gap-2",
+      },
+      style: {
+        "--border-radius": "calc(var(--radius)  + 4px)",
+      } as React.CSSProperties,
+    });
   };
 
   const addOptionButton = () => {
@@ -224,7 +277,7 @@ export function PollOptionsSection() {
       return (
         <div className="flex gap-2">
           <Button type="button" onClick={openCandidate} size="sm">
-            <Plus className="h-4 w-4" />
+            <Plus className="h-4 w-4 mr-2" />
             Add Candidate
           </Button>
         </div>
@@ -233,7 +286,7 @@ export function PollOptionsSection() {
     return (
       <div className="flex gap-2">
         <Button type="button" size="sm" onClick={openOption}>
-          <Plus className="h-4 w-4" />
+          <Plus className="h-4 w-4 mr-2" />
           Add Option
         </Button>
       </div>
@@ -303,7 +356,7 @@ export function PollOptionsSection() {
                       disabled
                     />
                   </div>
-                  {field.partyName && (
+                  {/* {field.partyName && (
                     <div className="flex items-center gap-2">
                       <FilePreview file={field.partyImage} />
                       <Input
@@ -312,7 +365,7 @@ export function PollOptionsSection() {
                         disabled
                       />
                     </div>
-                  )}
+                  )} */}
                 </CardContent>
               </Card>
             ))
@@ -349,7 +402,11 @@ export function PollOptionsSection() {
         )}
       </div>
 
-      <Button className="w-full flex items-center gap-3" size={"lg"}>
+      <Button
+        className="w-full flex items-center gap-3"
+        size={"lg"}
+        onClick={handleSavePoll}
+      >
         Save Poll <MoveRightIcon />
       </Button>
     </section>
@@ -382,30 +439,30 @@ export const OptionsModal = ({
     image: "",
   });
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const form = useForm<z.infer<typeof pollOptionsSchema>>({
+    resolver: zodResolver(pollOptionsSchema),
+    defaultValues: {
+      label: "",
+      image: undefined,
+    },
+  });
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setData((prev) => ({
-        ...prev,
-        image: file,
-      }));
+      form.setValue("image", file);
     }
   };
 
-  const onSubmit = () => {
-    if (!data.label.trim() || data.label.trim().length < 5) {
-      setError((prev) => ({
-        ...prev,
-        label: "five or more character is required",
-      }));
-      return;
-    }
+  const onSubmit = (data: z.infer<typeof pollOptionsSchema>) => {
     const newData = {
       id: crypto.randomUUID(),
       ...data,
     };
     addOption(newData);
+    console.log("newdata", newData);
     close();
+    form.reset();
   };
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
@@ -420,93 +477,110 @@ export const OptionsModal = ({
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Label</label>
-            <Input
-              placeholder="Enter option label"
-              onChange={(e) =>
-                setData((prev) => ({ ...prev, label: e.target.value }))
-              }
-            />
-          </div>
-
-          <div className="space-y-3">
-            <label className="text-sm font-medium">Image (Optional)</label>
-
-            <div className="flex flex-col gap-y-2">
-              <div className="flex items-center gap-x-5">
-                {data.image ? (
-                  <div className="size-18 relative rounded-md overflow-hidden">
-                    <Image
-                      src={
-                        data.image instanceof File
-                          ? URL.createObjectURL(data.image)
-                          : (data.image as string)
-                      }
-                      fill
-                      alt="logo"
-                      className="object-cover"
+          <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="label"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Label</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Option label or name"
+                      autoComplete="off"
                     />
-                  </div>
-                ) : (
-                  <Avatar className="size-18">
-                    <AvatarFallback>
-                      <ImageIcon className="size-9 text-neutral-400" />
-                    </AvatarFallback>
-                  </Avatar>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-                <div className="flex flex-col">
-                  <p className="text-sm">Project Icon</p>
-                  <p className="text-sm text-muted-foreground">
-                    JPG, PNG, SVG or JPEG, max 1mb
-                  </p>
-                  <input
-                    className="hidden"
-                    type="file"
-                    accept=".jpg, .png, .jpeg, .svg"
-                    ref={inputRef}
-                    // disabled={isLoading}
-                    onChange={handleImageChange}
-                  />
-                  {data.image ? (
-                    <Button
-                      type="button"
-                      // disabled={isLoading}
-                      variant="destructive"
-                      size="xs"
-                      className="w-fit mt-2"
-                      onClick={() => {
-                        if (inputRef.current) {
-                          inputRef.current.value = "";
-                        }
-                      }}
-                    >
-                      Remove image
-                    </Button>
-                  ) : (
-                    <Button
-                      type="button"
-                      // disabled={isLoading}
-                      variant="teritary"
-                      size="xs"
-                      className="w-fit mt-2"
-                      onClick={() => inputRef.current?.click()}
-                    >
-                      Upload image
-                    </Button>
-                  )}
-                </div>
-              </div>
+              />
+              <Controller
+                control={form.control}
+                name="image"
+                render={({ field, fieldState }) => (
+                  <div className="flex flex-col gap-y-2">
+                    <div className="flex items-center gap-x-5">
+                      {field.value ? (
+                        <div className="size-18 relative rounded-md overflow-hidden">
+                          <Image
+                            src={
+                              field.value instanceof File
+                                ? URL.createObjectURL(field.value)
+                                : (field.value as string)
+                            }
+                            fill
+                            alt="logo"
+                            className="object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <Avatar className="size-18">
+                          <AvatarFallback>
+                            <ImageIcon className="size-9 text-neutral-400" />
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                      <div className="flex flex-col">
+                        <p className="text-sm">Image</p>
+                        <p className="text-sm text-muted-foreground">
+                          JPG, PNG, SVG or JPEG, max 1mb
+                        </p>
+                        <input
+                          className="hidden"
+                          type="file"
+                          accept=".jpg, .png, .jpeg, .svg"
+                          ref={inputRef}
+                          // disabled={isLoading}
+                          onChange={handleImageChange}
+                        />
+                        {field.value ? (
+                          <Button
+                            type="button"
+                            // disabled={isLoading}
+                            variant="destructive"
+                            size="xs"
+                            className="w-fit mt-2"
+                            onClick={() => {
+                              field.onChange(null);
+                              if (inputRef.current) {
+                                inputRef.current.value = "";
+                              }
+                            }}
+                          >
+                            Remove image
+                          </Button>
+                        ) : (
+                          <Button
+                            type="button"
+                            // disabled={isLoading}
+                            variant="teritary"
+                            size="xs"
+                            className="w-fit mt-2"
+                            onClick={() => inputRef.current?.click()}
+                          >
+                            Upload image
+                          </Button>
+                        )}
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              />
+            </FieldGroup>
+            <div className="flex items-center justify-end gap-2 mt-2">
+              <Button variant="outline" onClick={close} type="button">
+                Cancle
+              </Button>
+              <Button type="submit">Save</Button>
             </div>
-          </div>
-          <div className="flex items-center justify-end gap-2 mt-2">
-            <Button variant="outline" onClick={close} type="button">
-              Cancle
-            </Button>
-            <Button onClick={onSubmit} type="submit">
-              Save
-            </Button>
-          </div>
+          </form>
         </CardContent>
       </Card>
     </ResponsiveModal>
@@ -528,10 +602,18 @@ export const CandidateModal = ({
   addCandidate,
 }: CandidateModalProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef1 = useRef<HTMLInputElement>(null);
 
   const form = useForm<z.infer<typeof candidateSchema>>({
     resolver: zodResolver(candidateSchema),
-    defaultValues: {},
+    defaultValues: {
+      name: "",
+      candidateImage: undefined,
+      profile: "",
+      partyName: "",
+      partyImage: undefined,
+      DOB: undefined,
+    },
   });
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -539,15 +621,22 @@ export const CandidateModal = ({
       form.setValue("candidateImage", file);
     }
   };
+  const handleImageChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      form.setValue("partyImage", file);
+    }
+  };
 
   const onSubmit = (data: z.infer<typeof candidateSchema>) => {
-    console.log(data);
     const newData = {
       id: crypto.randomUUID(),
       ...data,
     };
     addCandidate(newData);
+    console.log("newData", newData);
     close();
+    form.reset();
   };
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
@@ -574,7 +663,7 @@ export const CandidateModal = ({
                       {...field}
                       id={field.name}
                       aria-invalid={fieldState.invalid}
-                      placeholder="Login button not working on mobile"
+                      placeholder="Babatunde Shola"
                       autoComplete="off"
                     />
                     {fieldState.invalid && (
@@ -595,7 +684,7 @@ export const CandidateModal = ({
                       <InputGroupTextarea
                         {...field}
                         id="form-rhf-demo-description"
-                        placeholder="I'm having an issue with the login button on mobile."
+                        placeholder="Candidate profile or manifesto."
                         rows={6}
                         className="min-h-24 resize-none bg-transparent rounded-md"
                         aria-invalid={fieldState.invalid}
@@ -613,7 +702,29 @@ export const CandidateModal = ({
                 )}
               />
               <Controller
-                name="party"
+                name="DOB"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <div className="space-y-1 w-full">
+                      <label className="text-sm text-neutral-600 ml-2">
+                        Date of Birth
+                      </label>
+                      <DatePicker
+                        className="bg-bg-color1 hover:bg-muted active:bg-transparent"
+                        placeholder="dd/mm/yy"
+                        {...field}
+                      />
+                    </div>
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="partyName"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
@@ -624,7 +735,7 @@ export const CandidateModal = ({
                       {...field}
                       id={field.name}
                       aria-invalid={fieldState.invalid}
-                      placeholder="Login button not working on mobile"
+                      placeholder="Candidate party/level or any identifier"
                       autoComplete="off"
                     />
                     {fieldState.invalid && (
@@ -635,7 +746,7 @@ export const CandidateModal = ({
               />
               <Controller
                 control={form.control}
-                name="coverImage"
+                name="candidateImage"
                 render={({ field, fieldState }) => (
                   <div className="flex flex-col gap-y-2">
                     <div className="flex items-center gap-x-5">
@@ -743,9 +854,9 @@ export const CandidateModal = ({
                           className="hidden"
                           type="file"
                           accept=".jpg, .png, .jpeg, .svg"
-                          ref={inputRef}
+                          ref={inputRef1}
                           // disabled={isLoading}
-                          onChange={handleImageChange}
+                          onChange={handleImageChange1}
                         />
                         {field.value ? (
                           <Button
@@ -784,16 +895,14 @@ export const CandidateModal = ({
                 )}
               />
             </FieldGroup>
-          </form>
 
-          <div className="flex items-center justify-end gap-2 mt-2">
-            <Button variant="outline" onClick={close} type="button">
-              Cancle
-            </Button>
-            <Button onClick={onSubmit} type="submit">
-              Save
-            </Button>
-          </div>
+            <div className="flex items-center justify-end gap-2 mt-2">
+              <Button variant="outline" onClick={close} type="button">
+                Cancle
+              </Button>
+              <Button type="submit">Save</Button>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </ResponsiveModal>

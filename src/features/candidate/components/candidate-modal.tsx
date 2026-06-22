@@ -2,12 +2,24 @@
 import { ResponsiveModal } from "@/components/responsive-modal";
 import CandidateComponent from "./candidate";
 import { useOpenCandidateModal } from "../hook/use-open-candidate";
+import { CandidateType } from "../type";
 
-export const CandidateModal = () => {
-  const { isOpen, setIsOpen, close } = useOpenCandidateModal();
+interface CandidateModalProps {
+  isOpen: boolean;
+  index: number;
+  setIsOpen: (v: boolean) => void;
+  close: () => void;
+  data: CandidateType;
+}
+export const CandidateModal = ({
+  isOpen,
+  setIsOpen,
+  close,
+  data,
+}: CandidateModalProps) => {
   return (
     <ResponsiveModal open={isOpen} onOpenChange={setIsOpen}>
-      <CandidateComponent onCancel={close} />
+      <CandidateComponent onCancel={close} data={data} />
     </ResponsiveModal>
   );
 };

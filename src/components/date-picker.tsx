@@ -37,7 +37,7 @@ export const DatePicker = ({
           variant="outline"
           size="lg"
           className={cn(
-            "w-full justify-start text-left font-normal h-12 py-2 px-3",
+            "w-full justify-start text-left font-normal h-12 py-2 px-3 bg-bg-color1",
             !value && "text-muted-foreground",
             className,
           )}

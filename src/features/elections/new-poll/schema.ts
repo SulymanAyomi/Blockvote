@@ -45,7 +45,24 @@ export const imageFileSchema = z
     .refine((file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type as (typeof ACCEPTED_IMAGE_TYPES)[number]), {
         message: "Only JPG, PNG, and WEBP images are supported.",
     })
-    .optional();
+
+export const CompImageFileSchema = z
+    .custom<File>((val) => isFileLike(val), {
+        message: "Please upload an image.",
+    })
+    .refine((file) => file.size <= MAX_IMAGE_SIZE_BYTES, {
+        message: "Image must be 5MB or smaller.",
+    })
+    .refine(
+        (file) =>
+            ACCEPTED_IMAGE_TYPES.includes(
+                file.type as (typeof ACCEPTED_IMAGE_TYPES)[number]
+            ),
+        {
+            message: "Only JPG, PNG, and WEBP images are supported.",
+        }
+    );
+
 
 export const pollSection1Schema = z.object({
     title: z
@@ -58,13 +75,13 @@ export const pollSection1Schema = z.object({
         .trim()
         .min(MIN_DESCRIPTION_LENGTH, `Description must be at least ${MIN_DESCRIPTION_LENGTH} characters.`)
         .max(MAX_DESCRIPTION_LENGTH, `Description must be ${MAX_DESCRIPTION_LENGTH} characters or fewer.`),
-    coverImage: imageFileSchema,
+    coverImage: CompImageFileSchema,
     coverImagePreviewUrl: z.string().optional(),
 });
 
 export const pollSection2Schema = z.object({
-    votingType: z.enum(VOTING_TYPES, { error: "Choose a voting type." }),
-    maxSelections: z.coerce.number().int().min(1).max(50).optional(),
+    // votingType: z.enum(VOTING_TYPES, { error: "Choose a voting type." }),
+    // maxSelections: z.coerce.number().int().min(1).max(50).optional(),
     visibility: z.enum(VISIBILITY_OPTIONS, { error: "Choose who can see this poll." }),
     votingRestriction: z.enum(VOTING_RESTRICTIONS, { error: "Choose who can vote." }),
     anonymousVoting: z.boolean(),
@@ -73,8 +90,10 @@ export const pollSection2Schema = z.object({
 
 
 export const pollSection3Schema = z.object({
-    startDate: z.date({ error: "Start date and time is required." }),
-    endDate: z.date({ error: "End date and time is required." }),
+    startDate: z.date({ error: "Start date is required." }),
+    endDate: z.date({ error: "End date is required." }),
+    startTime: z.string({ error: "Start time is required." }),
+    endTime: z.string({ error: "End time is required." }),
     // timezone: z.string().min(1, "Choose a timezone."),
 });
 
@@ -89,8 +108,7 @@ export const candidateSchema = z.object({
         .trim()
         .min(MIN_DESCRIPTION_LENGTH, `Candidate profile must be at least ${MIN_DESCRIPTION_LENGTH} characters.`)
         .max(MAX_DESCRIPTION_LENGTH, `Candidate profile must be ${MAX_DESCRIPTION_LENGTH} characters or fewer.`),
-    candidateImage: imageFileSchema,
-    candidatePreviewUrl: z.string().optional(),
+    candidateImage: CompImageFileSchema,
     DOB: z.date({ error: "Date of birth is required." }),
     partyName: z
         .string()
@@ -98,5 +116,15 @@ export const candidateSchema = z.object({
         .min(3, `Title must be at least ${3} characters.`)
         .max(10, `Title must be ${10} characters or fewer.`),
     partyImage: imageFileSchema,
+});
+
+export const pollOptionsSchema = z.object({
+    label: z
+        .string()
+        .trim()
+        .min(MIN_TITLE_LENGTH, `Title must be at least ${MIN_TITLE_LENGTH} characters.`)
+        .max(MAX_TITLE_LENGTH, `Title must be ${MAX_TITLE_LENGTH} characters or fewer.`),
+
+    image: imageFileSchema,
 });
 

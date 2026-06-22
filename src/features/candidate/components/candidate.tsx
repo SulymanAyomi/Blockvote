@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
+import { CandidateType } from "../type";
 
 interface CandidateComponentProps {
   onCancel: () => void;
+  data: CandidateType;
 }
-const CandidateComponent = ({ onCancel }: CandidateComponentProps) => {
+const CandidateComponent = ({ onCancel, data }: CandidateComponentProps) => {
   return (
     <div className="w-full h-full border-none shadow-none">
       <div className="p-7">
@@ -13,13 +15,13 @@ const CandidateComponent = ({ onCancel }: CandidateComponentProps) => {
           <img src="/img-1.png" className="w-full h-full object-contain" />
         </div>
         <div className="flex w-full items-center justify-between">
-          <p className="font-semibold">Badara FoloJata</p>
+          <p className="font-semibold">{data.name}</p>
           <div className="w-fit flex items-center gap-4">
             <img
               src={"/img-3.jpg"}
               className="size-10 rounded-full object-cover"
             />
-            <p className="font-semibold">CON</p>
+            <p className="font-semibold">{data.partyName}</p>
           </div>
         </div>
         <div>
@@ -36,24 +38,7 @@ const CandidateComponent = ({ onCancel }: CandidateComponentProps) => {
               <div></div>
             </div>
           </div>
-          <div className="text-sm mt-4">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eius, eos!
-            A, rerum at, neque, necessitatibus aliquam voluptates quibusdam quia
-            quod atque reiciendis animi architecto velit blanditiis ab placeat
-            minus quos. Lorem ipsum, dolor sit amet consectetur adipisicing
-            elit. Culpa numquam ipsam natus nesciunt inventore quod, facilis
-            consequuntur maiores minus earum eligendi laborum provident unde
-            quibusdam modi fugit ut asperiores ab! Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Quo alias non voluptas animi
-            laboriosam, amet delectus blanditiis quae corrupti pariatur quia
-            maxime explicabo dolore ullam minus, magni sunt numquam architecto.
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia
-            repellendus at numquam est quam voluptas blanditiis, et perspiciatis
-            assumenda minus officiis saepe facere iusto nam! Possimus blanditiis
-            vero eius accusamus sapiente voluptatem non, recusandae nemo eaque
-            saepe dolores quia? Expedita quisquam explicabo numquam eveniet
-            reprehenderit exercitationem sint odit quas neque.
-          </div>
+          <div className="text-sm mt-4">{data.profile}</div>
         </div>
         <Button className="w-full mt-5 " onClick={onCancel}>
           Close

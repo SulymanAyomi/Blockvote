@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/field";
 import { ImageIcon, MoveRight } from "lucide-react";
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import {
@@ -38,17 +38,26 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { DatePicker } from "@/components/date-picker";
+import TimePicker from "@/components/time-picker";
+import { usePollData } from "@/context/pollData";
 
 interface Section2Props {
   onNext: () => void;
 }
 const Section3 = ({ onNext }: Section2Props) => {
+  const { pollData, setPollData } = usePollData();
+
   const form = useForm<z.infer<typeof pollSection3Schema>>({
     resolver: zodResolver(pollSection3Schema),
     defaultValues: {},
   });
 
   function onSubmit(data: z.infer<typeof pollSection3Schema>) {
+    setPollData((prev) => ({
+      ...prev,
+      ...data,
+    }));
+
     toast("You submitted the following values:", {
       description: (
         <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
@@ -63,8 +72,10 @@ const Section3 = ({ onNext }: Section2Props) => {
         "--border-radius": "calc(var(--radius)  + 4px)",
       } as React.CSSProperties,
     });
+
     onNext();
   }
+
   return (
     <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
@@ -79,7 +90,7 @@ const Section3 = ({ onNext }: Section2Props) => {
                     Start Date
                   </label>
                   <DatePicker
-                    className="bg-transparent hover:bg-muted active:bg-transparent"
+                    className="bg-bg-color1 hover:bg-muted active:bg-transparent"
                     placeholder="dd/mm/yy"
                     {...field}
                   />
@@ -92,13 +103,15 @@ const Section3 = ({ onNext }: Section2Props) => {
             )}
           />
           <Controller
-            name="votingType"
+            name="startTime"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <div className="space-y-1 w-full">
-                  <label className="text-sm text-neutral-600 ml-2">Time</label>
-                  <Input placeholder="00:00" />
+                  <label className="text-sm text-neutral-600 ml-2">
+                    Start Time
+                  </label>
+                  <TimePicker {...field} />
                 </div>
 
                 {fieldState.invalid && (
@@ -107,6 +120,14 @@ const Section3 = ({ onNext }: Section2Props) => {
               </Field>
             )}
           />
+
+          {/* <div className="w-full">
+            <div className="space-y-1 w-full">
+              <label className="text-sm text-neutral-600 ml-2">Time</label>
+              <TimePicker onChange={(e) => setStartTime(e.period)} />
+              {error.startTime && <div>{error.startTime}</div>}
+            </div>
+          </div> */}
         </div>
         <div className="flex gap-4 items-start justify-between">
           <Controller
@@ -119,7 +140,7 @@ const Section3 = ({ onNext }: Section2Props) => {
                     End Date
                   </label>
                   <DatePicker
-                    className="bg-transparent hover:bg-muted active:bg-transparent"
+                    className="hover:bg-muted active:bg-transparent"
                     placeholder="dd/mm/yy"
                     {...field}
                   />
@@ -132,13 +153,15 @@ const Section3 = ({ onNext }: Section2Props) => {
             )}
           />
           <Controller
-            name="votingType"
+            name="endTime"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <div className="space-y-1 w-full">
-                  <label className="text-sm text-neutral-600 ml-2">Time</label>
-                  <Input placeholder="00:00" />
+                  <label className="text-sm text-neutral-600 ml-2">
+                    End Time
+                  </label>
+                  <TimePicker {...field} />
                 </div>
 
                 {fieldState.invalid && (
