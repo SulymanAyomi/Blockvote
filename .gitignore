@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# files to ignore
+/src/features/elections/new-poll/draft
+src/features/elections/new-poll/draft
