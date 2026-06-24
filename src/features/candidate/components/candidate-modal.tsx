@@ -6,10 +6,9 @@ import { CandidateType } from "../type";
 
 interface CandidateModalProps {
   isOpen: boolean;
-  index: number;
   setIsOpen: (v: boolean) => void;
   close: () => void;
-  data: CandidateType;
+  data: CandidateType | undefined;
 }
 export const CandidateModal = ({
   isOpen,

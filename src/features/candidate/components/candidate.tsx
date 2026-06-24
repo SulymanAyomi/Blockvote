@@ -4,21 +4,31 @@ import { CandidateType } from "../type";
 
 interface CandidateComponentProps {
   onCancel: () => void;
-  data: CandidateType;
+  data: CandidateType | undefined;
 }
 const CandidateComponent = ({ onCancel, data }: CandidateComponentProps) => {
+  if (!data) {
+    return (
+      <div className="w-full h-full border-none shadow-none">
+        <div className="p-7"> Candidate not found</div>
+      </div>
+    );
+  }
   return (
     <div className="w-full h-full border-none shadow-none">
       <div className="p-7">
         <h3 className="text-lg mb-4">Candidate Information</h3>
         <div className="w-full h-32 rounded-sm">
-          <img src="/img-1.png" className="w-full h-full object-contain" />
+          <img
+            src={data.candidateImage}
+            className="w-full h-full object-contain"
+          />
         </div>
         <div className="flex w-full items-center justify-between">
           <p className="font-semibold">{data.name}</p>
           <div className="w-fit flex items-center gap-4">
             <img
-              src={"/img-3.jpg"}
+              src={data.partyImage}
               className="size-10 rounded-full object-cover"
             />
             <p className="font-semibold">{data.partyName}</p>

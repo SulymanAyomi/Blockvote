@@ -3,8 +3,11 @@
 import { useState } from "react";
 import CompleteVoteComponent from "./complete-vote";
 import VoteComponent from "./vote-component";
+import { useParams } from "next/navigation";
 
 const SingleVotePage = () => {
+  const params = useParams();
+  const electionId = params.electionId as string;
   const [completeVote, setCompleteVote] = useState(false);
   const changeCompleteVote = () => setCompleteVote(true);
   return (
@@ -12,7 +15,7 @@ const SingleVotePage = () => {
       {!completeVote ? (
         <VoteComponent changeCompleteVote={changeCompleteVote} />
       ) : (
-        <CompleteVoteComponent />
+        <CompleteVoteComponent id={electionId} />
       )}
     </div>
   );

@@ -3,7 +3,7 @@ export interface CandidateType {
     name: string;
     profile: string;
     candidateImage: File | string;
-    DOB: Date;
+    DOB: string;
     partyName: string;
     partyImage: File | string;
 }

@@ -3,7 +3,10 @@ import { CheckCircleIcon, HomeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const CompleteVoteComponent = () => {
+interface CompleteVoteComponentProps {
+  id: string;
+}
+const CompleteVoteComponent = ({ id }: CompleteVoteComponentProps) => {
   const router = useRouter();
   return (
     <div className="flex flex-col my-auto justify-evenly flex-1 w-full  h-full">
@@ -23,7 +26,7 @@ const CompleteVoteComponent = () => {
         <Button
           className="my-5"
           size={"lg"}
-          onClick={() => router.push("/elections/123/live-result")}
+          onClick={() => router.push(`/elections/${id}/live-result`)}
         >
           Live Result
         </Button>
