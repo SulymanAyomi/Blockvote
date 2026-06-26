@@ -1,6 +1,11 @@
+"use client";
 import { CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useParams, useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div className="w-full bg-white font-sans dark:bg-black py-5 flex flex-1 items-center justify-center">
       <main className="w-full max-w-3xl mx-auto p-4  dark:bg-black rounded-md min-w-sm h-full">
@@ -18,7 +23,11 @@ export default function Home() {
             </p>
           </div>
           <p className="text-primary-col">A Vote Anytime, Anywhere.</p>
-          <Button size={"lg"} className="py-4 w-full md:w-1/2">
+          <Button
+            size={"lg"}
+            className="py-4 w-full md:w-1/2"
+            onClick={() => router.push("/register")}
+          >
             Get Started
           </Button>
         </div>
