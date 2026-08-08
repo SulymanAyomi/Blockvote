@@ -1,110 +1,84 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldGroup } from "@/components/ui/field";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { cn } from "@/lib/utils";
 import {
-  Loader2Icon,
-  LucideArrowRight,
-  PencilIcon,
   MessageCircleMoreIcon,
+  LoaderCircleIcon,
+  MoveRightIcon,
+  Vote,
 } from "lucide-react";
-import Image from "next/image";
-import { FormEvent, useEffect, useState } from "react";
-// import { useVerifyOTP } from "../api/use-verify-otp";
-// import { useOpenLoginModal } from "../hook/use-login";
-// import { signIn, useSession } from "next-auth/react";
-// import { useAuthUser } from "@/context/Auth-context";
-// import { useQueryClient } from "@tanstack/react-query";
+import { FormEvent, useState } from "react";
+import { useVerifyOtp } from "../api/use-otp";
+import { DataType } from "../type";
 
 interface LoginFormProps {
-  className?: string;
-  email?: string;
+  data: DataType;
   prevStep: () => void;
   onNext: () => void;
 }
-export function OTPForm({
-  className,
-  prevStep,
-  email,
-  onNext,
-}: LoginFormProps) {
-  // const queryClient = useQueryClient();
+export function OTPForm({ data, prevStep, onNext }: LoginFormProps) {
   const [value, setValue] = useState("");
   const [errors, setErrors] = useState("");
-  // const { close } = useOpenLoginModal();
-  // const { data: session } = useSession();
-  // const { mutate, isPending } = useVerifyOTP();
 
-  // useEffect(() => {
-  //   if (session) {
-  //     close();
-  //   }
-  // }, [close, session]);
-  // const loginCall = async () => {
-  //   const res = await signIn("credentials", {
-  //     email,
-  //     otpVerified: "true",
-  //     redirect: false,
-  //   });
-  //   queryClient.invalidateQueries({ queryKey: ["my-profile"] });
-  //   if (res.error) {
-  //     setErrors("Something went wrong. Please try again.");
-  //   }
-  // };
-  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   setErrors("");
-  //   mutate(
-  //     {
-  //       json: {
-  //         email,
-  //         otp: value,
-  //       },
-  //     },
-  //     {
-  //       async onSuccess(data) {
-  //         if (data.success) {
-  //           await loginCall();
-  //         }
-  //       },
-  //       onError(data) {
-  //         setErrors(data.message);
-  //       },
-  //     }
-  //   );
-  // };
+  const { mutate, isPending } = useVerifyOtp();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setErrors("");
+    mutate(
+      {
+        json: {
+          regSessionId: data.regSessionId,
+          otp: value,
+        },
+      },
+      {
+        onSuccess(data) {
+          if (data.success) {
+            onNext();
+          }
+        },
+        onError(data) {
+          setErrors(data.message);
+        },
+      },
+    );
+  };
   return (
     <div className="w-full h-full">
       <div className="flex flex-col justify-between flex-1 w-full  h-[90%]">
         <div className="flex-2/3">
-          <div className="font-semibold text-2xl mb-2">
-            Verify Your Identity
+          <div className="flex items-start gap-3 mb-5">
+            <div className="w-9.5 h-9.5 rounded-full bg-[#FBEAE7] flex items-center justify-center shrink-0 mt-0.5">
+              <Vote size={20} className="text-[#B23A2E]" strokeWidth={2.25} />
+            </div>
+            <div>
+              <div className="font-mono text-[11px] tracking-wider uppercase text-[#B23A2E] font-semibold mb-1">
+                Student Voting Platform
+              </div>
+              <h1 className="text-xl font-semibold text-[#1B2A41] leading-tight">
+                Verify Your Identity
+              </h1>
+              <p className="text-muted-foreground">
+                Enter the 6-digits sent to your mail
+              </p>
+            </div>
           </div>
-          <p className="text-muted-foreground">
-            Enter the 6-digits sent to 080******94
-          </p>
+
           <div className="mt-10 space-y-9">
             <div className="space-y-1 w-full flex items-center justify-center text-center">
               <MessageCircleMoreIcon className="size-40 text-primary-col" />
             </div>
-            <div className="space-y-1 w-full mb-2.5">
+            <form
+              onSubmit={(e) => handleSubmit(e)}
+              className="space-y-1 w-full mb-2.5"
+            >
               <FieldGroup>
                 <Field>
                   <InputOTP
@@ -129,13 +103,19 @@ export function OTPForm({
                   )}
                 </Field>
               </FieldGroup>
-            </div>
+
+              <Button className="w-full mt-4" size={"lg"}>
+                {isPending ? (
+                  <LoaderCircleIcon className="animate-spin text-white size-4" />
+                ) : (
+                  <>
+                    Proceed <MoveRightIcon className="size-4" />
+                  </>
+                )}
+              </Button>
+            </form>
           </div>
         </div>
-
-        <Button className="w-full" size={"lg"} onClick={onNext}>
-          Proceed <LucideArrowRight className="size-4" />
-        </Button>
       </div>
     </div>
   );

@@ -1,0 +1,17 @@
+[
+  {
+    "studentId": "S1001",
+    "name": "Jordan Alvarez",
+    "referenceDescriptor": [0.12, 0.98, 0.44, 0.31, 0.77, 0.05, 0.63, 0.29]
+  },
+  {
+    "studentId": "S1002",
+    "name": "Priya Nair",
+    "referenceDescriptor": [0.51, 0.22, 0.19, 0.88, 0.34, 0.42, 0.11, 0.67]
+  },
+  {
+    "studentId": "S1003",
+    "name": "Sam Okafor",
+    "referenceDescriptor": null
+  }
+]

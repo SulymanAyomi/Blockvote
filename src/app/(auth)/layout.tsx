@@ -11,7 +11,7 @@ interface AuthLayoutProps {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   const pathname = usePathname();
-  const isSignIn = pathname === "/sign-in";
+  const isSignIn = pathname === "/login";
   return (
     <main className="min-h-screen">
       <div className="mx-auto max-w-screen-2xl p-4">
@@ -25,12 +25,12 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
             </p>
           </Link>
           <Button variant="secondary">
-            <Link href={isSignIn ? "/sign-up" : "/sign-in"}>
-              {isSignIn ? "Sign Up" : "Sign In"}
+            <Link href={isSignIn ? "/register" : "/login"}>
+              {isSignIn ? "Register" : "Login"}
             </Link>
           </Button>
         </nav>
-        <div className="h-[calc(100vh-65px)]">{children}</div>
+        <div className="">{children}</div>
       </div>
     </main>
   );

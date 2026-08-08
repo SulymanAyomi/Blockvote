@@ -1,0 +1,516 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider      = "prisma-client"
+  output        = "../src/generated"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Pre-loaded by school admin before registration opens
+
+model VoterRoll {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  idType   IdType
+  idNumber String @db.VarChar(20)
+
+  studentId String? @db.VarChar(50)
+
+  fullName String @db.VarChar(255)
+
+  email    String? @db.VarChar(255)
+  imageUrl String? @db.VarChar(255)
+  phone    String? @db.VarChar(20)
+
+  campusId     String? @db.Uuid
+  facultyId    String? @db.Uuid
+  departmentId String? @db.Uuid
+  programmeId  String? @db.Uuid
+  level        Int?
+
+  dateOfBirth DateTime? @db.Date
+
+  isRegistered Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campus     Campus?     @relation(fields: [campusId], references: [id])
+  faculty    Faculty?    @relation(fields: [facultyId], references: [id])
+  department Department? @relation(fields: [departmentId], references: [id])
+
+  account                Account?
+  faceReference          FaceReference?
+  otps                   Otp[]
+  registrationSessions   RegistrationSession[]
+  electionParticipations ElectionParticipation[]
+  candidates             Candidate[]
+  programmes             Programme[]
+  votingSessions         VotingSession[]
+
+  @@unique([idType, idNumber])
+  @@index([idType, idNumber])
+  @@map("voter_roll")
+}
+
+// Login accounts, created only after identity verification
+model Account {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  voterId String @unique @db.Uuid
+
+  passwordHash String
+
+  failedAttempts Int @default(0)
+
+  lockedUntil DateTime?
+
+  lastLogin DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  voter VoterRoll @relation(fields: [voterId], references: [id], onDelete: Cascade)
+
+  @@map("accounts")
+}
+
+// Short-lived OTPs for registration + login MFA
+model Otp {
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  voterId   String     @db.Uuid
+  otpHash   String     @map("otp_hash") @db.Text
+  purpose   OtpPurpose
+  expiresAt DateTime   @map("expires_at") @db.Timestamp
+  used      Boolean    @default(false)
+  createdAt DateTime   @default(now())
+
+  voterRoll VoterRoll? @relation(fields: [voterId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([voterId, purpose])
+  @@map("otps")
+}
+
+// Tracks progress through the multi-step registration journey
+model RegistrationSession {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  voterId       String   @db.Uuid
+  idVerified    Boolean  @default(false) @map("id_verified")
+  otpVerified   Boolean  @default(false) @map("otp_verified")
+  faceVerified  Boolean  @default(false) @map("face_verified")
+  infoConfirmed Boolean  @default(false) @map("info_confirmed")
+  expiresAt     DateTime @map("expires_at") @db.Timestamp
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp
+  updatedAt     DateTime @updatedAt
+
+  voterRoll VoterRoll @relation(fields: [voterId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([voterId])
+  @@map("registration_sessions")
+}
+
+model FaceReference {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  voterId String @unique @db.Uuid
+
+  referenceId String @unique
+
+  provider FaceProvider
+
+  status FaceReferenceStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  voter         VoterRoll      @relation(fields: [voterId], references: [id], onDelete: Cascade)
+  faceEmbedding FaceEmbedding?
+
+  @@map("face_references")
+}
+
+model FaceEmbedding {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  faceReferenceId String   @unique @db.Uuid
+  embedding       Float[]
+  modelName       String
+  modelVersion    String
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp
+
+  faceReference FaceReference @relation(fields: [faceReferenceId], references: [id])
+}
+
+model Institution {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  shortName String
+  email     String?
+  phone     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campuses  Campus[]
+  faculties Faculty[]
+}
+
+model Campus {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  institutionId String @db.Uuid
+
+  name String
+
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+
+  voters VoterRoll[]
+}
+
+model Faculty {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  institutionId String @db.Uuid
+
+  name String
+
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+
+  departments Department[]
+
+  voters VoterRoll[]
+}
+
+model Department {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  facultyId String @db.Uuid
+
+  name String
+
+  faculty Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+
+  voters VoterRoll[]
+
+  programmes Programme[]
+}
+
+model Programme {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  departmentId String @db.Uuid
+
+  name String
+
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  voters VoterRoll[]
+}
+
+model AcademicSession {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  name String
+
+  startDate DateTime
+
+  endDate DateTime? @db.Date
+
+  isCurrent Boolean @default(false)
+
+  elections Election[]
+}
+
+model Election {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  title       String
+  description String?
+  coverImage  String?
+
+  academicSessionId String @db.Uuid
+
+  startsAt DateTime
+  endsAt   DateTime
+
+  status ElectionStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  academicSession AcademicSession @relation(fields: [academicSessionId], references: [id])
+
+  positions      ElectionPosition[]
+  scopes         ElectionScope[]
+  participations ElectionParticipation[]
+
+  ballots Ballot[]
+
+  votingSessions VotingSession[]
+
+  issuedNonces IssuedNonce[]
+}
+
+model ElectionScope {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  electionId String @db.Uuid
+
+  type ScopeType
+
+  value String
+
+  election Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+
+  @@index([electionId])
+}
+
+model Position {
+  id                String             @id @default(uuid()) @db.Uuid
+  name              String             @unique
+  electionPositions ElectionPosition[]
+}
+
+model ElectionPosition {
+  id         String @id @default(uuid()) @db.Uuid
+  electionId String @db.Uuid
+  positionId String @db.Uuid
+
+  election   Election    @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  position   Position    @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  candidates Candidate[]
+
+  @@unique([electionId, positionId])
+}
+
+model Candidate {
+  id                 String @id @default(uuid()) @db.Uuid
+  electionPositionId String @db.Uuid
+  voterId            String @db.Uuid
+
+  manifesto        String? @db.Text
+  campaignSlogan   String? @db.VarChar(255)
+  imageUrl         String?
+  cvUrl            String? @db.Text // link to CV/resume
+  socialLinks      Json? // e.g., { twitter: "...", linkedin: "..." }
+  isIndependent    Boolean @default(true)
+  partyAffiliation String? @db.VarChar(100) // optional party name
+
+  electionPosition ElectionPosition @relation(fields: [electionPositionId], references: [id])
+  voter            VoterRoll        @relation(fields: [voterId], references: [id])
+
+  @@unique([electionPositionId, voterId])
+}
+
+model ElectionParticipation {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  electionId String @db.Uuid
+  voterId    String @db.Uuid
+
+  eligible Boolean @default(true)
+
+  hasVoted Boolean @default(false)
+
+  votedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  election Election @relation(fields: [electionId], references: [id])
+
+  voter VoterRoll @relation(fields: [voterId], references: [id])
+
+  @@unique([electionId, voterId])
+}
+
+enum VotingSessionStatus {
+  PENDING
+  FACE_VERIFIED
+  TOKEN_ISSUED
+  COMPLETED
+  EXPIRED
+  ABANDONED
+}
+
+model VotingSession {
+  id         String              @id @default(cuid())
+  voterId    String              @db.Uuid
+  electionId String              @db.Uuid
+  status     VotingSessionStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime // hard cutoff for PENDING/FACE_VERIFIED/TOKEN_ISSUED states
+
+  voter    VoterRoll @relation(fields: [voterId], references: [id])
+  election Election  @relation(fields: [electionId], references: [id])
+
+  @@index([voterId, electionId])
+  @@index([status, expiresAt]) // for the expiry sweep job
+}
+
+model IssuedNonce {
+  // ⚠️ Do NOT add voterId or any identity-linked field to this table.
+  // Its anonymity guarantee depends on this table having no path back to identity.
+  id         String   @id @default(cuid())
+  token      String   @unique
+  electionId String   @db.Uuid
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+
+  election Election @relation(fields: [electionId], references: [id])
+
+  @@index([token, used, expiresAt])
+}
+
+model Ballot {
+  id         String   @id @default(uuid()) @db.Uuid
+  electionId String   @db.Uuid
+  castAt     DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  election Election @relation(fields: [electionId], references: [id])
+
+  votes Vote[]
+}
+
+model Vote {
+  id                 String @id @default(uuid()) @db.Uuid
+  ballotId           String @db.Uuid
+  electionPositionId String @db.Uuid
+  candidateId        String @db.Uuid
+
+  ballot Ballot @relation(fields: [ballotId], references: [id], onDelete: Cascade)
+}
+
+model BlockchainElection {
+  id String @id @default(uuid())
+
+  electionId String @unique
+
+  contractAddress String
+
+  electionHash String
+
+  transactionHash String
+
+  createdAt DateTime @default(now())
+}
+
+model BlockchainBallot {
+  id String @id @default(uuid())
+
+  ballotId String @unique
+
+  ballotHash String
+
+  polygonTxHash String?
+
+  status BlockchainStatus
+
+  createdAt DateTime @default(now())
+}
+
+model BlockchainResult {
+  id String @id @default(uuid())
+
+  electionId String @unique
+
+  resultHash String
+
+  polygonTxHash String?
+
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique
+  passwordHash String
+  role         AdminRole
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  adminId   String?  @db.Uuid
+  action    String
+  resource  String?
+  createdAt DateTime @default(now())
+}
+
+model SystemSetting {
+  key   String @id
+  value String
+}
+
+enum ScopeType {
+  UNIVERSITY
+  CAMPUS
+  FACULTY
+  DEPARTMENT
+  PROGRAMME
+  LEVEL
+}
+
+enum IdType {
+  NIN
+  STUDENT_ID
+  PASSPORT
+  DRIVERS_LICENSE
+}
+
+enum OtpPurpose {
+  REGISTER
+  LOGIN
+  PASSWORD_RESET
+}
+
+enum FaceProvider {
+  PYTHON
+}
+
+enum FaceReferenceStatus {
+  ACTIVE
+  REVOKED
+  PENDING
+}
+
+enum ElectionStatus {
+  DRAFT
+  PUBLISHED
+  OPEN
+  CLOSED
+  ARCHIVED
+}
+
+enum ScopeField {
+  UNIVERSITY
+  CAMPUS
+  FACULTY
+  DEPARTMENT
+  PROGRAMME
+  LEVEL
+}
+
+enum ScopeOperator {
+  EQUALS
+  IN
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ELECTION_OFFICER
+}
+
+enum BlockchainStatus {
+  PENDING
+}

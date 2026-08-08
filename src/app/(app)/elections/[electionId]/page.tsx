@@ -8,20 +8,31 @@ import { useParams, useRouter } from "next/navigation";
 import mockPolls from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-
+import { useGetElection } from "@/features/elections/api/use-get-election";
+import PageLoading from "@/app/loading";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 const SingleVotePage = () => {
   const router = useRouter();
   const params = useParams();
   const electionId = params.electionId as string;
-  const election = mockPolls.find((election) => election.id == electionId);
-
+  const { data: nelection, isLoading } = useGetElection({ electionId });
+  // const election = mockPolls.find((election) => election.id == electionId);
+  const election = nelection?.data.election;
+  const postion = nelection?.data.positions;
   const [isOpen, setIsOpen] = useState(false);
-  const [data, setData] = useState<CandidateType>();
+  const [data, setData] = useState({
+    electionId: electionId,
+    candidateId: "",
+  });
 
   const open = (id: string) => {
-    const dd = election?.candidates?.find((c) => id === c.id);
-    if (dd) {
-      setData(dd);
+    if (id) {
+      setData((prev) => ({ ...prev, candidateId: id }));
       setIsOpen(true);
     }
   };
@@ -29,6 +40,9 @@ const SingleVotePage = () => {
   const close = () => {
     setIsOpen(false);
   };
+  if (isLoading) {
+    return <PageLoading />;
+  }
 
   if (!election) {
     return (
@@ -42,7 +56,8 @@ const SingleVotePage = () => {
     <div className="max-w-3xl mx-auto py-10 p-4 w-full h-full bg-white rounded-md">
       <CandidateModal
         close={close}
-        data={data}
+        electionId={electionId}
+        candidateId={data.candidateId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       />
@@ -54,9 +69,9 @@ const SingleVotePage = () => {
           <p className="text-sm font-semibold">Status</p>
           <Badge
             variant={"secondary"}
-            className="bg-yellow-700 rounded-md py-3"
+            className="bg-green-500 text-white capitalize rounded-md py-3"
           >
-            Ongoing
+            {election.status}
           </Badge>
         </div>
         <div className="flex flex-col items-start gap-2">
@@ -67,15 +82,73 @@ const SingleVotePage = () => {
               value={80}
               className="bg-neutral-400 text-green-500 w-full"
             ></Progress>
-            <p className="text-xs text-green-900">8hrs of 9hrs</p>
+            <p className="text-xs ">8hrs of 9hrs</p>
           </div>
         </div>
       </div>
       <div className="border-t">
         <p className="font-semibold py-3">
-          {election?.pollType == "Candidate" ? "Contestants" : "Options"}
+          {/* {election?.pollType == "Candidate" ? "Contestants" : "Options"} */}
+          Positions
         </p>
-        <div className="rounded-md space-y-3 grid gap-4 grid-cols-1 md:grid-cols-2">
+        <div className="space-y-3">
+          <Accordion
+            type="single"
+            collapsible
+            defaultValue="item-1"
+            className="space-y-3"
+          >
+            {postion?.map((p, i) => (
+              <AccordionItem value={`${i}`} key={i} className="py">
+                <AccordionTrigger className="hover:no-underline">
+                  <div>
+                    <span className="font-bold">{p.position.name} - </span>
+                    {p.candidates.length} candidate(s)
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="rounded-md space-y-3 grid gap-4 grid-cols-1 md:grid-cols-2">
+                    {p.candidates.map((candidate) => (
+                      <div className="flex items-center p-3 rounded-md gap-4 border shadow-sm">
+                        <div className="flex-1/3 w-full h-20 border rounded-sm bg-yellow-100">
+                          <img
+                            src={
+                              candidate.voter.imageUrl
+                                ? `${candidate.voter.imageUrl}`
+                                : "/daniel.png"
+                            }
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <div className="flex flex-2/3 flex-col space-y-0">
+                          <div>
+                            <p className="font-semibold mb-2!">
+                              {candidate.voter.fullName}
+                            </p>
+                            <p className="mb-2!">Computer science</p>
+                            <p className="text-muted-foreground text-xs mb-2">
+                              {candidate.voter.level} level
+                            </p>
+                          </div>
+                          <Button
+                            size={"xs"}
+                            className="w-fit"
+                            onClick={() => open(candidate.id)}
+                          >
+                            View details
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+
+        {/*
+         <div className="rounded-md space-y-3 grid gap-4 grid-cols-1 md:grid-cols-2">
           {election?.pollType == "Candidate"
             ? election.candidates?.map((candidate) => (
                 <div className="flex items-center p-3 rounded-md gap-4 border shadow-sm">
@@ -119,11 +192,11 @@ const SingleVotePage = () => {
                   </div>
                 </div>
               ))}
-        </div>
+        </div> */}
         <div className="mt-6 w-full">
           <Button
             className="w-full"
-            onClick={() => router.push(`/elections/${election?.id}/vote`)}
+            onClick={() => router.push(`/elections/${election?.id}/join`)}
           >
             Join Online Vote <MoveRightIcon className="size-6" />
           </Button>

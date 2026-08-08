@@ -1,9 +1,4 @@
-export interface CandidateType {
-    id: string;
-    name: string;
-    profile: string;
-    candidateImage: File | string;
-    DOB: string;
-    partyName: string;
-    partyImage: File | string;
-}
+import { useGetCandidateResponseType } from "./api/use-get-election"
+
+export type CandidateType = useGetCandidateResponseType["data"]["data"]
+
