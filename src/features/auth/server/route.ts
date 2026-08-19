@@ -359,7 +359,7 @@ const app = new Hono()
             return c.json(errorResponse("Something went wrong. Try again"), 500)
         }
     })
-    .get("/main", zValidator("query", getInfoConfirmationSchema), async (c) => {
+    .get("/main", async (c) => {
         try {
             const campus = await prisma.campus.findFirst()
             const csDept = await prisma.department.findFirst({
@@ -429,7 +429,7 @@ const app = new Hono()
             return c.json(errorResponse("Something went wrong. Try again"), 500)
         }
     })
-    .get("/election-m", zValidator("query", getInfoConfirmationSchema), async (c) => {
+    .get("/election-m", async (c) => {
         try {
             const departments = await prisma.department.findMany({
                 where: {
