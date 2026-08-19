@@ -393,6 +393,7 @@ const app = new Hono()
                 return c.json(errorResponse("Already voted"), 400);
             }
 
+            return c.json(successResponse({ votersessionId: "", status: "PENDING" }));
 
 
         } catch (e) {

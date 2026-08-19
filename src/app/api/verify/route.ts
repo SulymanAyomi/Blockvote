@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
   try {
     const result = await callPythonVerify({
       liveImageBase64: rawBase64,
-      referenceDescriptor: student.referenceDescriptor,
+      voterId: "student.referenceDescriptor",
     });
 
     console.log("result: ", result)

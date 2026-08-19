@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   try {
     const result = await callPythonVerify({
       liveImageBase64: rawBase64,
-      referenceDescriptor: student.referenceDescriptor,
+      voterId: student.studentId,
     });
 
     if (!result.faceDetected) {
@@ -85,8 +85,6 @@ export async function POST(request: NextRequest) {
         "We couldn't confidently confirm your identity automatically. Your submission has been sent to the election committee for manual review.",
       rejected:
         "We couldn't verify your identity from this photo. You can retake the photo or contact the election committee.",
-      no_face_detected: "",
-      no_reference_photo: "",
     };
 
     const body: VerifyApiResponse = {
