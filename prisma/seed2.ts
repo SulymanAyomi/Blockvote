@@ -58,7 +58,7 @@ function randomStudentId(): string {
 }
 
 function randomLevel(): number {
-    return randomItem([200, 300, 400]);
+    return randomItem([100, 200, 300, 400]);
 }
 
 function randomDate(start: Date, end: Date): Date {
@@ -83,36 +83,58 @@ const positionLevelRequirement: Record<string, number> = {
 // ----------------------------------------------------------------------
 async function main() {
     // --- 1. Clear existing data ---
-    // Order matters: children (tables holding FKs) must be deleted before
-    // the parents they point to.
-    await prisma.$transaction([
-        prisma.candidate.deleteMany(),
-        prisma.electionParticipation.deleteMany(),
-        prisma.electionPosition.deleteMany(),
-        prisma.electionScope.deleteMany(),
-        prisma.election.deleteMany(),
-        prisma.position.deleteMany(),
-        prisma.voterRoll.deleteMany(),
-        prisma.account.deleteMany(),
-        prisma.registrationSession.deleteMany(),
-        prisma.academicSession.deleteMany(),
-        prisma.programme.deleteMany(),
-        prisma.department.deleteMany(),
-        prisma.faculty.deleteMany(),
-        prisma.campus.deleteMany(),
-        prisma.institution.deleteMany(),
-    ]);
+    // Order matters: every child (any table holding an FK) must be deleted
+    // before the parent it points to. This follows the real FK graph in
+    // schema.prisma, not just the models this seed script populates —
+    // several relations (VotingSession, ElectionParticipation, Candidate,
+    // IssuedNonce, Ballot, FaceEmbedding) do NOT cascade, so they'd block
+    // deletion of VoterRoll/Election/ElectionPosition if left out, even if
+    // this script never wrote rows into them itself.
+    // await prisma.$transaction([
+    //     // --- leaves: no cascade, must go first ---
+    //     prisma.vote.deleteMany(),                    // child of Ballot (cascade, but clear explicitly for safety)
+    //     prisma.blockchainBallot.deleteMany(),         // no enforced FK, but logically tied to Ballot
+    //     prisma.blockchainResult.deleteMany(),         // no enforced FK, but logically tied to Election
+    //     prisma.blockchainElection.deleteMany(),       // no enforced FK, but logically tied to Election
+    //     prisma.ballot.deleteMany(),                   // child of Election
+    //     prisma.issuedNonce.deleteMany(),              // child of Election, NOT cascaded
+    //     prisma.votingSession.deleteMany(),            // child of VoterRoll + Election, NOT cascaded
+    //     prisma.candidate.deleteMany(),                // child of ElectionPosition + VoterRoll, NOT cascaded
+    //     prisma.electionParticipation.deleteMany(),    // child of Election + VoterRoll, NOT cascaded
+
+    //     // --- election structure ---
+    //     prisma.electionPosition.deleteMany(),         // child of Election + Position (cascade, cleared explicitly)
+    //     prisma.electionScope.deleteMany(),            // child of Election (cascade)
+    //     prisma.election.deleteMany(),                 // child of AcademicSession, NOT cascaded
+    //     prisma.position.deleteMany(),
+
+    //     // --- voter identity chain ---
+    //     prisma.faceEmbedding.deleteMany(),            // child of FaceReference, NOT cascaded
+    //     prisma.faceReference.deleteMany(),            // child of VoterRoll (cascade)
+    //     prisma.otp.deleteMany(),                      // child of VoterRoll (cascade)
+    //     prisma.registrationSession.deleteMany(),      // child of VoterRoll (cascade)
+    //     prisma.account.deleteMany(),                  // child of VoterRoll (cascade)
+    //     prisma.voterRoll.deleteMany(),                // child of Campus + Faculty + Department, NOT cascaded
+
+    //     // --- academic + org structure ---
+    //     prisma.academicSession.deleteMany(),
+    //     prisma.programme.deleteMany(),                // child of Department (cascade)
+    //     prisma.department.deleteMany(),               // child of Faculty (cascade)
+    //     prisma.faculty.deleteMany(),                  // child of Institution (cascade)
+    //     prisma.campus.deleteMany(),                   // child of Institution (cascade)
+    //     prisma.institution.deleteMany(),
+    // ]);
 
     // --- 2. Create Campus -------------------------------------------------
 
-    const institution = await prisma.institution.create({
-        data: {
+    const institution = await prisma.institution.findFirst({
+        where: {
             name: 'Al-Hikmah university',
             shortName: "ALHIK"
         },
     });
-    const campus = await prisma.campus.create({
-        data: { name: 'Main Campus', institutionId: institution.id },
+    const campus = await prisma.campus.findFirst({
+        where: { name: 'Main Campus', institutionId: institution?.id },
     });
 
     // --- 3. Create Faculties ---------------------------------------------
@@ -126,7 +148,7 @@ async function main() {
 
     const faculties = await Promise.all(
         facultyNames.map((name) =>
-            prisma.faculty.create({ data: { name, institutionId: institution.id } })
+            prisma.faculty.findMany({ where: { name, institutionId: institution!.id } })
         )
     );
 
@@ -170,17 +192,17 @@ async function main() {
         { name: 'Department of Urban Planning', faculty: environmentalFaculty },
     ];
 
-    const departments = await Promise.all(
-        departmentData.map(({ name, faculty }) =>
-            prisma.department.create({
-                data: {
-                    name,
-                    facultyId: faculty.id,
-                },
-            })
-        )
-    );
-
+    // const departments = await Promise.all(
+    //     departmentData.map(({ name, faculty }) =>
+    //         prisma.department.create({
+    //             data: {
+    //                 name,
+    //                 facultyId: faculty.id,
+    //             },
+    //         })
+    //     )
+    // );
+    const departments = await prisma.department.findMany()
     // --- 5. Create Programmes for each department ------------------------
     const programmeNamesByDept: Record<string, string[]> = {
         'Department of Mathematics': ['B.Sc Mathematics', 'B.Sc Statistics'],
@@ -243,52 +265,52 @@ async function main() {
         "Emmanuel Ayomide Adebayo",
     ];
     // For each department, pick a random programme and create voters
-    for (const dept of departments) {
-        // Get programmes belonging to this department
-        const deptProgrammes = programmeRecords.filter(
-            (p) => p.departmentId === dept.id
-        );
+    // for (const dept of departments) {
+    //     // Get programmes belonging to this department
+    //     const deptProgrammes = programmeRecords.filter(
+    //         (p) => p.departmentId === dept.id
+    //     );
 
-        if (deptProgrammes.length === 0) continue;
+    //     if (deptProgrammes.length === 0) continue;
 
-        const count = studentNames.length; // fixed off-by-one (was length - 1, dropping the last name)
+    //     const count = studentNames.length; // fixed off-by-one (was length - 1, dropping the last name)
 
-        for (let i = 0; i < count; i++) {
-            const fullName = studentNames[i];
-            const parts = fullName.split(" ")
-            const firstName = parts[0];
-            const lastName = parts[2];
-            const imageUrl = `/${firstName.toLowerCase()}.png`
-            const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}@university.edu`;
-            const phone = randomPhone();
-            const level = randomItem([100, 200, 300, 400]);
-            const dateOfBirth = randomDateOfBirth();
-            const idType = randomItem(idTypes);
-            const idNumber = randomIdNumber();
-            const studentId = randomStudentId()
+    //     for (let i = 0; i < count; i++) {
+    //         const fullName = studentNames[i];
+    //         const parts = fullName.split(" ")
+    //         const firstName = parts[0];
+    //         const lastName = parts[2];
+    //         const imageUrl = `/${firstName.toLowerCase()}.png`
+    //         const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}@university.edu`;
+    //         const phone = randomPhone();
+    //         const level = randomItem([100, 200, 300, 400]);
+    //         const dateOfBirth = randomDateOfBirth();
+    //         const idType = randomItem(idTypes);
+    //         const idNumber = randomIdNumber();
+    //         const studentId = randomStudentId()
 
-            // Randomly assign a programme from this department
-            const programme = randomItem(deptProgrammes);
+    //         // Randomly assign a programme from this department
+    //         const programme = randomItem(deptProgrammes);
 
-            await prisma.voterRoll.create({
-                data: {
-                    idType,
-                    idNumber,
-                    studentId,
-                    fullName,
-                    email,
-                    imageUrl,
-                    phone,
-                    campusId: campus.id,
-                    facultyId: dept.facultyId,
-                    departmentId: dept.id,
-                    programmeId: programme.id,
-                    level,
-                    dateOfBirth,
-                },
-            });
-        }
-    }
+    //         await prisma.voterRoll.create({
+    //             data: {
+    //                 idType,
+    //                 idNumber,
+    //                 studentId,
+    //                 fullName,
+    //                 email,
+    //                 imageUrl,
+    //                 phone,
+    //                 campusId: campus.id,
+    //                 facultyId: dept.facultyId,
+    //                 departmentId: dept.id,
+    //                 programmeId: programme.id,
+    //                 level,
+    //                 dateOfBirth,
+    //             },
+    //         });
+    //     }
+    // }
 
     // --- 6b. Create a specific voter: Muhammad Jamiu Soliu ----------------
     const csDept = departments.find(d => d.name === 'Department of Computer Science')!;
@@ -305,7 +327,7 @@ async function main() {
             email: 'muhammadsoliu@university.edu',
             imageUrl: '/soliu.png',
             phone: randomPhone(),
-            campusId: campus.id,
+            campusId: campus!.id,
             facultyId: csDept.facultyId,
             departmentId: csDept.id,
             programmeId: csProgramme.id,

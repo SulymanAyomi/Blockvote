@@ -1,117 +1,89 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider      = "prisma-client"
-  output        = "../src/generated"
-  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+  provider        = "prisma-client"
+  output          = "../src/generated"
+  previewFeatures = ["partialIndexes"]
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-// Pre-loaded by school admin before registration opens
-
 model VoterRoll {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  idType   IdType
-  idNumber String @db.VarChar(20)
-
-  studentId String? @db.VarChar(50)
-
-  fullName String @db.VarChar(255)
-
-  email    String? @db.VarChar(255)
-  imageUrl String? @db.VarChar(255)
-  phone    String? @db.VarChar(20)
-
-  campusId     String? @db.Uuid
-  facultyId    String? @db.Uuid
-  departmentId String? @db.Uuid
-  programmeId  String? @db.Uuid
-  level        Int?
-
-  dateOfBirth DateTime? @db.Date
-
-  isRegistered Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  campus     Campus?     @relation(fields: [campusId], references: [id])
-  faculty    Faculty?    @relation(fields: [facultyId], references: [id])
-  department Department? @relation(fields: [departmentId], references: [id])
-
+  id                     String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  idType                 IdType
+  idNumber               String                  @db.VarChar(20)
+  studentId              String?                 @db.VarChar(50)
+  fullName               String                  @db.VarChar(255)
+  email                  String?                 @db.VarChar(255)
+  imageUrl               String?                 @db.VarChar(255)
+  phone                  String?                 @db.VarChar(20)
+  campusId               String?                 @db.Uuid
+  facultyId              String?                 @db.Uuid
+  departmentId           String?                 @db.Uuid
+  programmeId            String?                 @db.Uuid
+  level                  Int?
+  dateOfBirth            DateTime?               @db.Date
+  isRegistered           Boolean                 @default(false)
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  candidates             Candidate[]
+  electionParticipations ElectionParticipation[]
+  votingSessions         VotingSession[]
   account                Account?
   faceReference          FaceReference?
   otps                   Otp[]
   registrationSessions   RegistrationSession[]
-  electionParticipations ElectionParticipation[]
-  candidates             Candidate[]
-  programmes             Programme[]
-  votingSessions         VotingSession[]
+  campus                 Campus?                 @relation(fields: [campusId], references: [id])
+  department             Department?             @relation(fields: [departmentId], references: [id])
+  faculty                Faculty?                @relation(fields: [facultyId], references: [id])
+  programmes             Programme[]             @relation("ProgrammeToVoterRoll")
 
   @@unique([idType, idNumber])
   @@index([idType, idNumber])
   @@map("voter_roll")
 }
 
-// Login accounts, created only after identity verification
 model Account {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  voterId String @unique @db.Uuid
-
-  passwordHash String
-
-  failedAttempts Int @default(0)
-
-  lockedUntil DateTime?
-
-  lastLogin DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  voter VoterRoll @relation(fields: [voterId], references: [id], onDelete: Cascade)
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  voterId        String    @unique @db.Uuid
+  passwordHash   String
+  failedAttempts Int       @default(0)
+  lockedUntil    DateTime?
+  lastLogin      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  voter          VoterRoll @relation(fields: [voterId], references: [id], onDelete: Cascade)
 
   @@map("accounts")
 }
 
-// Short-lived OTPs for registration + login MFA
 model Otp {
   id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   voterId   String     @db.Uuid
-  otpHash   String     @map("otp_hash") @db.Text
+  otpHash   String     @map("otp_hash")
   purpose   OtpPurpose
-  expiresAt DateTime   @map("expires_at") @db.Timestamp
+  expiresAt DateTime   @map("expires_at") @db.Timestamp(6)
   used      Boolean    @default(false)
   createdAt DateTime   @default(now())
-
-  voterRoll VoterRoll? @relation(fields: [voterId], references: [id], onDelete: Cascade)
+  voterRoll VoterRoll  @relation(fields: [voterId], references: [id], onDelete: Cascade)
 
   @@index([expiresAt])
   @@index([voterId, purpose])
   @@map("otps")
 }
 
-// Tracks progress through the multi-step registration journey
 model RegistrationSession {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  voterId       String   @db.Uuid
-  idVerified    Boolean  @default(false) @map("id_verified")
-  otpVerified   Boolean  @default(false) @map("otp_verified")
-  faceVerified  Boolean  @default(false) @map("face_verified")
-  infoConfirmed Boolean  @default(false) @map("info_confirmed")
-  expiresAt     DateTime @map("expires_at") @db.Timestamp
-  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp
-  updatedAt     DateTime @updatedAt
-
-  voterRoll VoterRoll @relation(fields: [voterId], references: [id], onDelete: Cascade)
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  voterId       String    @db.Uuid
+  idVerified    Boolean   @default(false) @map("id_verified")
+  otpVerified   Boolean   @default(false) @map("otp_verified")
+  faceVerified  Boolean   @default(false) @map("face_verified")
+  infoConfirmed Boolean   @default(false) @map("info_confirmed")
+  expiresAt     DateTime  @map("expires_at") @db.Timestamp(6)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime  @updatedAt
+  voterRoll     VoterRoll @relation(fields: [voterId], references: [id], onDelete: Cascade)
 
   @@index([expiresAt])
   @@index([voterId])
@@ -119,156 +91,110 @@ model RegistrationSession {
 }
 
 model FaceReference {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  voterId String @unique @db.Uuid
-
-  referenceId String @unique
-
-  provider FaceProvider
-
-  status FaceReferenceStatus @default(ACTIVE)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  voter         VoterRoll      @relation(fields: [voterId], references: [id], onDelete: Cascade)
+  id            String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  voterId       String              @unique @db.Uuid
+  referenceId   String              @unique
+  provider      FaceProvider
+  status        FaceReferenceStatus @default(ACTIVE)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
   faceEmbedding FaceEmbedding?
+  voter         VoterRoll           @relation(fields: [voterId], references: [id], onDelete: Cascade)
 
   @@map("face_references")
 }
 
 model FaceEmbedding {
-  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  faceReferenceId String   @unique @db.Uuid
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  faceReferenceId String        @unique @db.Uuid
   embedding       Float[]
   modelName       String
   modelVersion    String
-  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp
-
-  faceReference FaceReference @relation(fields: [faceReferenceId], references: [id])
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamp(6)
+  faceReference   FaceReference @relation(fields: [faceReferenceId], references: [id])
 }
 
 model Institution {
-  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
   shortName String
   email     String?
   phone     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   campuses  Campus[]
   faculties Faculty[]
 }
 
 model Campus {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  institutionId String @db.Uuid
-
-  name String
-
-  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-
-  voters VoterRoll[]
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  institutionId String      @db.Uuid
+  name          String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  voters        VoterRoll[]
 }
 
 model Faculty {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  institutionId String @db.Uuid
-
-  name String
-
-  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-
-  departments Department[]
-
-  voters VoterRoll[]
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  institutionId String       @db.Uuid
+  name          String
+  departments   Department[]
+  institution   Institution  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  voters        VoterRoll[]
 }
 
 model Department {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  facultyId String @db.Uuid
-
-  name String
-
-  faculty Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
-
-  voters VoterRoll[]
-
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  facultyId  String      @db.Uuid
+  name       String
+  faculty    Faculty     @relation(fields: [facultyId], references: [id], onDelete: Cascade)
   programmes Programme[]
+  voters     VoterRoll[]
 }
 
 model Programme {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  departmentId String @db.Uuid
-
-  name String
-
-  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
-
-  voters VoterRoll[]
+  id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  departmentId String      @db.Uuid
+  name         String
+  department   Department  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  voters       VoterRoll[] @relation("ProgrammeToVoterRoll")
 }
 
 model AcademicSession {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  name String
-
+  id        String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
   startDate DateTime
-
-  endDate DateTime? @db.Date
-
-  isCurrent Boolean @default(false)
-
+  endDate   DateTime?  @db.Date
+  isCurrent Boolean    @default(false)
   elections Election[]
 }
 
 model Election {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  title       String
-  description String?
-  coverImage  String?
-
-  academicSessionId String @db.Uuid
-
-  startsAt DateTime
-  endsAt   DateTime
-
-  status ElectionStatus @default(DRAFT)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  academicSession AcademicSession @relation(fields: [academicSessionId], references: [id])
-
-  positions      ElectionPosition[]
-  scopes         ElectionScope[]
-  participations ElectionParticipation[]
-
-  ballots Ballot[]
-
-  votingSessions VotingSession[]
-
-  issuedNonces IssuedNonce[]
+  id                String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title             String
+  description       String?
+  coverImage        String?
+  academicSessionId String                  @db.Uuid
+  startsAt          DateTime
+  endsAt            DateTime
+  status            ElectionStatus          @default(DRAFT)
+  createdAt         DateTime                @default(now())
+  updatedAt         DateTime                @updatedAt
+  ballots           Ballot[]
+  academicSession   AcademicSession         @relation(fields: [academicSessionId], references: [id])
+  participations    ElectionParticipation[]
+  positions         ElectionPosition[]
+  scopes            ElectionScope[]
+  issuedNonces      IssuedNonce[]
+  votingSessions    VotingSession[]
 }
 
 model ElectionScope {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  electionId String @db.Uuid
-
-  type ScopeType
-
-  value String
-
-  election Election @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  electionId String    @db.Uuid
+  type       ScopeType
+  value      String
+  election   Election  @relation(fields: [electionId], references: [id], onDelete: Cascade)
 
   @@index([electionId])
 }
@@ -280,64 +206,45 @@ model Position {
 }
 
 model ElectionPosition {
-  id         String @id @default(uuid()) @db.Uuid
-  electionId String @db.Uuid
-  positionId String @db.Uuid
-
+  id         String      @id @default(uuid()) @db.Uuid
+  electionId String      @db.Uuid
+  positionId String      @db.Uuid
+  candidates Candidate[]
   election   Election    @relation(fields: [electionId], references: [id], onDelete: Cascade)
   position   Position    @relation(fields: [positionId], references: [id], onDelete: Cascade)
-  candidates Candidate[]
 
   @@unique([electionId, positionId])
 }
 
 model Candidate {
-  id                 String @id @default(uuid()) @db.Uuid
-  electionPositionId String @db.Uuid
-  voterId            String @db.Uuid
-
-  manifesto        String? @db.Text
-  campaignSlogan   String? @db.VarChar(255)
-  imageUrl         String?
-  cvUrl            String? @db.Text // link to CV/resume
-  socialLinks      Json? // e.g., { twitter: "...", linkedin: "..." }
-  isIndependent    Boolean @default(true)
-  partyAffiliation String? @db.VarChar(100) // optional party name
-
-  electionPosition ElectionPosition @relation(fields: [electionPositionId], references: [id])
-  voter            VoterRoll        @relation(fields: [voterId], references: [id])
+  id                 String           @id @default(uuid()) @db.Uuid
+  electionPositionId String           @db.Uuid
+  voterId            String           @db.Uuid
+  manifesto          String?
+  campaignSlogan     String?          @db.VarChar(255)
+  imageUrl           String?
+  cvUrl              String?
+  socialLinks        Json?
+  isIndependent      Boolean          @default(true)
+  partyAffiliation   String?          @db.VarChar(100)
+  electionPosition   ElectionPosition @relation(fields: [electionPositionId], references: [id])
+  voter              VoterRoll        @relation(fields: [voterId], references: [id])
 
   @@unique([electionPositionId, voterId])
 }
 
 model ElectionParticipation {
-  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-
-  electionId String @db.Uuid
-  voterId    String @db.Uuid
-
-  eligible Boolean @default(true)
-
-  hasVoted Boolean @default(false)
-
-  votedAt DateTime?
-
-  createdAt DateTime @default(now())
-
-  election Election @relation(fields: [electionId], references: [id])
-
-  voter VoterRoll @relation(fields: [voterId], references: [id])
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  electionId String    @db.Uuid
+  voterId    String    @db.Uuid
+  eligible   Boolean   @default(true)
+  hasVoted   Boolean   @default(false)
+  votedAt    DateTime?
+  createdAt  DateTime  @default(now())
+  election   Election  @relation(fields: [electionId], references: [id])
+  voter      VoterRoll @relation(fields: [voterId], references: [id])
 
   @@unique([electionId, voterId])
-}
-
-enum VotingSessionStatus {
-  PENDING
-  FACE_VERIFIED
-  TOKEN_ISSUED
-  COMPLETED
-  EXPIRED
-  ABANDONED
 }
 
 model VotingSession {
@@ -345,29 +252,25 @@ model VotingSession {
   voterId    String              @db.Uuid
   electionId String              @db.Uuid
   status     VotingSessionStatus @default(PENDING)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+  expiresAt  DateTime
+  election   Election            @relation(fields: [electionId], references: [id])
+  voter      VoterRoll           @relation(fields: [voterId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  expiresAt DateTime // hard cutoff for PENDING/FACE_VERIFIED/TOKEN_ISSUED states
-
-  voter    VoterRoll @relation(fields: [voterId], references: [id])
-  election Election  @relation(fields: [electionId], references: [id])
-
+  @@unique([voterId, electionId], map: "one_active_session_per_voter_election", where: raw("(status = ANY (ARRAY['PENDING'::\"VotingSessionStatus\", 'FACE_VERIFIED'::\"VotingSessionStatus\", 'TOKEN_ISSUED'::\"VotingSessionStatus\"]))"))
   @@index([voterId, electionId])
-  @@index([status, expiresAt]) // for the expiry sweep job
+  @@index([status, expiresAt])
 }
 
 model IssuedNonce {
-  // ⚠️ Do NOT add voterId or any identity-linked field to this table.
-  // Its anonymity guarantee depends on this table having no path back to identity.
   id         String   @id @default(cuid())
   token      String   @unique
   electionId String   @db.Uuid
   used       Boolean  @default(false)
   createdAt  DateTime @default(now())
   expiresAt  DateTime
-
-  election Election @relation(fields: [electionId], references: [id])
+  election   Election @relation(fields: [electionId], references: [id])
 
   @@index([token, used, expiresAt])
 }
@@ -377,10 +280,8 @@ model Ballot {
   electionId String   @db.Uuid
   castAt     DateTime @default(now())
   updatedAt  DateTime @updatedAt
-
-  election Election @relation(fields: [electionId], references: [id])
-
-  votes Vote[]
+  election   Election @relation(fields: [electionId], references: [id])
+  votes      Vote[]
 }
 
 model Vote {
@@ -388,48 +289,33 @@ model Vote {
   ballotId           String @db.Uuid
   electionPositionId String @db.Uuid
   candidateId        String @db.Uuid
-
-  ballot Ballot @relation(fields: [ballotId], references: [id], onDelete: Cascade)
+  ballot             Ballot @relation(fields: [ballotId], references: [id], onDelete: Cascade)
 }
 
 model BlockchainElection {
-  id String @id @default(uuid())
-
-  electionId String @unique
-
+  id              String   @id @default(uuid())
+  electionId      String   @unique
   contractAddress String
-
-  electionHash String
-
+  electionHash    String
   transactionHash String
-
-  createdAt DateTime @default(now())
+  createdAt       DateTime @default(now())
 }
 
 model BlockchainBallot {
-  id String @id @default(uuid())
-
-  ballotId String @unique
-
-  ballotHash String
-
+  id            String           @id @default(uuid())
+  ballotId      String           @unique
+  ballotHash    String
   polygonTxHash String?
-
-  status BlockchainStatus
-
-  createdAt DateTime @default(now())
+  status        BlockchainStatus
+  createdAt     DateTime         @default(now())
 }
 
 model BlockchainResult {
-  id String @id @default(uuid())
-
-  electionId String @unique
-
-  resultHash String
-
+  id            String   @id @default(uuid())
+  electionId    String   @unique
+  resultHash    String
   polygonTxHash String?
-
-  createdAt DateTime @default(now())
+  createdAt     DateTime @default(now())
 }
 
 model Admin {
@@ -450,6 +336,15 @@ model AuditLog {
 model SystemSetting {
   key   String @id
   value String
+}
+
+enum VotingSessionStatus {
+  PENDING
+  FACE_VERIFIED
+  TOKEN_ISSUED
+  COMPLETED
+  EXPIRED
+  ABANDONED
 }
 
 enum ScopeType {

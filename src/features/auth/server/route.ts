@@ -9,6 +9,7 @@ import { RegistrationStageError, requireStage } from "@/lib/registration-session
 import { callPythonVerify } from "@/lib/verification/pythonServiceClient";
 import { THRESHOLDS, VerifyApiResponse } from "@/lib/verification/types";
 import { getSession } from "@/lib/session";
+import { ElectionStatus, ScopeType } from "@/generated/enums";
 // import { getSession } from '@/lib/session';
 
 // import { Ratelimit } from '@upstash/ratelimit';
@@ -358,6 +359,204 @@ const app = new Hono()
             return c.json(errorResponse("Something went wrong. Try again"), 500)
         }
     })
+    .get("/main", zValidator("query", getInfoConfirmationSchema), async (c) => {
+        try {
+            const campus = await prisma.campus.findFirst()
+            const csDept = await prisma.department.findFirst({
+                where: {
+                    name: "Department of Computer Science"
+                }
+            })
+            const csProgramme = await prisma.programme.findFirst({
+                where: {
+                    departmentId: csDept?.id
+                }
+            })
+
+            const voterInfo = await prisma.voterRoll.create({
+                data: {
+                    idType: 'NIN',
+                    idNumber: "25777399054",
+                    studentId: "STU/2023/5724",
+                    fullName: 'Muhammad Jamiu Soliu',
+                    email: 'muhammadsoliu@university.edu',
+                    imageUrl: '/soliu.png',
+                    phone: "09060923345",
+                    campusId: campus!.id,
+                    facultyId: csDept?.facultyId,
+                    departmentId: csDept?.id,
+                    programmeId: csProgramme?.id,
+                    level: 400,
+                    dateOfBirth: randomDateOfBirth(),
+                },
+            });
+
+            const positionNames = [
+                'President',
+                'Vice President',
+                'Speaker',
+                'Treasurer',
+                'Social Director',
+                'Public Relations Officer (PRO)',
+                'Deputy Speaker',
+            ];
+            const positions = await Promise.all(
+                positionNames.map(name => prisma.position.create({ data: { name } }))
+            );
+
+            const sessions = await Promise.all([
+                prisma.academicSession.create({
+                    data: {
+                        name: '2026/2027',
+                        startDate: new Date('2026-09-01'),
+                        endDate: new Date('2027-07-31'),
+                        isCurrent: true,
+                    },
+                }),
+                prisma.academicSession.create({
+                    data: {
+                        name: '2027/2028',
+                        startDate: new Date('2027-09-01'),
+                        endDate: new Date('2028-07-31'),
+                        isCurrent: false,
+                    },
+                }),
+            ]);
+            return c.json(successResponse(voterInfo));
+
+        } catch (e) {
+            console.log(e)
+            return c.json(errorResponse("Something went wrong. Try again"), 500)
+        }
+    })
+    .get("/election-m", zValidator("query", getInfoConfirmationSchema), async (c) => {
+        try {
+            const departments = await prisma.department.findMany({
+                where: {
+                    name: {
+                        in: ["Department of Computer Science", "Department of Accounting"]
+                    }
+                }
+            })
+            const positionNames = [
+                'President',
+                'Vice President',
+                'Speaker',
+                'Treasurer',
+                'Social Director',
+                'Public Relations Officer (PRO)',
+                'Deputy Speaker',
+            ];
+            const positions = await Promise.all(
+                positionNames.map(name => prisma.position.create({ data: { name } }))
+            );
+
+            const positionMap: Record<string, string> = {};
+            positions.forEach(p => { positionMap[p.name] = p.id; });
+
+            const sessions = await Promise.all([
+                prisma.academicSession.create({
+                    data: {
+                        name: '2026/2027',
+                        startDate: new Date('2026-09-01'),
+                        endDate: new Date('2027-07-31'),
+                        isCurrent: true,
+                    },
+                }),
+                prisma.academicSession.create({
+                    data: {
+                        name: '2027/2028',
+                        startDate: new Date('2027-09-01'),
+                        endDate: new Date('2028-07-31'),
+                        isCurrent: false,
+                    },
+                }),
+            ]);
+            const [session2026, session2027] = sessions;
+            const electionConfigs = [
+                {
+                    title: 'Student Union Election 2026/2027',
+                    description: 'University wide student government election.',
+                    session: session2026,
+                    scopeType: ScopeType.UNIVERSITY,
+                    scopeValue: 'all',
+                    positionNames: ['President', 'Vice President', 'Speaker', 'Treasurer', 'Social Director', 'Public Relations Officer (PRO)'],
+                    startsAt: new Date('2026-10-10T08:00:00'),
+                    endsAt: new Date('2026-10-12T17:00:00'),
+                    status: ElectionStatus.OPEN,
+                },
+                {
+                    title: 'NACOS Election 2026/2027',
+                    description: 'National Association of Computer Science Students election.',
+                    session: session2026,
+                    scopeType: ScopeType.DEPARTMENT,
+                    scopeValue: 'Department of Computer Science',
+                    positionNames: ['President', 'Vice President', 'Speaker', 'Treasurer', 'Social Director'],
+                    startsAt: new Date('2026-11-01T08:00:00'),
+                    endsAt: new Date('2026-11-02T17:00:00'),
+                    status: ElectionStatus.PUBLISHED,
+                },
+                {
+                    title: 'Accounting Department Election 2026/2027',
+                    description: 'Election for the Accounting Department student leaders.',
+                    session: session2026,
+                    scopeType: ScopeType.DEPARTMENT,
+                    scopeValue: 'Department of Accounting',
+                    positionNames: ['President', 'Vice President', 'Treasurer'],
+                    startsAt: new Date('2026-11-10T08:00:00'),
+                    endsAt: new Date('2026-11-11T17:00:00'),
+                    status: ElectionStatus.DRAFT,
+                },
+            ];
+
+            const createdElections: any[] = [];
+
+            for (const cfg of electionConfigs) {
+                let departmentId: string | undefined;
+                if (cfg.scopeType === ScopeType.DEPARTMENT) {
+                    const dept = departments.find(d => d.name === cfg.scopeValue);
+                    if (dept) departmentId = dept.id;
+                }
+
+                const election = await prisma.election.create({
+                    data: {
+                        title: cfg.title,
+                        description: cfg.description,
+                        academicSessionId: cfg.session.id,
+                        startsAt: cfg.startsAt,
+                        endsAt: cfg.endsAt,
+                        status: cfg.status,
+                        scopes: {
+                            create: {
+                                type: cfg.scopeType,
+                                value: cfg.scopeValue,
+                            },
+                        },
+                    },
+                });
+
+                createdElections.push(election);
+
+                for (const posName of cfg.positionNames) {
+                    const positionId = positionMap[posName];
+                    if (!positionId) continue;
+                    await prisma.electionPosition.create({
+                        data: {
+                            electionId: election.id,
+                            positionId: positionId,
+                        },
+                    });
+                }
+            }
+
+
+            return c.json(successResponse(session2026));
+
+        } catch (e) {
+            console.log(e)
+            return c.json(errorResponse("Something went wrong. Try again"), 500)
+        }
+    })
 // .onError((err, c) => {
 //     if (err instanceof RegistrationStageError) {
 //         return c.json(errorResponse(err.message), err.status)
@@ -367,3 +566,12 @@ const app = new Hono()
 
 export default app;
 
+function randomDateOfBirth(): Date {
+    const now = new Date();
+    const yearsAgo = 18 + Math.floor(Math.random() * 8); // 18–25
+    const date = new Date(now);
+    date.setFullYear(now.getFullYear() - yearsAgo);
+    date.setMonth(Math.floor(Math.random() * 12));
+    date.setDate(Math.floor(Math.random() * 28) + 1);
+    return date;
+}
