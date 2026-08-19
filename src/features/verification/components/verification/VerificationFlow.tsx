@@ -63,11 +63,11 @@ export function VerificationFlow({
     if (state.status !== "captured") return;
     submit();
     try {
-      const res = await fetch("/api/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentId, imageBase64: state.imageDataUrl }),
-      });
+      // const res = await fetch("/api/verify", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ studentId, imageBase64: state.imageDataUrl }),
+      // });
       // const result = (await res.json()) as VerifyApiResponse;
       // dispatch({ type: "SERVER_RESULT", result }); 772092
       mutate(

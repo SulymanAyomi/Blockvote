@@ -52,10 +52,8 @@ const app = new Hono()
             });
             // await sendEmail(voter.email, `Your registration code: ${otp}`);
             console.log("otp:", otp)
-            const data = {
 
-            }
-            return c.json(successResponse({ message: 'OTP sent to registered email', regSessionId: regSession.id }));
+            return c.json(successResponse({ message: 'OTP sent to registered email', regSessionId: regSession.id, otp }));
         } catch (e) {
             console.log(e)
             return c.json(errorResponse("Something went wrong. Try again"), 500)
@@ -307,7 +305,8 @@ const app = new Hono()
             // await sendEmail(voter!.email, `Your login code: ${otp}`);
             const data = {
                 vid: vOtp.id,
-                email: voter?.email
+                email: voter?.email,
+                otp
             }
             return c.json(successResponse(data, 'Registration complete'), 200);
 

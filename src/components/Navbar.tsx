@@ -26,10 +26,10 @@ export const Navbar = () => {
     <div className="mb-0 pt-2 px-4 border-b bg-white">
       <div className="flex justify-between  items-center mb-4">
         <UserButton />
-        <div className="px-2 py-3 rounded-sm bg-primary-col text-white flex items-center hover:bg-primary-col/80">
+        {/* <div className="px-2 py-3 rounded-sm bg-primary-col text-white flex items-center hover:bg-primary-col/80">
           <WalletMinimalIcon className="mr-2 size-4" />
           <span className="text-xs tracking-tight">Connect wallet</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );

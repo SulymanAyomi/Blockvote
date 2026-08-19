@@ -31,6 +31,13 @@ export const useVerifyNin = () => {
             }
             return data
         },
+        onSuccess: (data) => {
+            // @ts-ignore
+            const otp = data.data.otp
+            if (otp) {
+                toast.success(`Your otp is ${otp}.`)
+            }
+        }
     })
     return mutation
 }
