@@ -438,41 +438,18 @@ const app = new Hono()
                     }
                 }
             })
-            const positionNames = [
-                'President',
-                'Vice President',
-                'Speaker',
-                'Treasurer',
-                'Social Director',
-                'Public Relations Officer (PRO)',
-                'Deputy Speaker',
-            ];
-            const positions = await Promise.all(
-                positionNames.map(name => prisma.position.create({ data: { name } }))
-            );
+
+            const positions = await prisma.position.findMany()
 
             const positionMap: Record<string, string> = {};
             positions.forEach(p => { positionMap[p.name] = p.id; });
 
-            const sessions = await Promise.all([
-                prisma.academicSession.create({
-                    data: {
-                        name: '2026/2027',
-                        startDate: new Date('2026-09-01'),
-                        endDate: new Date('2027-07-31'),
-                        isCurrent: true,
-                    },
-                }),
-                prisma.academicSession.create({
-                    data: {
-                        name: '2027/2028',
-                        startDate: new Date('2027-09-01'),
-                        endDate: new Date('2028-07-31'),
-                        isCurrent: false,
-                    },
-                }),
-            ]);
-            const [session2026, session2027] = sessions;
+            const session2026 = await prisma.academicSession.findFirst({
+                where: { name: '2026/2027' }
+            })
+            if (!session2026) {
+                return c.json(errorResponse("weeee", 400))
+            }
             const electionConfigs = [
                 {
                     title: 'Student Union Election 2026/2027',
@@ -557,6 +534,7 @@ const app = new Hono()
             return c.json(errorResponse("Something went wrong. Try again"), 500)
         }
     })
+
 // .onError((err, c) => {
 //     if (err instanceof RegistrationStageError) {
 //         return c.json(errorResponse(err.message), err.status)
