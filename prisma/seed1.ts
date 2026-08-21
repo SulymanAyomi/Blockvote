@@ -228,7 +228,28 @@ async function main() {
         "Ibrahim Sani Abdullahi",
         "Cynthia Amarachi Umeh",
         "Emmanuel Ayomide Adebayo",
+        "Abdulrahman Musa Yusuf",
+        "Chidera Joy Okafor",
+        "Oluwaseun David Adeyemi",
+        "Aisha Zainab Ibrahim",
+        "Chukwuebuka Daniel Eze",
+        "Temiloluwa Grace Adebayo",
+        "Fatima Hauwa Bello",
+        "Emmanuel Chinedu Okoro",
+        "Esther Oluwatoyin Olamide",
+        "Ibrahim Sani Musa",
+        "Precious Amarachi Nwankwo",
+        "Daniel Etim Akpan",
+        "Zainab Maryam Abdullahi",
+        "Favour Chisom Eze",
+        "Samuel Oluwadamilare Oladipo",
+        "Maryam Aisha Sani",
+        "David Ekong Udo",
+        "Grace Ifeoma Nwachukwu",
+        "Abdulaziz Ahmed Lawal",
+        "Victory Iniobong Ekanem",
     ];
+
     // For each department, pick a random programme and create voters
     for (const dept of departments) {
         // Get programmes belonging to this department

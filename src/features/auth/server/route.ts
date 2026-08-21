@@ -361,7 +361,12 @@ const app = new Hono()
     })
     .get("/main", async (c) => {
         try {
+            // await prisma.voterRoll.deleteMany();              // child of Campus + Faculty + Department, NOT cascaded
+
             const campus = await prisma.campus.findFirst()
+
+            const departments = await prisma.department.findMany()
+            const programmeRecords = await prisma.programme.findMany()
             const csDept = await prisma.department.findFirst({
                 where: {
                     name: "Department of Computer Science"
@@ -372,64 +377,219 @@ const app = new Hono()
                     departmentId: csDept?.id
                 }
             })
+            const idType = 'NIN' // adjust to your enum values
 
-            const voterInfo = await prisma.voterRoll.create({
-                data: {
-                    idType: 'NIN',
-                    idNumber: "25777399054",
-                    studentId: "STU/2023/5724",
-                    fullName: 'Muhammad Jamiu Soliu',
-                    email: 'muhammadsoliu@university.edu',
-                    imageUrl: '/soliu.png',
-                    phone: "09060923345",
-                    campusId: campus!.id,
-                    facultyId: csDept?.facultyId,
-                    departmentId: csDept?.id,
-                    programmeId: csProgramme?.id,
-                    level: 400,
-                    dateOfBirth: randomDateOfBirth(),
-                },
-            });
-
-            const positionNames = [
-                'President',
-                'Vice President',
-                'Speaker',
-                'Treasurer',
-                'Social Director',
-                'Public Relations Officer (PRO)',
-                'Deputy Speaker',
+            const studentNames = [
+                "Abdulrahman Ibrahim Bello",
+                "Chiamaka Grace Okafor",
+                "Oluwaseun David Adeyemi",
+                "Maryam Aisha Suleiman",
+                "Emeka Chinedu Nwosu",
+                "Esther Oluwatoyin Akinwale",
+                "Daniel Chukwuemeka Eze",
+                "Zainab Rukayat Lawal",
+                "Samuel Olumide Ogunleye",
+                "Blessing Efe Oghenekaro",
+                "Yusuf Abdulazeez Musa",
+                "Mercy Nkem Obi",
+                "Michael Tobi Ojo",
+                "Fatimah Aminat Mohammed",
+                "Precious Ifeoma Ezeani",
+                "Victor Ebuka Okoro",
+                "Deborah Tolulope Ajayi",
+                "Ibrahim Sani Abdullahi",
+                "Cynthia Amarachi Umeh",
+                "Emmanuel Ayomide Adebayo",
+                "Abdulrahman Musa Yusuf",
+                "Chidera Joy Okafor",
+                "Oluwaseun David Adeyemi",
+                "Aisha Zainab Ibrahim",
+                "Chukwuebuka Daniel Eze",
+                "Temiloluwa Grace Adebayo",
+                "Fatima Hauwa Bello",
+                "Emmanuel Chinedu Okoro",
+                "Esther Oluwatoyin Olamide",
+                "Ibrahim Sani Musa",
+                "Precious Amarachi Nwankwo",
+                "Daniel Etim Akpan",
+                "Zainab Maryam Abdullahi",
+                "Favour Chisom Eze",
+                "Samuel Oluwadamilare Oladipo",
+                "Maryam Aisha Sani",
+                "David Ekong Udo",
+                "Grace Ifeoma Nwachukwu",
+                "Abdulaziz Ahmed Lawal",
+                "Victory Iniobong Ekanem",
+                "Abdulrahman Musa Yusuf",
+                "Chidera Joy Okafor",
+                "Oluwaseun David Adeyemi",
+                "Aisha Zainab Ibrahim",
+                "Chukwuebuka Daniel Eze",
+                "Temiloluwa Grace Adebayo",
+                "Fatima Hauwa Bello",
+                "Emmanuel Chinedu Okoro",
+                "Esther Oluwatoyin Olamide",
+                "Ibrahim Sani Musa",
+                "Precious Amarachi Nwankwo",
+                "Daniel Etim Akpan",
+                "Zainab Maryam Abdullahi",
+                "Favour Chisom Eze",
+                "Samuel Oluwadamilare Oladipo",
+                "Maryam Aisha Sani",
+                "David Ekong Udo",
+                "Grace Ifeoma Nwachukwu",
+                "Abdulaziz Ahmed Lawal",
+                "Victory Iniobong Ekanem",
             ];
-            const positions = await Promise.all(
-                positionNames.map(name => prisma.position.create({ data: { name } }))
-            );
 
-            const sessions = await Promise.all([
-                prisma.academicSession.create({
-                    data: {
-                        name: '2026/2027',
-                        startDate: new Date('2026-09-01'),
-                        endDate: new Date('2027-07-31'),
-                        isCurrent: true,
-                    },
-                }),
-                prisma.academicSession.create({
-                    data: {
-                        name: '2027/2028',
-                        startDate: new Date('2027-09-01'),
-                        endDate: new Date('2028-07-31'),
-                        isCurrent: false,
-                    },
-                }),
-            ]);
-            return c.json(successResponse(voterInfo));
+            function getStudentName(count: number) {
+
+                return studentNames[count]
+            }
+
+            const voterAllocationPlan: { department: string; level: number; count: number }[] = [
+                // 400-level (13 total: CS 5 + Soliu = 6, Accounting 4, others 3)
+                { department: 'Department of Computer Science', level: 400, count: 9 },
+                { department: 'Department of Accounting', level: 400, count: 9 },
+                { department: 'Department of Mechanical Engineering', level: 400, count: 2 },
+                { department: 'Department of Economics', level: 400, count: 1 },
+                { department: 'Department of Physics', level: 400, count: 1 },
+                { department: 'Department of English', level: 400, count: 1 },
+
+
+                // 300-level (10 total: CS 4, Accounting 2, others 4)
+                { department: 'Department of Computer Science', level: 300, count: 9 },
+                { department: 'Department of Accounting', level: 300, count: 9 },
+                { department: 'Department of Mass Communication', level: 300, count: 1 },
+                { department: 'Department of Civil Engineering', level: 300, count: 1 },
+                { department: 'Department of Sociology', level: 300, count: 1 },
+                { department: 'Department of English', level: 300, count: 1 },
+                { department: 'Department of Chemistry', level: 300, count: 1 },
+
+
+                // 200-level (10 total: CS 1, Accounting 1, others 8)
+                { department: 'Department of Computer Science', level: 200, count: 3 },
+                { department: 'Department of Accounting', level: 200, count: 3 },
+                { department: 'Department of Mathematics', level: 200, count: 1 },
+                { department: 'Department of Chemistry', level: 200, count: 1 },
+                { department: 'Department of Biology', level: 200, count: 1 },
+                { department: 'Department of Cybersecurity', level: 200, count: 1 },
+                { department: 'Department of Electrical Engineering', level: 200, count: 1 },
+                { department: 'Department of Chemical Engineering', level: 200, count: 1 },
+                { department: 'Department of Architecture', level: 200, count: 1 },
+                { department: 'Department of Urban Planning', level: 200, count: 1 },
+            ];
+
+            let count = 0
+            let ss = []
+
+            for (const entry of voterAllocationPlan) {
+                const dept = departments.find((d) => d.name === entry.department);
+                if (!dept) {
+                    console.warn(`⚠️ Department not found in allocation plan: ${entry.department}`);
+                    continue;
+                }
+                const deptProgrammes = programmeRecords.filter((p) => p.departmentId === dept.id);
+                if (deptProgrammes.length === 0) continue;
+
+                for (let i = 0; i < entry.count; i++) {
+                    const fullName = getStudentName(count);
+                    const parts = fullName.split(" ")
+                    const firstName = parts[0];
+                    const lastName = parts[2];
+                    const imageUrl = `/${firstName.toLowerCase()}.png`
+                    const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 10000)}@university.edu`;
+                    const phone = randomPhone();
+                    const level = entry.level;
+                    const dateOfBirth = randomDateOfBirth();
+                    const idType = "NIN"
+                    const idNumber = randomIdNumber();
+                    const studentId = randomStudentId()
+
+                    // Randomly assign a programme from this department
+                    const programme = randomItem(deptProgrammes);
+                    ss.push(fullName)
+                    await prisma.voterRoll.create({
+                        data: {
+                            idType,
+                            idNumber,
+                            studentId,
+                            fullName,
+                            email,
+                            imageUrl,
+                            phone,
+                            campusId: campus?.id,
+                            facultyId: dept.facultyId,
+                            departmentId: dept.id,
+                            programmeId: programme.id,
+                            level,
+                            dateOfBirth,
+                        },
+                    });
+                    count++
+                }
+            }
+            const data = {
+                ss,
+                length: ss.length
+            }
+            // const voterInfo = await prisma.voterRoll.create({
+            //     data: {
+            //         idType: 'NIN',
+            //         idNumber: "25777399054",
+            //         studentId: "STU/2023/5724",
+            //         fullName: 'Muhammad Jamiu Soliu',
+            //         email: 'muhammadsoliu@university.edu',
+            //         imageUrl: '/soliu.png',
+            //         phone: "09060923345",
+            //         campusId: campus!.id,
+            //         facultyId: csDept?.facultyId,
+            //         departmentId: csDept?.id,
+            //         programmeId: csProgramme?.id,
+            //         level: 400,
+            //         dateOfBirth: randomDateOfBirth(),
+            //     },
+            // });
+
+            // const positionNames = [
+            //     'President',
+            //     'Vice President',
+            //     'Speaker',
+            //     'Treasurer',
+            //     'Social Director',
+            //     'Public Relations Officer (PRO)',
+            //     'Deputy Speaker',
+            // ];
+            // const positions = await Promise.all(
+            //     positionNames.map(name => prisma.position.create({ data: { name } }))
+            // );
+
+            // const sessions = await Promise.all([
+            //     prisma.academicSession.create({
+            //         data: {
+            //             name: '2026/2027',
+            //             startDate: new Date('2026-09-01'),
+            //             endDate: new Date('2027-07-31'),
+            //             isCurrent: true,
+            //         },
+            //     }),
+            //     prisma.academicSession.create({
+            //         data: {
+            //             name: '2027/2028',
+            //             startDate: new Date('2027-09-01'),
+            //             endDate: new Date('2028-07-31'),
+            //             isCurrent: false,
+            //         },
+            //     }),
+            // ]);
+            return c.json(successResponse(data));
 
         } catch (e) {
             console.log(e)
             return c.json(errorResponse("Something went wrong. Try again"), 500)
         }
     })
-    .get("/election-m", async (c) => {
+    .get("/election-create", async (c) => {
         try {
             const departments = await prisma.department.findMany({
                 where: {
@@ -527,7 +687,123 @@ const app = new Hono()
             }
 
 
-            return c.json(successResponse(session2026));
+            return c.json(successResponse(createdElections));
+
+        } catch (e) {
+            console.log(e)
+            return c.json(errorResponse("Something went wrong. Try again"), 500)
+        }
+    })
+    .get("/election-candidates", async (c) => {
+        try {
+            const positionLevelRequirement: Record<string, number> = {
+                'President': 400,
+                'Speaker': 400,
+                'Treasurer': 400,
+                'Vice President': 300,
+                'Deputy Speaker': 300,
+                'Social Director': 300,
+                'Public Relations Officer (PRO)': 200,
+            };
+            const allElections = await prisma.election.findMany({
+                include: {
+                    scopes: true,
+                    positions: {
+                        include: {
+                            position: true,
+                        },
+                    },
+                },
+            });
+
+            const voters = await prisma.voterRoll.findMany()
+            const departments = await prisma.department.findMany()
+
+            for (const election of allElections) {
+                let eligibleVoterIds: string[] = [];
+                const scope = election.scopes[0];
+
+                if (scope.type === ScopeType.UNIVERSITY) {
+                    eligibleVoterIds = voters.map(v => v.id);
+                } else if (scope.type === ScopeType.DEPARTMENT) {
+                    const dept = departments.find(d => d.name === scope.value);
+                    if (dept) {
+                        eligibleVoterIds = voters.filter(v => v.departmentId === dept.id).map(v => v.id);
+                    }
+                } else {
+                    eligibleVoterIds = voters.map(v => v.id);
+                }
+
+                // Register all eligible voters as participants
+                for (const vt of eligibleVoterIds) {
+                    await prisma.electionParticipation.create({
+                        data: {
+                            electionId: election.id,
+                            voterId: vt,
+                            eligible: true,
+                        }
+                    })
+                }
+
+                // Track voters already used as a candidate in this election so the
+                // same person doesn't end up contesting two positions at once.
+                const usedInThisElection = new Set<string>();
+
+                const MAX_CANDIDATES_PER_POSITION = 4; // "up to 3 where the pool allows"
+
+                for (const ep of election.positions) {
+                    const requiredLevel = positionLevelRequirement[ep.position.name];
+
+                    const candidatePool = eligibleVoterIds.filter((id) => {
+                        if (usedInThisElection.has(id)) return false;
+                        if (!requiredLevel) return true;
+                        return voters.find((v) => v.id === id)?.level === requiredLevel;
+                    });
+
+                    if (candidatePool.length === 0) continue;
+
+                    const shuffled = [...candidatePool].sort(() => 0.5 - Math.random());
+
+                    // For the university-wide election, no two candidates for the
+                    // SAME position may come from the same department — this is
+                    // moot for NACOS/Accounting since those are single-department
+                    // scopes to begin with, so we only enforce it here.
+                    const isUniversityScope = scope.type === ScopeType.UNIVERSITY;
+                    const departmentsUsedForPosition = new Set<string>();
+                    const selected: string[] = [];
+
+                    for (const voterId of shuffled) {
+                        if (selected.length >= MAX_CANDIDATES_PER_POSITION) break;
+
+                        if (isUniversityScope) {
+                            const voterDeptId = voters.find((v) => v.id === voterId)?.departmentId;
+                            if (voterDeptId) {
+                                if (departmentsUsedForPosition.has(voterDeptId)) continue;
+                                departmentsUsedForPosition.add(voterDeptId);
+                            }
+                        }
+
+                        selected.push(voterId);
+                    }
+
+                    for (const voterId of selected) {
+                        usedInThisElection.add(voterId);
+                        const imageUrl = voters.find((v) => v.id == voterId)?.imageUrl
+                        await prisma.candidate.create({
+                            data: {
+                                electionPositionId: ep.id,
+                                voterId: voterId,
+                                manifesto: "I am committed to serving the student body. My vision is to improve welfare and academic excellence.",
+                                imageUrl
+                            },
+                        });
+                    }
+                }
+            }
+
+
+
+            return c.json(successResponse("sucess"));
 
         } catch (e) {
             console.log(e)
@@ -544,6 +820,10 @@ const app = new Hono()
 
 export default app;
 
+function randomItem<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
 function randomDateOfBirth(): Date {
     const now = new Date();
     const yearsAgo = 18 + Math.floor(Math.random() * 8); // 18–25
@@ -552,4 +832,29 @@ function randomDateOfBirth(): Date {
     date.setMonth(Math.floor(Math.random() * 12));
     date.setDate(Math.floor(Math.random() * 28) + 1);
     return date;
+}
+
+function randomStudentId(): string {
+    const year = 2020 + Math.floor(Math.random() * 6); // 2020–2025
+    const seq = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+    return `STU/${year}/${seq}`;
+}
+
+function randomLevel(): number {
+    return randomItem([200, 300, 400]);
+}
+
+function randomDate(start: Date, end: Date): Date {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+function randomPhone(): string {
+    const prefixes = ['080', '081', '090', '091', '070', '0803', '0806', '0813'];
+    const prefix = randomItem(prefixes);
+    const rest = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join('');
+    return prefix + rest;
+}
+function randomIdNumber(): string {
+    const digits = Array.from({ length: 11 }, () => Math.floor(Math.random() * 10)).join('');
+    return `${digits}`;
 }
