@@ -363,176 +363,180 @@ const app = new Hono()
         try {
             // await prisma.voterRoll.deleteMany();              // child of Campus + Faculty + Department, NOT cascaded
 
-            const campus = await prisma.campus.findFirst()
-
-            const departments = await prisma.department.findMany()
-            const programmeRecords = await prisma.programme.findMany()
-            const csDept = await prisma.department.findFirst({
-                where: {
-                    name: "Department of Computer Science"
-                }
-            })
-            const csProgramme = await prisma.programme.findFirst({
-                where: {
-                    departmentId: csDept?.id
-                }
-            })
-            const idType = 'NIN' // adjust to your enum values
-
-            const studentNames = [
-                "Abdulrahman Ibrahim Bello",
-                "Chiamaka Grace Okafor",
-                "Oluwaseun David Adeyemi",
-                "Maryam Aisha Suleiman",
-                "Emeka Chinedu Nwosu",
-                "Esther Oluwatoyin Akinwale",
-                "Daniel Chukwuemeka Eze",
-                "Zainab Rukayat Lawal",
-                "Samuel Olumide Ogunleye",
-                "Blessing Efe Oghenekaro",
-                "Yusuf Abdulazeez Musa",
-                "Mercy Nkem Obi",
-                "Michael Tobi Ojo",
-                "Fatimah Aminat Mohammed",
-                "Precious Ifeoma Ezeani",
-                "Victor Ebuka Okoro",
-                "Deborah Tolulope Ajayi",
-                "Ibrahim Sani Abdullahi",
-                "Cynthia Amarachi Umeh",
-                "Emmanuel Ayomide Adebayo",
-                "Abdulrahman Musa Yusuf",
-                "Chidera Joy Okafor",
-                "Oluwaseun David Adeyemi",
-                "Aisha Zainab Ibrahim",
-                "Chukwuebuka Daniel Eze",
-                "Temiloluwa Grace Adebayo",
-                "Fatima Hauwa Bello",
-                "Emmanuel Chinedu Okoro",
-                "Esther Oluwatoyin Olamide",
-                "Ibrahim Sani Musa",
-                "Precious Amarachi Nwankwo",
-                "Daniel Etim Akpan",
-                "Zainab Maryam Abdullahi",
-                "Favour Chisom Eze",
-                "Samuel Oluwadamilare Oladipo",
-                "Maryam Aisha Sani",
-                "David Ekong Udo",
-                "Grace Ifeoma Nwachukwu",
-                "Abdulaziz Ahmed Lawal",
-                "Victory Iniobong Ekanem",
-                "Abdulrahman Musa Yusuf",
-                "Chidera Joy Okafor",
-                "Oluwaseun David Adeyemi",
-                "Aisha Zainab Ibrahim",
-                "Chukwuebuka Daniel Eze",
-                "Temiloluwa Grace Adebayo",
-                "Fatima Hauwa Bello",
-                "Emmanuel Chinedu Okoro",
-                "Esther Oluwatoyin Olamide",
-                "Ibrahim Sani Musa",
-                "Precious Amarachi Nwankwo",
-                "Daniel Etim Akpan",
-                "Zainab Maryam Abdullahi",
-                "Favour Chisom Eze",
-                "Samuel Oluwadamilare Oladipo",
-                "Maryam Aisha Sani",
-                "David Ekong Udo",
-                "Grace Ifeoma Nwachukwu",
-                "Abdulaziz Ahmed Lawal",
-                "Victory Iniobong Ekanem",
-            ];
-
-            function getStudentName(count: number) {
-
-                return studentNames[count]
+            const voters = await prisma.voterRoll.count()
+            if (voters >= 50) {
+                return c.json(successResponse("You have enough voters"))
             }
+            // const campus = await prisma.campus.findFirst()
 
-            const voterAllocationPlan: { department: string; level: number; count: number }[] = [
-                // 400-level (13 total: CS 5 + Soliu = 6, Accounting 4, others 3)
-                { department: 'Department of Computer Science', level: 400, count: 9 },
-                { department: 'Department of Accounting', level: 400, count: 9 },
-                { department: 'Department of Mechanical Engineering', level: 400, count: 2 },
-                { department: 'Department of Economics', level: 400, count: 1 },
-                { department: 'Department of Physics', level: 400, count: 1 },
-                { department: 'Department of English', level: 400, count: 1 },
+            // const departments = await prisma.department.findMany()
+            // const programmeRecords = await prisma.programme.findMany()
+            // const csDept = await prisma.department.findFirst({
+            //     where: {
+            //         name: "Department of Computer Science"
+            //     }
+            // })
+            // const csProgramme = await prisma.programme.findFirst({
+            //     where: {
+            //         departmentId: csDept?.id
+            //     }
+            // })
+            // const idType = 'NIN' // adjust to your enum values
+
+            // const studentNames = [
+            //     "Abdulrahman Ibrahim Bello",
+            //     "Chiamaka Grace Okafor",
+            //     "Oluwaseun David Adeyemi",
+            //     "Maryam Aisha Suleiman",
+            //     "Emeka Chinedu Nwosu",
+            //     "Esther Oluwatoyin Akinwale",
+            //     "Daniel Chukwuemeka Eze",
+            //     "Zainab Rukayat Lawal",
+            //     "Samuel Olumide Ogunleye",
+            //     "Blessing Efe Oghenekaro",
+            //     "Yusuf Abdulazeez Musa",
+            //     "Mercy Nkem Obi",
+            //     "Michael Tobi Ojo",
+            //     "Fatimah Aminat Mohammed",
+            //     "Precious Ifeoma Ezeani",
+            //     "Victor Ebuka Okoro",
+            //     "Deborah Tolulope Ajayi",
+            //     "Ibrahim Sani Abdullahi",
+            //     "Cynthia Amarachi Umeh",
+            //     "Emmanuel Ayomide Adebayo",
+            //     "Abdulrahman Musa Yusuf",
+            //     "Chidera Joy Okafor",
+            //     "Oluwaseun David Adeyemi",
+            //     "Aisha Zainab Ibrahim",
+            //     "Chukwuebuka Daniel Eze",
+            //     "Temiloluwa Grace Adebayo",
+            //     "Fatima Hauwa Bello",
+            //     "Emmanuel Chinedu Okoro",
+            //     "Esther Oluwatoyin Olamide",
+            //     "Ibrahim Sani Musa",
+            //     "Precious Amarachi Nwankwo",
+            //     "Daniel Etim Akpan",
+            //     "Zainab Maryam Abdullahi",
+            //     "Favour Chisom Eze",
+            //     "Samuel Oluwadamilare Oladipo",
+            //     "Maryam Aisha Sani",
+            //     "David Ekong Udo",
+            //     "Grace Ifeoma Nwachukwu",
+            //     "Abdulaziz Ahmed Lawal",
+            //     "Victory Iniobong Ekanem",
+            //     "Abdulrahman Musa Yusuf",
+            //     "Chidera Joy Okafor",
+            //     "Oluwaseun David Adeyemi",
+            //     "Aisha Zainab Ibrahim",
+            //     "Chukwuebuka Daniel Eze",
+            //     "Temiloluwa Grace Adebayo",
+            //     "Fatima Hauwa Bello",
+            //     "Emmanuel Chinedu Okoro",
+            //     "Esther Oluwatoyin Olamide",
+            //     "Ibrahim Sani Musa",
+            //     "Precious Amarachi Nwankwo",
+            //     "Daniel Etim Akpan",
+            //     "Zainab Maryam Abdullahi",
+            //     "Favour Chisom Eze",
+            //     "Samuel Oluwadamilare Oladipo",
+            //     "Maryam Aisha Sani",
+            //     "David Ekong Udo",
+            //     "Grace Ifeoma Nwachukwu",
+            //     "Abdulaziz Ahmed Lawal",
+            //     "Victory Iniobong Ekanem",
+            // ];
+
+            // function getStudentName(count: number) {
+
+            //     return studentNames[count]
+            // }
+
+            // const voterAllocationPlan: { department: string; level: number; count: number }[] = [
+            //     // 400-level (13 total: CS 5 + Soliu = 6, Accounting 4, others 3)
+            //     { department: 'Department of Computer Science', level: 400, count: 9 },
+            //     { department: 'Department of Accounting', level: 400, count: 9 },
+            //     { department: 'Department of Mechanical Engineering', level: 400, count: 2 },
+            //     { department: 'Department of Economics', level: 400, count: 1 },
+            //     { department: 'Department of Physics', level: 400, count: 1 },
+            //     { department: 'Department of English', level: 400, count: 1 },
 
 
-                // 300-level (10 total: CS 4, Accounting 2, others 4)
-                { department: 'Department of Computer Science', level: 300, count: 9 },
-                { department: 'Department of Accounting', level: 300, count: 9 },
-                { department: 'Department of Mass Communication', level: 300, count: 1 },
-                { department: 'Department of Civil Engineering', level: 300, count: 1 },
-                { department: 'Department of Sociology', level: 300, count: 1 },
-                { department: 'Department of English', level: 300, count: 1 },
-                { department: 'Department of Chemistry', level: 300, count: 1 },
+            //     // 300-level (10 total: CS 4, Accounting 2, others 4)
+            //     { department: 'Department of Computer Science', level: 300, count: 9 },
+            //     { department: 'Department of Accounting', level: 300, count: 9 },
+            //     { department: 'Department of Mass Communication', level: 300, count: 1 },
+            //     { department: 'Department of Civil Engineering', level: 300, count: 1 },
+            //     { department: 'Department of Sociology', level: 300, count: 1 },
+            //     { department: 'Department of English', level: 300, count: 1 },
+            //     { department: 'Department of Chemistry', level: 300, count: 1 },
 
 
-                // 200-level (10 total: CS 1, Accounting 1, others 8)
-                { department: 'Department of Computer Science', level: 200, count: 3 },
-                { department: 'Department of Accounting', level: 200, count: 3 },
-                { department: 'Department of Mathematics', level: 200, count: 1 },
-                { department: 'Department of Chemistry', level: 200, count: 1 },
-                { department: 'Department of Biology', level: 200, count: 1 },
-                { department: 'Department of Cybersecurity', level: 200, count: 1 },
-                { department: 'Department of Electrical Engineering', level: 200, count: 1 },
-                { department: 'Department of Chemical Engineering', level: 200, count: 1 },
-                { department: 'Department of Architecture', level: 200, count: 1 },
-                { department: 'Department of Urban Planning', level: 200, count: 1 },
-            ];
+            //     // 200-level (10 total: CS 1, Accounting 1, others 8)
+            //     { department: 'Department of Computer Science', level: 200, count: 3 },
+            //     { department: 'Department of Accounting', level: 200, count: 3 },
+            //     { department: 'Department of Mathematics', level: 200, count: 1 },
+            //     { department: 'Department of Chemistry', level: 200, count: 1 },
+            //     { department: 'Department of Biology', level: 200, count: 1 },
+            //     { department: 'Department of Cybersecurity', level: 200, count: 1 },
+            //     { department: 'Department of Electrical Engineering', level: 200, count: 1 },
+            //     { department: 'Department of Chemical Engineering', level: 200, count: 1 },
+            //     { department: 'Department of Architecture', level: 200, count: 1 },
+            //     { department: 'Department of Urban Planning', level: 200, count: 1 },
+            // ];
 
-            let count = 0
-            let ss = []
+            // let count = 0
+            // let ss = []
 
-            for (const entry of voterAllocationPlan) {
-                const dept = departments.find((d) => d.name === entry.department);
-                if (!dept) {
-                    console.warn(`⚠️ Department not found in allocation plan: ${entry.department}`);
-                    continue;
-                }
-                const deptProgrammes = programmeRecords.filter((p) => p.departmentId === dept.id);
-                if (deptProgrammes.length === 0) continue;
+            // for (const entry of voterAllocationPlan) {
+            //     const dept = departments.find((d) => d.name === entry.department);
+            //     if (!dept) {
+            //         console.warn(`⚠️ Department not found in allocation plan: ${entry.department}`);
+            //         continue;
+            //     }
+            //     const deptProgrammes = programmeRecords.filter((p) => p.departmentId === dept.id);
+            //     if (deptProgrammes.length === 0) continue;
 
-                for (let i = 0; i < entry.count; i++) {
-                    const fullName = getStudentName(count);
-                    const parts = fullName.split(" ")
-                    const firstName = parts[0];
-                    const lastName = parts[2];
-                    const imageUrl = `/${firstName.toLowerCase()}.png`
-                    const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 10000)}@university.edu`;
-                    const phone = randomPhone();
-                    const level = entry.level;
-                    const dateOfBirth = randomDateOfBirth();
-                    const idType = "NIN"
-                    const idNumber = randomIdNumber();
-                    const studentId = randomStudentId()
+            //     for (let i = 0; i < entry.count; i++) {
+            //         const fullName = getStudentName(count);
+            //         const parts = fullName.split(" ")
+            //         const firstName = parts[0];
+            //         const lastName = parts[2];
+            //         const imageUrl = `/${firstName.toLowerCase()}.png`
+            //         const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 10000)}@university.edu`;
+            //         const phone = randomPhone();
+            //         const level = entry.level;
+            //         const dateOfBirth = randomDateOfBirth();
+            //         const idType = "NIN"
+            //         const idNumber = randomIdNumber();
+            //         const studentId = randomStudentId()
 
-                    // Randomly assign a programme from this department
-                    const programme = randomItem(deptProgrammes);
-                    ss.push(fullName)
-                    await prisma.voterRoll.create({
-                        data: {
-                            idType,
-                            idNumber,
-                            studentId,
-                            fullName,
-                            email,
-                            imageUrl,
-                            phone,
-                            campusId: campus?.id,
-                            facultyId: dept.facultyId,
-                            departmentId: dept.id,
-                            programmeId: programme.id,
-                            level,
-                            dateOfBirth,
-                        },
-                    });
-                    count++
-                }
-            }
-            const data = {
-                ss,
-                length: ss.length
-            }
+            //         // Randomly assign a programme from this department
+            //         const programme = randomItem(deptProgrammes);
+            //         ss.push(fullName)
+            //         await prisma.voterRoll.create({
+            //             data: {
+            //                 idType,
+            //                 idNumber,
+            //                 studentId,
+            //                 fullName,
+            //                 email,
+            //                 imageUrl,
+            //                 phone,
+            //                 campusId: campus?.id,
+            //                 facultyId: dept.facultyId,
+            //                 departmentId: dept.id,
+            //                 programmeId: programme.id,
+            //                 level,
+            //                 dateOfBirth,
+            //             },
+            //         });
+            //         count++
+            //     }
+            // }
+            // const data = {
+            //     ss,
+            //     length: ss.length
+            // }
             // const voterInfo = await prisma.voterRoll.create({
             //     data: {
             //         idType: 'NIN',
@@ -582,7 +586,7 @@ const app = new Hono()
             //         },
             //     }),
             // ]);
-            return c.json(successResponse(data));
+            return c.json(successResponse("success"));
 
         } catch (e) {
             console.log(e)
