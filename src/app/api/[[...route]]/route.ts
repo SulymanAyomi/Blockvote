@@ -4,6 +4,7 @@ import { handle } from "hono/vercel"
 import auth from "@/features/auth/server/route"
 import voting from "@/features/voting/server/route"
 import election from "@/features/elections/server/route"
+import candidate from "@/features/candidate/server/route"
 
 
 const app = new Hono().basePath("/api")
@@ -14,6 +15,7 @@ const routes = app
     .route("/register", auth)
     .route("/voting", voting)
     .route("/election", election)
+    .route("/candidate", candidate)
 
 
 export const GET = handle(app)
