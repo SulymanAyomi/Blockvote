@@ -50,8 +50,8 @@ export function VerificationFlow({
   const { faceDetected, centered } = useFaceDetection(videoRef, cameraActive);
 
   // Feed live detection results into the state machine as they change.
-  // const readyToCapture = faceDetected && centered;
-  const readyToCapture = true;
+  const readyToCapture = faceDetected && centered;
+  // const readyToCapture = true;
   if (cameraActive) {
     const shouldBeFaceDetected = state.status === "face_detected";
     if (readyToCapture !== shouldBeFaceDetected) {
