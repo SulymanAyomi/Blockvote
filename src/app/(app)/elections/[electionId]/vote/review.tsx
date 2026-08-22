@@ -98,7 +98,9 @@ const ReviewBallotClient = () => {
                       <p className="font-semibold mb-2!">
                         {candidate?.voter.fullName}
                       </p>
-                      <p className="mb-2!">Computer science</p>
+                      <p className="mb-2!">
+                        {departmentName(candidate?.voter?.department?.name!)}
+                      </p>
                       <p className="text-muted-foreground text-xs mb-2">
                         {candidate?.voter.level} level
                       </p>
@@ -139,3 +141,7 @@ const ReviewBallotClient = () => {
 };
 
 export default ReviewBallotClient;
+
+const departmentName = (name: string) => {
+  return name.replace(/^.*?Department of /, "");
+};

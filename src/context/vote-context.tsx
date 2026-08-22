@@ -10,6 +10,9 @@ export interface Candidate {
     level: number | null;
     fullName: string;
     imageUrl: string | null;
+    department: {
+      name: string;
+    } | null;
   };
 }
 

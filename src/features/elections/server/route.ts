@@ -242,7 +242,12 @@ const app = new Hono()
                                 select: {
                                     fullName: true,
                                     level: true,
-                                    imageUrl: true
+                                    imageUrl: true,
+                                    department: {
+                                        select: {
+                                            name: true
+                                        }
+                                    }
                                 }
                             }
                         }

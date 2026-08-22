@@ -125,7 +125,11 @@ const SingleVotePage = () => {
                             <p className="font-semibold mb-2!">
                               {candidate.voter.fullName}
                             </p>
-                            <p className="mb-2!">Computer science</p>
+                            <p className="mb-2!">
+                              {departmentName(
+                                candidate.voter?.department?.name!,
+                              )}
+                            </p>
                             <p className="text-muted-foreground text-xs mb-2">
                               {candidate.voter.level} level
                             </p>
@@ -207,3 +211,7 @@ const SingleVotePage = () => {
 };
 
 export default SingleVotePage;
+
+const departmentName = (name: string) => {
+  return name.replace(/^.*?Department of /, "");
+};
