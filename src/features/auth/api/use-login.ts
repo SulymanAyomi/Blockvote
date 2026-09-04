@@ -32,7 +32,9 @@ export const useLogin = () => {
         },
         onSuccess: async (data) => {
             if (data.success) {
-                toast.success(`Your otp is ${data.data.otp}`)
+                toast.success(`Your otp is ${data.data.otp}`, {
+                    duration: 30000
+                })
                 router.push(`/verification?email=${data.data.email}&&vid=${data.data.vid}`)
             }
         }

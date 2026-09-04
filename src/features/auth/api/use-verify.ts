@@ -35,7 +35,9 @@ export const useVerifyNin = () => {
             // @ts-ignore
             const otp = data.data.otp
             if (otp) {
-                toast.success(`Your otp is ${otp}.`)
+                toast.success(`Your otp is ${otp}.`, {
+                    duration: 30000
+                })
             }
         }
     })
