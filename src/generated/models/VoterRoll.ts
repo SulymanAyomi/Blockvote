@@ -312,17 +312,17 @@ export type VoterRollWhereInput = {
   isRegistered?: Prisma.BoolFilter<"VoterRoll"> | boolean
   createdAt?: Prisma.DateTimeFilter<"VoterRoll"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"VoterRoll"> | Date | string
-  campus?: Prisma.XOR<Prisma.CampusNullableScalarRelationFilter, Prisma.CampusWhereInput> | null
-  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
-  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
+  candidates?: Prisma.CandidateListRelationFilter
+  electionParticipations?: Prisma.ElectionParticipationListRelationFilter
+  votingSessions?: Prisma.VotingSessionListRelationFilter
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
   faceReference?: Prisma.XOR<Prisma.FaceReferenceNullableScalarRelationFilter, Prisma.FaceReferenceWhereInput> | null
   otps?: Prisma.OtpListRelationFilter
   registrationSessions?: Prisma.RegistrationSessionListRelationFilter
-  electionParticipations?: Prisma.ElectionParticipationListRelationFilter
-  candidates?: Prisma.CandidateListRelationFilter
+  campus?: Prisma.XOR<Prisma.CampusNullableScalarRelationFilter, Prisma.CampusWhereInput> | null
+  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
+  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
   programmes?: Prisma.ProgrammeListRelationFilter
-  votingSessions?: Prisma.VotingSessionListRelationFilter
 }
 
 export type VoterRollOrderByWithRelationInput = {
@@ -343,17 +343,17 @@ export type VoterRollOrderByWithRelationInput = {
   isRegistered?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  campus?: Prisma.CampusOrderByWithRelationInput
-  faculty?: Prisma.FacultyOrderByWithRelationInput
-  department?: Prisma.DepartmentOrderByWithRelationInput
+  candidates?: Prisma.CandidateOrderByRelationAggregateInput
+  electionParticipations?: Prisma.ElectionParticipationOrderByRelationAggregateInput
+  votingSessions?: Prisma.VotingSessionOrderByRelationAggregateInput
   account?: Prisma.AccountOrderByWithRelationInput
   faceReference?: Prisma.FaceReferenceOrderByWithRelationInput
   otps?: Prisma.OtpOrderByRelationAggregateInput
   registrationSessions?: Prisma.RegistrationSessionOrderByRelationAggregateInput
-  electionParticipations?: Prisma.ElectionParticipationOrderByRelationAggregateInput
-  candidates?: Prisma.CandidateOrderByRelationAggregateInput
+  campus?: Prisma.CampusOrderByWithRelationInput
+  department?: Prisma.DepartmentOrderByWithRelationInput
+  faculty?: Prisma.FacultyOrderByWithRelationInput
   programmes?: Prisma.ProgrammeOrderByRelationAggregateInput
-  votingSessions?: Prisma.VotingSessionOrderByRelationAggregateInput
 }
 
 export type VoterRollWhereUniqueInput = Prisma.AtLeast<{
@@ -378,17 +378,17 @@ export type VoterRollWhereUniqueInput = Prisma.AtLeast<{
   isRegistered?: Prisma.BoolFilter<"VoterRoll"> | boolean
   createdAt?: Prisma.DateTimeFilter<"VoterRoll"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"VoterRoll"> | Date | string
-  campus?: Prisma.XOR<Prisma.CampusNullableScalarRelationFilter, Prisma.CampusWhereInput> | null
-  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
-  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
+  candidates?: Prisma.CandidateListRelationFilter
+  electionParticipations?: Prisma.ElectionParticipationListRelationFilter
+  votingSessions?: Prisma.VotingSessionListRelationFilter
   account?: Prisma.XOR<Prisma.AccountNullableScalarRelationFilter, Prisma.AccountWhereInput> | null
   faceReference?: Prisma.XOR<Prisma.FaceReferenceNullableScalarRelationFilter, Prisma.FaceReferenceWhereInput> | null
   otps?: Prisma.OtpListRelationFilter
   registrationSessions?: Prisma.RegistrationSessionListRelationFilter
-  electionParticipations?: Prisma.ElectionParticipationListRelationFilter
-  candidates?: Prisma.CandidateListRelationFilter
+  campus?: Prisma.XOR<Prisma.CampusNullableScalarRelationFilter, Prisma.CampusWhereInput> | null
+  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
+  faculty?: Prisma.XOR<Prisma.FacultyNullableScalarRelationFilter, Prisma.FacultyWhereInput> | null
   programmes?: Prisma.ProgrammeListRelationFilter
-  votingSessions?: Prisma.VotingSessionListRelationFilter
 }, "id" | "idType_idNumber">
 
 export type VoterRollOrderByWithAggregationInput = {
@@ -454,17 +454,17 @@ export type VoterRollCreateInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateInput = {
@@ -485,14 +485,14 @@ export type VoterRollUncheckedCreateInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUpdateInput = {
@@ -510,17 +510,17 @@ export type VoterRollUpdateInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateInput = {
@@ -541,14 +541,14 @@ export type VoterRollUncheckedUpdateInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollCreateManyInput = {
@@ -686,11 +686,6 @@ export type VoterRollScalarRelationFilter = {
   isNot?: Prisma.VoterRollWhereInput
 }
 
-export type VoterRollNullableScalarRelationFilter = {
-  is?: Prisma.VoterRollWhereInput | null
-  isNot?: Prisma.VoterRollWhereInput | null
-}
-
 export type VoterRollListRelationFilter = {
   every?: Prisma.VoterRollWhereInput
   some?: Prisma.VoterRollWhereInput
@@ -753,12 +748,10 @@ export type VoterRollCreateNestedOneWithoutOtpsInput = {
   connect?: Prisma.VoterRollWhereUniqueInput
 }
 
-export type VoterRollUpdateOneWithoutOtpsNestedInput = {
+export type VoterRollUpdateOneRequiredWithoutOtpsNestedInput = {
   create?: Prisma.XOR<Prisma.VoterRollCreateWithoutOtpsInput, Prisma.VoterRollUncheckedCreateWithoutOtpsInput>
   connectOrCreate?: Prisma.VoterRollCreateOrConnectWithoutOtpsInput
   upsert?: Prisma.VoterRollUpsertWithoutOtpsInput
-  disconnect?: Prisma.VoterRollWhereInput | boolean
-  delete?: Prisma.VoterRollWhereInput | boolean
   connect?: Prisma.VoterRollWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.VoterRollUpdateToOneWithWhereWithoutOtpsInput, Prisma.VoterRollUpdateWithoutOtpsInput>, Prisma.VoterRollUncheckedUpdateWithoutOtpsInput>
 }
@@ -1012,16 +1005,16 @@ export type VoterRollCreateWithoutAccountInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutAccountInput = {
@@ -1042,13 +1035,13 @@ export type VoterRollUncheckedCreateWithoutAccountInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutAccountInput = {
@@ -1082,16 +1075,16 @@ export type VoterRollUpdateWithoutAccountInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutAccountInput = {
@@ -1112,13 +1105,13 @@ export type VoterRollUncheckedUpdateWithoutAccountInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollCreateWithoutOtpsInput = {
@@ -1136,16 +1129,16 @@ export type VoterRollCreateWithoutOtpsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutOtpsInput = {
@@ -1166,13 +1159,13 @@ export type VoterRollUncheckedCreateWithoutOtpsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutOtpsInput = {
@@ -1206,16 +1199,16 @@ export type VoterRollUpdateWithoutOtpsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutOtpsInput = {
@@ -1236,13 +1229,13 @@ export type VoterRollUncheckedUpdateWithoutOtpsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollCreateWithoutRegistrationSessionsInput = {
@@ -1260,16 +1253,16 @@ export type VoterRollCreateWithoutRegistrationSessionsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutRegistrationSessionsInput = {
@@ -1290,13 +1283,13 @@ export type VoterRollUncheckedCreateWithoutRegistrationSessionsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutRegistrationSessionsInput = {
@@ -1330,16 +1323,16 @@ export type VoterRollUpdateWithoutRegistrationSessionsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutRegistrationSessionsInput = {
@@ -1360,13 +1353,13 @@ export type VoterRollUncheckedUpdateWithoutRegistrationSessionsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollCreateWithoutFaceReferenceInput = {
@@ -1384,16 +1377,16 @@ export type VoterRollCreateWithoutFaceReferenceInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutFaceReferenceInput = {
@@ -1414,13 +1407,13 @@ export type VoterRollUncheckedCreateWithoutFaceReferenceInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutFaceReferenceInput = {
@@ -1454,16 +1447,16 @@ export type VoterRollUpdateWithoutFaceReferenceInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutFaceReferenceInput = {
@@ -1484,13 +1477,13 @@ export type VoterRollUncheckedUpdateWithoutFaceReferenceInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollCreateWithoutCampusInput = {
@@ -1508,16 +1501,16 @@ export type VoterRollCreateWithoutCampusInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutCampusInput = {
@@ -1537,14 +1530,14 @@ export type VoterRollUncheckedCreateWithoutCampusInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutCampusInput = {
@@ -1611,16 +1604,16 @@ export type VoterRollCreateWithoutFacultyInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutFacultyInput = {
@@ -1640,14 +1633,14 @@ export type VoterRollUncheckedCreateWithoutFacultyInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutFacultyInput = {
@@ -1691,16 +1684,16 @@ export type VoterRollCreateWithoutDepartmentInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutDepartmentInput = {
@@ -1720,14 +1713,14 @@ export type VoterRollUncheckedCreateWithoutDepartmentInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutDepartmentInput = {
@@ -1771,16 +1764,16 @@ export type VoterRollCreateWithoutProgrammesInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
 }
 
 export type VoterRollUncheckedCreateWithoutProgrammesInput = {
@@ -1801,13 +1794,13 @@ export type VoterRollUncheckedCreateWithoutProgrammesInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutProgrammesInput = {
@@ -1846,16 +1839,16 @@ export type VoterRollCreateWithoutCandidatesInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutCandidatesInput = {
@@ -1876,13 +1869,13 @@ export type VoterRollUncheckedCreateWithoutCandidatesInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutCandidatesInput = {
@@ -1916,16 +1909,16 @@ export type VoterRollUpdateWithoutCandidatesInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutCandidatesInput = {
@@ -1946,13 +1939,13 @@ export type VoterRollUncheckedUpdateWithoutCandidatesInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollCreateWithoutElectionParticipationsInput = {
@@ -1970,16 +1963,16 @@ export type VoterRollCreateWithoutElectionParticipationsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollUncheckedCreateWithoutElectionParticipationsInput = {
@@ -2000,13 +1993,13 @@ export type VoterRollUncheckedCreateWithoutElectionParticipationsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutVoterInput
 }
 
 export type VoterRollCreateOrConnectWithoutElectionParticipationsInput = {
@@ -2040,16 +2033,16 @@ export type VoterRollUpdateWithoutElectionParticipationsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutElectionParticipationsInput = {
@@ -2070,13 +2063,13 @@ export type VoterRollUncheckedUpdateWithoutElectionParticipationsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollCreateWithoutVotingSessionsInput = {
@@ -2094,15 +2087,15 @@ export type VoterRollCreateWithoutVotingSessionsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
-  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateCreateNestedManyWithoutVoterInput
+  campus?: Prisma.CampusCreateNestedOneWithoutVotersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutVotersInput
+  faculty?: Prisma.FacultyCreateNestedOneWithoutVotersInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutVotersInput
 }
 
@@ -2124,12 +2117,12 @@ export type VoterRollUncheckedCreateWithoutVotingSessionsInput = {
   isRegistered?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
   account?: Prisma.AccountUncheckedCreateNestedOneWithoutVoterInput
   faceReference?: Prisma.FaceReferenceUncheckedCreateNestedOneWithoutVoterInput
   otps?: Prisma.OtpUncheckedCreateNestedManyWithoutVoterRollInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedCreateNestedManyWithoutVoterRollInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutVoterInput
-  candidates?: Prisma.CandidateUncheckedCreateNestedManyWithoutVoterInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutVotersInput
 }
 
@@ -2164,15 +2157,15 @@ export type VoterRollUpdateWithoutVotingSessionsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
 }
 
@@ -2194,12 +2187,12 @@ export type VoterRollUncheckedUpdateWithoutVotingSessionsInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
 }
 
@@ -2237,16 +2230,16 @@ export type VoterRollUpdateWithoutCampusInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutCampusInput = {
@@ -2266,14 +2259,14 @@ export type VoterRollUncheckedUpdateWithoutCampusInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateManyWithoutCampusInput = {
@@ -2329,16 +2322,16 @@ export type VoterRollUpdateWithoutFacultyInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutFacultyInput = {
@@ -2358,14 +2351,14 @@ export type VoterRollUncheckedUpdateWithoutFacultyInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateManyWithoutFacultyInput = {
@@ -2421,16 +2414,16 @@ export type VoterRollUpdateWithoutDepartmentInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutDepartmentInput = {
@@ -2450,14 +2443,14 @@ export type VoterRollUncheckedUpdateWithoutDepartmentInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutVotersNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateManyWithoutDepartmentInput = {
@@ -2494,16 +2487,16 @@ export type VoterRollUpdateWithoutProgrammesInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
-  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUpdateManyWithoutVoterNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutVoterNestedInput
+  campus?: Prisma.CampusUpdateOneWithoutVotersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutVotersNestedInput
+  faculty?: Prisma.FacultyUpdateOneWithoutVotersNestedInput
 }
 
 export type VoterRollUncheckedUpdateWithoutProgrammesInput = {
@@ -2524,13 +2517,13 @@ export type VoterRollUncheckedUpdateWithoutProgrammesInput = {
   isRegistered?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
+  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
   account?: Prisma.AccountUncheckedUpdateOneWithoutVoterNestedInput
   faceReference?: Prisma.FaceReferenceUncheckedUpdateOneWithoutVoterNestedInput
   otps?: Prisma.OtpUncheckedUpdateManyWithoutVoterRollNestedInput
   registrationSessions?: Prisma.RegistrationSessionUncheckedUpdateManyWithoutVoterRollNestedInput
-  electionParticipations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutVoterNestedInput
-  candidates?: Prisma.CandidateUncheckedUpdateManyWithoutVoterNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutVoterNestedInput
 }
 
 export type VoterRollUncheckedUpdateManyWithoutProgrammesInput = {
@@ -2559,21 +2552,21 @@ export type VoterRollUncheckedUpdateManyWithoutProgrammesInput = {
  */
 
 export type VoterRollCountOutputType = {
+  candidates: number
+  electionParticipations: number
+  votingSessions: number
   otps: number
   registrationSessions: number
-  electionParticipations: number
-  candidates: number
   programmes: number
-  votingSessions: number
 }
 
 export type VoterRollCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  candidates?: boolean | VoterRollCountOutputTypeCountCandidatesArgs
+  electionParticipations?: boolean | VoterRollCountOutputTypeCountElectionParticipationsArgs
+  votingSessions?: boolean | VoterRollCountOutputTypeCountVotingSessionsArgs
   otps?: boolean | VoterRollCountOutputTypeCountOtpsArgs
   registrationSessions?: boolean | VoterRollCountOutputTypeCountRegistrationSessionsArgs
-  electionParticipations?: boolean | VoterRollCountOutputTypeCountElectionParticipationsArgs
-  candidates?: boolean | VoterRollCountOutputTypeCountCandidatesArgs
   programmes?: boolean | VoterRollCountOutputTypeCountProgrammesArgs
-  votingSessions?: boolean | VoterRollCountOutputTypeCountVotingSessionsArgs
 }
 
 /**
@@ -2584,6 +2577,27 @@ export type VoterRollCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
    * Select specific fields to fetch from the VoterRollCountOutputType
    */
   select?: Prisma.VoterRollCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * VoterRollCountOutputType without action
+ */
+export type VoterRollCountOutputTypeCountCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CandidateWhereInput
+}
+
+/**
+ * VoterRollCountOutputType without action
+ */
+export type VoterRollCountOutputTypeCountElectionParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ElectionParticipationWhereInput
+}
+
+/**
+ * VoterRollCountOutputType without action
+ */
+export type VoterRollCountOutputTypeCountVotingSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VotingSessionWhereInput
 }
 
 /**
@@ -2603,29 +2617,8 @@ export type VoterRollCountOutputTypeCountRegistrationSessionsArgs<ExtArgs extend
 /**
  * VoterRollCountOutputType without action
  */
-export type VoterRollCountOutputTypeCountElectionParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ElectionParticipationWhereInput
-}
-
-/**
- * VoterRollCountOutputType without action
- */
-export type VoterRollCountOutputTypeCountCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CandidateWhereInput
-}
-
-/**
- * VoterRollCountOutputType without action
- */
 export type VoterRollCountOutputTypeCountProgrammesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProgrammeWhereInput
-}
-
-/**
- * VoterRollCountOutputType without action
- */
-export type VoterRollCountOutputTypeCountVotingSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VotingSessionWhereInput
 }
 
 
@@ -2647,17 +2640,17 @@ export type VoterRollSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   isRegistered?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
-  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
-  department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  candidates?: boolean | Prisma.VoterRoll$candidatesArgs<ExtArgs>
+  electionParticipations?: boolean | Prisma.VoterRoll$electionParticipationsArgs<ExtArgs>
+  votingSessions?: boolean | Prisma.VoterRoll$votingSessionsArgs<ExtArgs>
   account?: boolean | Prisma.VoterRoll$accountArgs<ExtArgs>
   faceReference?: boolean | Prisma.VoterRoll$faceReferenceArgs<ExtArgs>
   otps?: boolean | Prisma.VoterRoll$otpsArgs<ExtArgs>
   registrationSessions?: boolean | Prisma.VoterRoll$registrationSessionsArgs<ExtArgs>
-  electionParticipations?: boolean | Prisma.VoterRoll$electionParticipationsArgs<ExtArgs>
-  candidates?: boolean | Prisma.VoterRoll$candidatesArgs<ExtArgs>
+  campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
+  department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
   programmes?: boolean | Prisma.VoterRoll$programmesArgs<ExtArgs>
-  votingSessions?: boolean | Prisma.VoterRoll$votingSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.VoterRollCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["voterRoll"]>
 
@@ -2680,8 +2673,8 @@ export type VoterRollSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   createdAt?: boolean
   updatedAt?: boolean
   campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
-  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
   department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
 }, ExtArgs["result"]["voterRoll"]>
 
 export type VoterRollSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2703,8 +2696,8 @@ export type VoterRollSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   createdAt?: boolean
   updatedAt?: boolean
   campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
-  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
   department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
 }, ExtArgs["result"]["voterRoll"]>
 
 export type VoterRollSelectScalar = {
@@ -2729,44 +2722,44 @@ export type VoterRollSelectScalar = {
 
 export type VoterRollOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "idType" | "idNumber" | "studentId" | "fullName" | "email" | "imageUrl" | "phone" | "campusId" | "facultyId" | "departmentId" | "programmeId" | "level" | "dateOfBirth" | "isRegistered" | "createdAt" | "updatedAt", ExtArgs["result"]["voterRoll"]>
 export type VoterRollInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
-  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
-  department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  candidates?: boolean | Prisma.VoterRoll$candidatesArgs<ExtArgs>
+  electionParticipations?: boolean | Prisma.VoterRoll$electionParticipationsArgs<ExtArgs>
+  votingSessions?: boolean | Prisma.VoterRoll$votingSessionsArgs<ExtArgs>
   account?: boolean | Prisma.VoterRoll$accountArgs<ExtArgs>
   faceReference?: boolean | Prisma.VoterRoll$faceReferenceArgs<ExtArgs>
   otps?: boolean | Prisma.VoterRoll$otpsArgs<ExtArgs>
   registrationSessions?: boolean | Prisma.VoterRoll$registrationSessionsArgs<ExtArgs>
-  electionParticipations?: boolean | Prisma.VoterRoll$electionParticipationsArgs<ExtArgs>
-  candidates?: boolean | Prisma.VoterRoll$candidatesArgs<ExtArgs>
+  campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
+  department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
   programmes?: boolean | Prisma.VoterRoll$programmesArgs<ExtArgs>
-  votingSessions?: boolean | Prisma.VoterRoll$votingSessionsArgs<ExtArgs>
   _count?: boolean | Prisma.VoterRollCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VoterRollIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
-  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
   department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
 }
 export type VoterRollIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campus?: boolean | Prisma.VoterRoll$campusArgs<ExtArgs>
-  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
   department?: boolean | Prisma.VoterRoll$departmentArgs<ExtArgs>
+  faculty?: boolean | Prisma.VoterRoll$facultyArgs<ExtArgs>
 }
 
 export type $VoterRollPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "VoterRoll"
   objects: {
-    campus: Prisma.$CampusPayload<ExtArgs> | null
-    faculty: Prisma.$FacultyPayload<ExtArgs> | null
-    department: Prisma.$DepartmentPayload<ExtArgs> | null
+    candidates: Prisma.$CandidatePayload<ExtArgs>[]
+    electionParticipations: Prisma.$ElectionParticipationPayload<ExtArgs>[]
+    votingSessions: Prisma.$VotingSessionPayload<ExtArgs>[]
     account: Prisma.$AccountPayload<ExtArgs> | null
     faceReference: Prisma.$FaceReferencePayload<ExtArgs> | null
     otps: Prisma.$OtpPayload<ExtArgs>[]
     registrationSessions: Prisma.$RegistrationSessionPayload<ExtArgs>[]
-    electionParticipations: Prisma.$ElectionParticipationPayload<ExtArgs>[]
-    candidates: Prisma.$CandidatePayload<ExtArgs>[]
+    campus: Prisma.$CampusPayload<ExtArgs> | null
+    department: Prisma.$DepartmentPayload<ExtArgs> | null
+    faculty: Prisma.$FacultyPayload<ExtArgs> | null
     programmes: Prisma.$ProgrammePayload<ExtArgs>[]
-    votingSessions: Prisma.$VotingSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3180,17 +3173,17 @@ readonly fields: VoterRollFieldRefs;
  */
 export interface Prisma__VoterRollClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  campus<T extends Prisma.VoterRoll$campusArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$campusArgs<ExtArgs>>): Prisma.Prisma__CampusClient<runtime.Types.Result.GetResult<Prisma.$CampusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  faculty<T extends Prisma.VoterRoll$facultyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$facultyArgs<ExtArgs>>): Prisma.Prisma__FacultyClient<runtime.Types.Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  department<T extends Prisma.VoterRoll$departmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$departmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  candidates<T extends Prisma.VoterRoll$candidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$candidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  electionParticipations<T extends Prisma.VoterRoll$electionParticipationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$electionParticipationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ElectionParticipationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  votingSessions<T extends Prisma.VoterRoll$votingSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$votingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VotingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   account<T extends Prisma.VoterRoll$accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$accountArgs<ExtArgs>>): Prisma.Prisma__AccountClient<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   faceReference<T extends Prisma.VoterRoll$faceReferenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$faceReferenceArgs<ExtArgs>>): Prisma.Prisma__FaceReferenceClient<runtime.Types.Result.GetResult<Prisma.$FaceReferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   otps<T extends Prisma.VoterRoll$otpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$otpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   registrationSessions<T extends Prisma.VoterRoll$registrationSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$registrationSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RegistrationSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  electionParticipations<T extends Prisma.VoterRoll$electionParticipationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$electionParticipationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ElectionParticipationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  candidates<T extends Prisma.VoterRoll$candidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$candidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campus<T extends Prisma.VoterRoll$campusArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$campusArgs<ExtArgs>>): Prisma.Prisma__CampusClient<runtime.Types.Result.GetResult<Prisma.$CampusPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  department<T extends Prisma.VoterRoll$departmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$departmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  faculty<T extends Prisma.VoterRoll$facultyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$facultyArgs<ExtArgs>>): Prisma.Prisma__FacultyClient<runtime.Types.Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   programmes<T extends Prisma.VoterRoll$programmesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$programmesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgrammePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  votingSessions<T extends Prisma.VoterRoll$votingSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRoll$votingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VotingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3638,60 +3631,75 @@ export type VoterRollDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * VoterRoll.campus
+ * VoterRoll.candidates
  */
-export type VoterRoll$campusArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type VoterRoll$candidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Campus
+   * Select specific fields to fetch from the Candidate
    */
-  select?: Prisma.CampusSelect<ExtArgs> | null
+  select?: Prisma.CandidateSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Campus
+   * Omit specific fields from the Candidate
    */
-  omit?: Prisma.CampusOmit<ExtArgs> | null
+  omit?: Prisma.CandidateOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.CampusInclude<ExtArgs> | null
-  where?: Prisma.CampusWhereInput
+  include?: Prisma.CandidateInclude<ExtArgs> | null
+  where?: Prisma.CandidateWhereInput
+  orderBy?: Prisma.CandidateOrderByWithRelationInput | Prisma.CandidateOrderByWithRelationInput[]
+  cursor?: Prisma.CandidateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CandidateScalarFieldEnum | Prisma.CandidateScalarFieldEnum[]
 }
 
 /**
- * VoterRoll.faculty
+ * VoterRoll.electionParticipations
  */
-export type VoterRoll$facultyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type VoterRoll$electionParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Faculty
+   * Select specific fields to fetch from the ElectionParticipation
    */
-  select?: Prisma.FacultySelect<ExtArgs> | null
+  select?: Prisma.ElectionParticipationSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Faculty
+   * Omit specific fields from the ElectionParticipation
    */
-  omit?: Prisma.FacultyOmit<ExtArgs> | null
+  omit?: Prisma.ElectionParticipationOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.FacultyInclude<ExtArgs> | null
-  where?: Prisma.FacultyWhereInput
+  include?: Prisma.ElectionParticipationInclude<ExtArgs> | null
+  where?: Prisma.ElectionParticipationWhereInput
+  orderBy?: Prisma.ElectionParticipationOrderByWithRelationInput | Prisma.ElectionParticipationOrderByWithRelationInput[]
+  cursor?: Prisma.ElectionParticipationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ElectionParticipationScalarFieldEnum | Prisma.ElectionParticipationScalarFieldEnum[]
 }
 
 /**
- * VoterRoll.department
+ * VoterRoll.votingSessions
  */
-export type VoterRoll$departmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type VoterRoll$votingSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Department
+   * Select specific fields to fetch from the VotingSession
    */
-  select?: Prisma.DepartmentSelect<ExtArgs> | null
+  select?: Prisma.VotingSessionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Department
+   * Omit specific fields from the VotingSession
    */
-  omit?: Prisma.DepartmentOmit<ExtArgs> | null
+  omit?: Prisma.VotingSessionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.DepartmentInclude<ExtArgs> | null
-  where?: Prisma.DepartmentWhereInput
+  include?: Prisma.VotingSessionInclude<ExtArgs> | null
+  where?: Prisma.VotingSessionWhereInput
+  orderBy?: Prisma.VotingSessionOrderByWithRelationInput | Prisma.VotingSessionOrderByWithRelationInput[]
+  cursor?: Prisma.VotingSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VotingSessionScalarFieldEnum | Prisma.VotingSessionScalarFieldEnum[]
 }
 
 /**
@@ -3781,51 +3789,60 @@ export type VoterRoll$registrationSessionsArgs<ExtArgs extends runtime.Types.Ext
 }
 
 /**
- * VoterRoll.electionParticipations
+ * VoterRoll.campus
  */
-export type VoterRoll$electionParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type VoterRoll$campusArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ElectionParticipation
+   * Select specific fields to fetch from the Campus
    */
-  select?: Prisma.ElectionParticipationSelect<ExtArgs> | null
+  select?: Prisma.CampusSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ElectionParticipation
+   * Omit specific fields from the Campus
    */
-  omit?: Prisma.ElectionParticipationOmit<ExtArgs> | null
+  omit?: Prisma.CampusOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ElectionParticipationInclude<ExtArgs> | null
-  where?: Prisma.ElectionParticipationWhereInput
-  orderBy?: Prisma.ElectionParticipationOrderByWithRelationInput | Prisma.ElectionParticipationOrderByWithRelationInput[]
-  cursor?: Prisma.ElectionParticipationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ElectionParticipationScalarFieldEnum | Prisma.ElectionParticipationScalarFieldEnum[]
+  include?: Prisma.CampusInclude<ExtArgs> | null
+  where?: Prisma.CampusWhereInput
 }
 
 /**
- * VoterRoll.candidates
+ * VoterRoll.department
  */
-export type VoterRoll$candidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type VoterRoll$departmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Candidate
+   * Select specific fields to fetch from the Department
    */
-  select?: Prisma.CandidateSelect<ExtArgs> | null
+  select?: Prisma.DepartmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Candidate
+   * Omit specific fields from the Department
    */
-  omit?: Prisma.CandidateOmit<ExtArgs> | null
+  omit?: Prisma.DepartmentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.CandidateInclude<ExtArgs> | null
-  where?: Prisma.CandidateWhereInput
-  orderBy?: Prisma.CandidateOrderByWithRelationInput | Prisma.CandidateOrderByWithRelationInput[]
-  cursor?: Prisma.CandidateWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CandidateScalarFieldEnum | Prisma.CandidateScalarFieldEnum[]
+  include?: Prisma.DepartmentInclude<ExtArgs> | null
+  where?: Prisma.DepartmentWhereInput
+}
+
+/**
+ * VoterRoll.faculty
+ */
+export type VoterRoll$facultyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Faculty
+   */
+  select?: Prisma.FacultySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Faculty
+   */
+  omit?: Prisma.FacultyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacultyInclude<ExtArgs> | null
+  where?: Prisma.FacultyWhereInput
 }
 
 /**
@@ -3850,30 +3867,6 @@ export type VoterRoll$programmesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.ProgrammeScalarFieldEnum | Prisma.ProgrammeScalarFieldEnum[]
-}
-
-/**
- * VoterRoll.votingSessions
- */
-export type VoterRoll$votingSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the VotingSession
-   */
-  select?: Prisma.VotingSessionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the VotingSession
-   */
-  omit?: Prisma.VotingSessionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VotingSessionInclude<ExtArgs> | null
-  where?: Prisma.VotingSessionWhereInput
-  orderBy?: Prisma.VotingSessionOrderByWithRelationInput | Prisma.VotingSessionOrderByWithRelationInput[]
-  cursor?: Prisma.VotingSessionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VotingSessionScalarFieldEnum | Prisma.VotingSessionScalarFieldEnum[]
 }
 
 /**

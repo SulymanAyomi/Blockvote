@@ -198,8 +198,8 @@ export type FaceReferenceWhereInput = {
   status?: Prisma.EnumFaceReferenceStatusFilter<"FaceReference"> | $Enums.FaceReferenceStatus
   createdAt?: Prisma.DateTimeFilter<"FaceReference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FaceReference"> | Date | string
-  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
   faceEmbedding?: Prisma.XOR<Prisma.FaceEmbeddingNullableScalarRelationFilter, Prisma.FaceEmbeddingWhereInput> | null
+  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
 }
 
 export type FaceReferenceOrderByWithRelationInput = {
@@ -210,8 +210,8 @@ export type FaceReferenceOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  voter?: Prisma.VoterRollOrderByWithRelationInput
   faceEmbedding?: Prisma.FaceEmbeddingOrderByWithRelationInput
+  voter?: Prisma.VoterRollOrderByWithRelationInput
 }
 
 export type FaceReferenceWhereUniqueInput = Prisma.AtLeast<{
@@ -225,8 +225,8 @@ export type FaceReferenceWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumFaceReferenceStatusFilter<"FaceReference"> | $Enums.FaceReferenceStatus
   createdAt?: Prisma.DateTimeFilter<"FaceReference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FaceReference"> | Date | string
-  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
   faceEmbedding?: Prisma.XOR<Prisma.FaceEmbeddingNullableScalarRelationFilter, Prisma.FaceEmbeddingWhereInput> | null
+  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
 }, "id" | "voterId" | "referenceId">
 
 export type FaceReferenceOrderByWithAggregationInput = {
@@ -262,8 +262,8 @@ export type FaceReferenceCreateInput = {
   status?: $Enums.FaceReferenceStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  voter: Prisma.VoterRollCreateNestedOneWithoutFaceReferenceInput
   faceEmbedding?: Prisma.FaceEmbeddingCreateNestedOneWithoutFaceReferenceInput
+  voter: Prisma.VoterRollCreateNestedOneWithoutFaceReferenceInput
 }
 
 export type FaceReferenceUncheckedCreateInput = {
@@ -284,8 +284,8 @@ export type FaceReferenceUpdateInput = {
   status?: Prisma.EnumFaceReferenceStatusFieldUpdateOperationsInput | $Enums.FaceReferenceStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  voter?: Prisma.VoterRollUpdateOneRequiredWithoutFaceReferenceNestedInput
   faceEmbedding?: Prisma.FaceEmbeddingUpdateOneWithoutFaceReferenceNestedInput
+  voter?: Prisma.VoterRollUpdateOneRequiredWithoutFaceReferenceNestedInput
 }
 
 export type FaceReferenceUncheckedUpdateInput = {
@@ -544,8 +544,8 @@ export type FaceReferenceSelect<ExtArgs extends runtime.Types.Extensions.Interna
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   faceEmbedding?: boolean | Prisma.FaceReference$faceEmbeddingArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["faceReference"]>
 
 export type FaceReferenceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -582,8 +582,8 @@ export type FaceReferenceSelectScalar = {
 
 export type FaceReferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "voterId" | "referenceId" | "provider" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["faceReference"]>
 export type FaceReferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   faceEmbedding?: boolean | Prisma.FaceReference$faceEmbeddingArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }
 export type FaceReferenceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
@@ -595,8 +595,8 @@ export type FaceReferenceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Type
 export type $FaceReferencePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FaceReference"
   objects: {
-    voter: Prisma.$VoterRollPayload<ExtArgs>
     faceEmbedding: Prisma.$FaceEmbeddingPayload<ExtArgs> | null
+    voter: Prisma.$VoterRollPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1000,8 +1000,8 @@ readonly fields: FaceReferenceFieldRefs;
  */
 export interface Prisma__FaceReferenceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  voter<T extends Prisma.VoterRollDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRollDefaultArgs<ExtArgs>>): Prisma.Prisma__VoterRollClient<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   faceEmbedding<T extends Prisma.FaceReference$faceEmbeddingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FaceReference$faceEmbeddingArgs<ExtArgs>>): Prisma.Prisma__FaceEmbeddingClient<runtime.Types.Result.GetResult<Prisma.$FaceEmbeddingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  voter<T extends Prisma.VoterRollDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRollDefaultArgs<ExtArgs>>): Prisma.Prisma__VoterRollClient<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

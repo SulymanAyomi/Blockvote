@@ -70,14 +70,19 @@ export const ModelName = {
   Candidate: 'Candidate',
   ElectionParticipation: 'ElectionParticipation',
   VotingSession: 'VotingSession',
-  IssuedNonce: 'IssuedNonce',
   Ballot: 'Ballot',
+  SpentToken: 'SpentToken',
+  PendingBallot: 'PendingBallot',
   Vote: 'Vote',
+  ElectionTally: 'ElectionTally',
   BlockchainElection: 'BlockchainElection',
+  BlockchainBatch: 'BlockchainBatch',
   BlockchainBallot: 'BlockchainBallot',
   BlockchainResult: 'BlockchainResult',
   Admin: 'Admin',
   AuditLog: 'AuditLog',
+  Notification: 'Notification',
+  Announcement: 'Announcement',
   SystemSetting: 'SystemSetting'
 } as const
 
@@ -139,6 +144,7 @@ export const OtpScalarFieldEnum = {
   voterId: 'voterId',
   otpHash: 'otpHash',
   purpose: 'purpose',
+  attempts: 'attempts',
   expiresAt: 'expiresAt',
   used: 'used',
   createdAt: 'createdAt'
@@ -250,12 +256,15 @@ export type AcademicSessionScalarFieldEnum = (typeof AcademicSessionScalarFieldE
 export const ElectionScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  code: 'code',
   description: 'description',
+  about: 'about',
   coverImage: 'coverImage',
   academicSessionId: 'academicSessionId',
   startsAt: 'startsAt',
   endsAt: 'endsAt',
   status: 'status',
+  resultsPublishAt: 'resultsPublishAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -283,6 +292,7 @@ export type PositionScalarFieldEnum = (typeof PositionScalarFieldEnum)[keyof typ
 
 export const ElectionPositionScalarFieldEnum = {
   id: 'id',
+  description: 'description',
   electionId: 'electionId',
   positionId: 'positionId'
 } as const
@@ -295,6 +305,7 @@ export const CandidateScalarFieldEnum = {
   electionPositionId: 'electionPositionId',
   voterId: 'voterId',
   manifesto: 'manifesto',
+  platform: 'platform',
   campaignSlogan: 'campaignSlogan',
   imageUrl: 'imageUrl',
   cvUrl: 'cvUrl',
@@ -313,6 +324,7 @@ export const ElectionParticipationScalarFieldEnum = {
   eligible: 'eligible',
   hasVoted: 'hasVoted',
   votedAt: 'votedAt',
+  faceAttempts: 'faceAttempts',
   createdAt: 'createdAt'
 } as const
 
@@ -324,6 +336,7 @@ export const VotingSessionScalarFieldEnum = {
   voterId: 'voterId',
   electionId: 'electionId',
   status: 'status',
+  authSessionId: 'authSessionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   expiresAt: 'expiresAt'
@@ -332,26 +345,30 @@ export const VotingSessionScalarFieldEnum = {
 export type VotingSessionScalarFieldEnum = (typeof VotingSessionScalarFieldEnum)[keyof typeof VotingSessionScalarFieldEnum]
 
 
-export const IssuedNonceScalarFieldEnum = {
-  id: 'id',
-  token: 'token',
-  electionId: 'electionId',
-  used: 'used',
-  createdAt: 'createdAt',
-  expiresAt: 'expiresAt'
-} as const
-
-export type IssuedNonceScalarFieldEnum = (typeof IssuedNonceScalarFieldEnum)[keyof typeof IssuedNonceScalarFieldEnum]
-
-
 export const BallotScalarFieldEnum = {
   id: 'id',
   electionId: 'electionId',
-  castAt: 'castAt',
-  updatedAt: 'updatedAt'
+  batchId: 'batchId'
 } as const
 
 export type BallotScalarFieldEnum = (typeof BallotScalarFieldEnum)[keyof typeof BallotScalarFieldEnum]
+
+
+export const SpentTokenScalarFieldEnum = {
+  tokenHash: 'tokenHash',
+  electionId: 'electionId'
+} as const
+
+export type SpentTokenScalarFieldEnum = (typeof SpentTokenScalarFieldEnum)[keyof typeof SpentTokenScalarFieldEnum]
+
+
+export const PendingBallotScalarFieldEnum = {
+  id: 'id',
+  electionId: 'electionId',
+  sealed: 'sealed'
+} as const
+
+export type PendingBallotScalarFieldEnum = (typeof PendingBallotScalarFieldEnum)[keyof typeof PendingBallotScalarFieldEnum]
 
 
 export const VoteScalarFieldEnum = {
@@ -362,6 +379,17 @@ export const VoteScalarFieldEnum = {
 } as const
 
 export type VoteScalarFieldEnum = (typeof VoteScalarFieldEnum)[keyof typeof VoteScalarFieldEnum]
+
+
+export const ElectionTallyScalarFieldEnum = {
+  id: 'id',
+  electionId: 'electionId',
+  electionPositionId: 'electionPositionId',
+  candidateId: 'candidateId',
+  votes: 'votes'
+} as const
+
+export type ElectionTallyScalarFieldEnum = (typeof ElectionTallyScalarFieldEnum)[keyof typeof ElectionTallyScalarFieldEnum]
 
 
 export const BlockchainElectionScalarFieldEnum = {
@@ -376,13 +404,26 @@ export const BlockchainElectionScalarFieldEnum = {
 export type BlockchainElectionScalarFieldEnum = (typeof BlockchainElectionScalarFieldEnum)[keyof typeof BlockchainElectionScalarFieldEnum]
 
 
+export const BlockchainBatchScalarFieldEnum = {
+  id: 'id',
+  electionId: 'electionId',
+  batchId: 'batchId',
+  ballotCount: 'ballotCount',
+  merkleRoot: 'merkleRoot',
+  polygonTxHash: 'polygonTxHash',
+  status: 'status',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockchainBatchScalarFieldEnum = (typeof BlockchainBatchScalarFieldEnum)[keyof typeof BlockchainBatchScalarFieldEnum]
+
+
 export const BlockchainBallotScalarFieldEnum = {
   id: 'id',
   ballotId: 'ballotId',
   ballotHash: 'ballotHash',
   polygonTxHash: 'polygonTxHash',
-  status: 'status',
-  createdAt: 'createdAt'
+  status: 'status'
 } as const
 
 export type BlockchainBallotScalarFieldEnum = (typeof BlockchainBallotScalarFieldEnum)[keyof typeof BlockchainBallotScalarFieldEnum]
@@ -418,6 +459,27 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  body: 'body',
+  read: 'read',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const AnnouncementScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  createdAt: 'createdAt'
+} as const
+
+export type AnnouncementScalarFieldEnum = (typeof AnnouncementScalarFieldEnum)[keyof typeof AnnouncementScalarFieldEnum]
 
 
 export const SystemSettingScalarFieldEnum = {

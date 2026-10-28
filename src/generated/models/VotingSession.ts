@@ -29,6 +29,7 @@ export type VotingSessionMinAggregateOutputType = {
   voterId: string | null
   electionId: string | null
   status: $Enums.VotingSessionStatus | null
+  authSessionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   expiresAt: Date | null
@@ -39,6 +40,7 @@ export type VotingSessionMaxAggregateOutputType = {
   voterId: string | null
   electionId: string | null
   status: $Enums.VotingSessionStatus | null
+  authSessionId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   expiresAt: Date | null
@@ -49,6 +51,7 @@ export type VotingSessionCountAggregateOutputType = {
   voterId: number
   electionId: number
   status: number
+  authSessionId: number
   createdAt: number
   updatedAt: number
   expiresAt: number
@@ -61,6 +64,7 @@ export type VotingSessionMinAggregateInputType = {
   voterId?: true
   electionId?: true
   status?: true
+  authSessionId?: true
   createdAt?: true
   updatedAt?: true
   expiresAt?: true
@@ -71,6 +75,7 @@ export type VotingSessionMaxAggregateInputType = {
   voterId?: true
   electionId?: true
   status?: true
+  authSessionId?: true
   createdAt?: true
   updatedAt?: true
   expiresAt?: true
@@ -81,6 +86,7 @@ export type VotingSessionCountAggregateInputType = {
   voterId?: true
   electionId?: true
   status?: true
+  authSessionId?: true
   createdAt?: true
   updatedAt?: true
   expiresAt?: true
@@ -164,6 +170,7 @@ export type VotingSessionGroupByOutputType = {
   voterId: string
   electionId: string
   status: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt: Date
   updatedAt: Date
   expiresAt: Date
@@ -195,11 +202,12 @@ export type VotingSessionWhereInput = {
   voterId?: Prisma.UuidFilter<"VotingSession"> | string
   electionId?: Prisma.UuidFilter<"VotingSession"> | string
   status?: Prisma.EnumVotingSessionStatusFilter<"VotingSession"> | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFilter<"VotingSession"> | string
   createdAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
   expiresAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
-  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
   election?: Prisma.XOR<Prisma.ElectionScalarRelationFilter, Prisma.ElectionWhereInput>
+  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
 }
 
 export type VotingSessionOrderByWithRelationInput = {
@@ -207,33 +215,37 @@ export type VotingSessionOrderByWithRelationInput = {
   voterId?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  authSessionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
-  voter?: Prisma.VoterRollOrderByWithRelationInput
   election?: Prisma.ElectionOrderByWithRelationInput
+  voter?: Prisma.VoterRollOrderByWithRelationInput
 }
 
 export type VotingSessionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  voterId_electionId?: Prisma.VotingSessionVoterIdElectionIdCompoundUniqueInput
   AND?: Prisma.VotingSessionWhereInput | Prisma.VotingSessionWhereInput[]
   OR?: Prisma.VotingSessionWhereInput[]
   NOT?: Prisma.VotingSessionWhereInput | Prisma.VotingSessionWhereInput[]
   voterId?: Prisma.UuidFilter<"VotingSession"> | string
   electionId?: Prisma.UuidFilter<"VotingSession"> | string
   status?: Prisma.EnumVotingSessionStatusFilter<"VotingSession"> | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFilter<"VotingSession"> | string
   createdAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
   expiresAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
-  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
   election?: Prisma.XOR<Prisma.ElectionScalarRelationFilter, Prisma.ElectionWhereInput>
-}, "id">
+  voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
+}, "id" | "voterId_electionId">
 
 export type VotingSessionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   voterId?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  authSessionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -250,6 +262,7 @@ export type VotingSessionScalarWhereWithAggregatesInput = {
   voterId?: Prisma.UuidWithAggregatesFilter<"VotingSession"> | string
   electionId?: Prisma.UuidWithAggregatesFilter<"VotingSession"> | string
   status?: Prisma.EnumVotingSessionStatusWithAggregatesFilter<"VotingSession"> | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringWithAggregatesFilter<"VotingSession"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"VotingSession"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"VotingSession"> | Date | string
   expiresAt?: Prisma.DateTimeWithAggregatesFilter<"VotingSession"> | Date | string
@@ -258,11 +271,12 @@ export type VotingSessionScalarWhereWithAggregatesInput = {
 export type VotingSessionCreateInput = {
   id?: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
-  voter: Prisma.VoterRollCreateNestedOneWithoutVotingSessionsInput
   election: Prisma.ElectionCreateNestedOneWithoutVotingSessionsInput
+  voter: Prisma.VoterRollCreateNestedOneWithoutVotingSessionsInput
 }
 
 export type VotingSessionUncheckedCreateInput = {
@@ -270,6 +284,7 @@ export type VotingSessionUncheckedCreateInput = {
   voterId: string
   electionId: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -278,11 +293,12 @@ export type VotingSessionUncheckedCreateInput = {
 export type VotingSessionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  voter?: Prisma.VoterRollUpdateOneRequiredWithoutVotingSessionsNestedInput
   election?: Prisma.ElectionUpdateOneRequiredWithoutVotingSessionsNestedInput
+  voter?: Prisma.VoterRollUpdateOneRequiredWithoutVotingSessionsNestedInput
 }
 
 export type VotingSessionUncheckedUpdateInput = {
@@ -290,6 +306,7 @@ export type VotingSessionUncheckedUpdateInput = {
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   electionId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -300,6 +317,7 @@ export type VotingSessionCreateManyInput = {
   voterId: string
   electionId: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -308,6 +326,7 @@ export type VotingSessionCreateManyInput = {
 export type VotingSessionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -318,6 +337,7 @@ export type VotingSessionUncheckedUpdateManyInput = {
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   electionId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -333,11 +353,17 @@ export type VotingSessionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type VotingSessionVoterIdElectionIdCompoundUniqueInput = {
+  voterId: string
+  electionId: string
+}
+
 export type VotingSessionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   voterId?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  authSessionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -348,6 +374,7 @@ export type VotingSessionMaxOrderByAggregateInput = {
   voterId?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  authSessionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -358,6 +385,7 @@ export type VotingSessionMinOrderByAggregateInput = {
   voterId?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  authSessionId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
@@ -454,6 +482,7 @@ export type EnumVotingSessionStatusFieldUpdateOperationsInput = {
 export type VotingSessionCreateWithoutVoterInput = {
   id?: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -464,6 +493,7 @@ export type VotingSessionUncheckedCreateWithoutVoterInput = {
   id?: string
   electionId: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -503,6 +533,7 @@ export type VotingSessionScalarWhereInput = {
   voterId?: Prisma.UuidFilter<"VotingSession"> | string
   electionId?: Prisma.UuidFilter<"VotingSession"> | string
   status?: Prisma.EnumVotingSessionStatusFilter<"VotingSession"> | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFilter<"VotingSession"> | string
   createdAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
   expiresAt?: Prisma.DateTimeFilter<"VotingSession"> | Date | string
@@ -511,6 +542,7 @@ export type VotingSessionScalarWhereInput = {
 export type VotingSessionCreateWithoutElectionInput = {
   id?: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -521,6 +553,7 @@ export type VotingSessionUncheckedCreateWithoutElectionInput = {
   id?: string
   voterId: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -556,6 +589,7 @@ export type VotingSessionCreateManyVoterInput = {
   id?: string
   electionId: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -564,6 +598,7 @@ export type VotingSessionCreateManyVoterInput = {
 export type VotingSessionUpdateWithoutVoterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -574,6 +609,7 @@ export type VotingSessionUncheckedUpdateWithoutVoterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   electionId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -583,6 +619,7 @@ export type VotingSessionUncheckedUpdateManyWithoutVoterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   electionId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -592,6 +629,7 @@ export type VotingSessionCreateManyElectionInput = {
   id?: string
   voterId: string
   status?: $Enums.VotingSessionStatus
+  authSessionId: string
   createdAt?: Date | string
   updatedAt?: Date | string
   expiresAt: Date | string
@@ -600,6 +638,7 @@ export type VotingSessionCreateManyElectionInput = {
 export type VotingSessionUpdateWithoutElectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -610,6 +649,7 @@ export type VotingSessionUncheckedUpdateWithoutElectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -619,6 +659,7 @@ export type VotingSessionUncheckedUpdateManyWithoutElectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumVotingSessionStatusFieldUpdateOperationsInput | $Enums.VotingSessionStatus
+  authSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -631,11 +672,12 @@ export type VotingSessionSelect<ExtArgs extends runtime.Types.Extensions.Interna
   voterId?: boolean
   electionId?: boolean
   status?: boolean
+  authSessionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   expiresAt?: boolean
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["votingSession"]>
 
 export type VotingSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -643,11 +685,12 @@ export type VotingSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   voterId?: boolean
   electionId?: boolean
   status?: boolean
+  authSessionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   expiresAt?: boolean
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["votingSession"]>
 
 export type VotingSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -655,11 +698,12 @@ export type VotingSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   voterId?: boolean
   electionId?: boolean
   status?: boolean
+  authSessionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   expiresAt?: boolean
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["votingSession"]>
 
 export type VotingSessionSelectScalar = {
@@ -667,36 +711,38 @@ export type VotingSessionSelectScalar = {
   voterId?: boolean
   electionId?: boolean
   status?: boolean
+  authSessionId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   expiresAt?: boolean
 }
 
-export type VotingSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "voterId" | "electionId" | "status" | "createdAt" | "updatedAt" | "expiresAt", ExtArgs["result"]["votingSession"]>
+export type VotingSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "voterId" | "electionId" | "status" | "authSessionId" | "createdAt" | "updatedAt" | "expiresAt", ExtArgs["result"]["votingSession"]>
 export type VotingSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }
 export type VotingSessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }
 export type VotingSessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
+  voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }
 
 export type $VotingSessionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "VotingSession"
   objects: {
-    voter: Prisma.$VoterRollPayload<ExtArgs>
     election: Prisma.$ElectionPayload<ExtArgs>
+    voter: Prisma.$VoterRollPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     voterId: string
     electionId: string
     status: $Enums.VotingSessionStatus
+    authSessionId: string
     createdAt: Date
     updatedAt: Date
     expiresAt: Date
@@ -1094,8 +1140,8 @@ readonly fields: VotingSessionFieldRefs;
  */
 export interface Prisma__VotingSessionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  voter<T extends Prisma.VoterRollDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRollDefaultArgs<ExtArgs>>): Prisma.Prisma__VoterRollClient<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   election<T extends Prisma.ElectionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ElectionDefaultArgs<ExtArgs>>): Prisma.Prisma__ElectionClient<runtime.Types.Result.GetResult<Prisma.$ElectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  voter<T extends Prisma.VoterRollDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRollDefaultArgs<ExtArgs>>): Prisma.Prisma__VoterRollClient<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1129,6 +1175,7 @@ export interface VotingSessionFieldRefs {
   readonly voterId: Prisma.FieldRef<"VotingSession", 'String'>
   readonly electionId: Prisma.FieldRef<"VotingSession", 'String'>
   readonly status: Prisma.FieldRef<"VotingSession", 'VotingSessionStatus'>
+  readonly authSessionId: Prisma.FieldRef<"VotingSession", 'String'>
   readonly createdAt: Prisma.FieldRef<"VotingSession", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"VotingSession", 'DateTime'>
   readonly expiresAt: Prisma.FieldRef<"VotingSession", 'DateTime'>

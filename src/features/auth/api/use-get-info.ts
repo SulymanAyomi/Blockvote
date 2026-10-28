@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
+import { unwrap } from "@/lib/api";
 
 
 interface useGetInfoProps {
@@ -10,23 +11,11 @@ interface useGetInfoProps {
 export const useGetInfo = ({ regSessionId }: useGetInfoProps) => {
     const query = useQuery({
         queryKey: ["info"],
-        queryFn: async () => {
-            console.log("I rannnnnn")
-            const response = await client.api.register["confirm-info"]["$get"]({
-                query: {
-                    regSessionId
-                }
-            })
-
-            if (!response.ok) {
-                throw new Error("Something went wrong")
+        queryFn: async () => unwrap(await client.api.register["confirm-info"]["$get"]({
+            query: {
+                regSessionId
             }
-
-            const { data } = await response.json()
-
-            console.log("data", data)
-            return data
-        }
+        }))
     })
     return query
 }

@@ -30,7 +30,6 @@ export type BlockchainBallotMinAggregateOutputType = {
   ballotHash: string | null
   polygonTxHash: string | null
   status: $Enums.BlockchainStatus | null
-  createdAt: Date | null
 }
 
 export type BlockchainBallotMaxAggregateOutputType = {
@@ -39,7 +38,6 @@ export type BlockchainBallotMaxAggregateOutputType = {
   ballotHash: string | null
   polygonTxHash: string | null
   status: $Enums.BlockchainStatus | null
-  createdAt: Date | null
 }
 
 export type BlockchainBallotCountAggregateOutputType = {
@@ -48,7 +46,6 @@ export type BlockchainBallotCountAggregateOutputType = {
   ballotHash: number
   polygonTxHash: number
   status: number
-  createdAt: number
   _all: number
 }
 
@@ -59,7 +56,6 @@ export type BlockchainBallotMinAggregateInputType = {
   ballotHash?: true
   polygonTxHash?: true
   status?: true
-  createdAt?: true
 }
 
 export type BlockchainBallotMaxAggregateInputType = {
@@ -68,7 +64,6 @@ export type BlockchainBallotMaxAggregateInputType = {
   ballotHash?: true
   polygonTxHash?: true
   status?: true
-  createdAt?: true
 }
 
 export type BlockchainBallotCountAggregateInputType = {
@@ -77,7 +72,6 @@ export type BlockchainBallotCountAggregateInputType = {
   ballotHash?: true
   polygonTxHash?: true
   status?: true
-  createdAt?: true
   _all?: true
 }
 
@@ -159,7 +153,6 @@ export type BlockchainBallotGroupByOutputType = {
   ballotHash: string
   polygonTxHash: string | null
   status: $Enums.BlockchainStatus
-  createdAt: Date
   _count: BlockchainBallotCountAggregateOutputType | null
   _min: BlockchainBallotMinAggregateOutputType | null
   _max: BlockchainBallotMaxAggregateOutputType | null
@@ -189,7 +182,6 @@ export type BlockchainBallotWhereInput = {
   ballotHash?: Prisma.StringFilter<"BlockchainBallot"> | string
   polygonTxHash?: Prisma.StringNullableFilter<"BlockchainBallot"> | string | null
   status?: Prisma.EnumBlockchainStatusFilter<"BlockchainBallot"> | $Enums.BlockchainStatus
-  createdAt?: Prisma.DateTimeFilter<"BlockchainBallot"> | Date | string
 }
 
 export type BlockchainBallotOrderByWithRelationInput = {
@@ -198,7 +190,6 @@ export type BlockchainBallotOrderByWithRelationInput = {
   ballotHash?: Prisma.SortOrder
   polygonTxHash?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
 }
 
 export type BlockchainBallotWhereUniqueInput = Prisma.AtLeast<{
@@ -210,7 +201,6 @@ export type BlockchainBallotWhereUniqueInput = Prisma.AtLeast<{
   ballotHash?: Prisma.StringFilter<"BlockchainBallot"> | string
   polygonTxHash?: Prisma.StringNullableFilter<"BlockchainBallot"> | string | null
   status?: Prisma.EnumBlockchainStatusFilter<"BlockchainBallot"> | $Enums.BlockchainStatus
-  createdAt?: Prisma.DateTimeFilter<"BlockchainBallot"> | Date | string
 }, "id" | "ballotId">
 
 export type BlockchainBallotOrderByWithAggregationInput = {
@@ -219,7 +209,6 @@ export type BlockchainBallotOrderByWithAggregationInput = {
   ballotHash?: Prisma.SortOrder
   polygonTxHash?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
   _count?: Prisma.BlockchainBallotCountOrderByAggregateInput
   _max?: Prisma.BlockchainBallotMaxOrderByAggregateInput
   _min?: Prisma.BlockchainBallotMinOrderByAggregateInput
@@ -234,7 +223,6 @@ export type BlockchainBallotScalarWhereWithAggregatesInput = {
   ballotHash?: Prisma.StringWithAggregatesFilter<"BlockchainBallot"> | string
   polygonTxHash?: Prisma.StringNullableWithAggregatesFilter<"BlockchainBallot"> | string | null
   status?: Prisma.EnumBlockchainStatusWithAggregatesFilter<"BlockchainBallot"> | $Enums.BlockchainStatus
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"BlockchainBallot"> | Date | string
 }
 
 export type BlockchainBallotCreateInput = {
@@ -243,7 +231,6 @@ export type BlockchainBallotCreateInput = {
   ballotHash: string
   polygonTxHash?: string | null
   status: $Enums.BlockchainStatus
-  createdAt?: Date | string
 }
 
 export type BlockchainBallotUncheckedCreateInput = {
@@ -252,7 +239,6 @@ export type BlockchainBallotUncheckedCreateInput = {
   ballotHash: string
   polygonTxHash?: string | null
   status: $Enums.BlockchainStatus
-  createdAt?: Date | string
 }
 
 export type BlockchainBallotUpdateInput = {
@@ -261,7 +247,6 @@ export type BlockchainBallotUpdateInput = {
   ballotHash?: Prisma.StringFieldUpdateOperationsInput | string
   polygonTxHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumBlockchainStatusFieldUpdateOperationsInput | $Enums.BlockchainStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockchainBallotUncheckedUpdateInput = {
@@ -270,7 +255,6 @@ export type BlockchainBallotUncheckedUpdateInput = {
   ballotHash?: Prisma.StringFieldUpdateOperationsInput | string
   polygonTxHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumBlockchainStatusFieldUpdateOperationsInput | $Enums.BlockchainStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockchainBallotCreateManyInput = {
@@ -279,7 +263,6 @@ export type BlockchainBallotCreateManyInput = {
   ballotHash: string
   polygonTxHash?: string | null
   status: $Enums.BlockchainStatus
-  createdAt?: Date | string
 }
 
 export type BlockchainBallotUpdateManyMutationInput = {
@@ -288,7 +271,6 @@ export type BlockchainBallotUpdateManyMutationInput = {
   ballotHash?: Prisma.StringFieldUpdateOperationsInput | string
   polygonTxHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumBlockchainStatusFieldUpdateOperationsInput | $Enums.BlockchainStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockchainBallotUncheckedUpdateManyInput = {
@@ -297,7 +279,6 @@ export type BlockchainBallotUncheckedUpdateManyInput = {
   ballotHash?: Prisma.StringFieldUpdateOperationsInput | string
   polygonTxHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumBlockchainStatusFieldUpdateOperationsInput | $Enums.BlockchainStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockchainBallotCountOrderByAggregateInput = {
@@ -306,7 +287,6 @@ export type BlockchainBallotCountOrderByAggregateInput = {
   ballotHash?: Prisma.SortOrder
   polygonTxHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
 }
 
 export type BlockchainBallotMaxOrderByAggregateInput = {
@@ -315,7 +295,6 @@ export type BlockchainBallotMaxOrderByAggregateInput = {
   ballotHash?: Prisma.SortOrder
   polygonTxHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
 }
 
 export type BlockchainBallotMinOrderByAggregateInput = {
@@ -324,11 +303,6 @@ export type BlockchainBallotMinOrderByAggregateInput = {
   ballotHash?: Prisma.SortOrder
   polygonTxHash?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-}
-
-export type EnumBlockchainStatusFieldUpdateOperationsInput = {
-  set?: $Enums.BlockchainStatus
 }
 
 
@@ -339,7 +313,6 @@ export type BlockchainBallotSelect<ExtArgs extends runtime.Types.Extensions.Inte
   ballotHash?: boolean
   polygonTxHash?: boolean
   status?: boolean
-  createdAt?: boolean
 }, ExtArgs["result"]["blockchainBallot"]>
 
 export type BlockchainBallotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -348,7 +321,6 @@ export type BlockchainBallotSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   ballotHash?: boolean
   polygonTxHash?: boolean
   status?: boolean
-  createdAt?: boolean
 }, ExtArgs["result"]["blockchainBallot"]>
 
 export type BlockchainBallotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -357,7 +329,6 @@ export type BlockchainBallotSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   ballotHash?: boolean
   polygonTxHash?: boolean
   status?: boolean
-  createdAt?: boolean
 }, ExtArgs["result"]["blockchainBallot"]>
 
 export type BlockchainBallotSelectScalar = {
@@ -366,10 +337,9 @@ export type BlockchainBallotSelectScalar = {
   ballotHash?: boolean
   polygonTxHash?: boolean
   status?: boolean
-  createdAt?: boolean
 }
 
-export type BlockchainBallotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ballotId" | "ballotHash" | "polygonTxHash" | "status" | "createdAt", ExtArgs["result"]["blockchainBallot"]>
+export type BlockchainBallotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ballotId" | "ballotHash" | "polygonTxHash" | "status", ExtArgs["result"]["blockchainBallot"]>
 
 export type $BlockchainBallotPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "BlockchainBallot"
@@ -380,7 +350,6 @@ export type $BlockchainBallotPayload<ExtArgs extends runtime.Types.Extensions.In
     ballotHash: string
     polygonTxHash: string | null
     status: $Enums.BlockchainStatus
-    createdAt: Date
   }, ExtArgs["result"]["blockchainBallot"]>
   composites: {}
 }
@@ -809,7 +778,6 @@ export interface BlockchainBallotFieldRefs {
   readonly ballotHash: Prisma.FieldRef<"BlockchainBallot", 'String'>
   readonly polygonTxHash: Prisma.FieldRef<"BlockchainBallot", 'String'>
   readonly status: Prisma.FieldRef<"BlockchainBallot", 'BlockchainStatus'>
-  readonly createdAt: Prisma.FieldRef<"BlockchainBallot", 'DateTime'>
 }
     
 

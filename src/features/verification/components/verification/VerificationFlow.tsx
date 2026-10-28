@@ -50,8 +50,8 @@ export function VerificationFlow({
   const { faceDetected, centered } = useFaceDetection(videoRef, cameraActive);
 
   // Feed live detection results into the state machine as they change.
-  const readyToCapture = faceDetected && centered;
-  // const readyToCapture = true;
+  // const readyToCapture = faceDetected && centered;
+  const readyToCapture = true;
   if (cameraActive) {
     const shouldBeFaceDetected = state.status === "face_detected";
     if (readyToCapture !== shouldBeFaceDetected) {
@@ -63,13 +63,6 @@ export function VerificationFlow({
     if (state.status !== "captured") return;
     submit();
     try {
-      // const res = await fetch("/api/verify", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ studentId, imageBase64: state.imageDataUrl }),
-      // });
-      // const result = (await res.json()) as VerifyApiResponse;
-      // dispatch({ type: "SERVER_RESULT", result }); 772092
       mutate(
         {
           json: {
@@ -79,11 +72,18 @@ export function VerificationFlow({
         },
         {
           onSuccess: (data) => {
-            console.log(data);
             const result = data.data as VerifyApiResponse;
             dispatch({ type: "SERVER_RESULT", result });
           },
-          onError: () => {},
+          onError: (err) => {
+            dispatch({
+              type: "SERVER_ERROR",
+              message:
+                err instanceof Error
+                  ? err.message
+                  : "Verification request failed.",
+            });
+          },
         },
       );
     } catch (err) {

@@ -6,28 +6,22 @@ import {
   MoveRightIcon,
   Vote,
 } from "lucide-react";
-import React, { useState } from "react";
 import { useInfoConfirmation } from "../api/use-info-confirmation";
 import { useGetInfo } from "../api/use-get-info";
 import PageLoading from "./loading";
+import { useState } from "react";
 
 interface PersonalInfoProps {
   onNext: () => void;
   regSessionId: string;
 }
 const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
-  // const [data, setData] = useState({
-  //   name: "Sulyman Ayo",
-  //   DOB: "12-12-2026",
-  //   number: "08098765432",
-  //   state: "Kwara state",
-  //   LGA: "Ilorin-west",
-  //   Address: "27, Gaa-akanbi ilorin ",
-  // });
   const { data, isLoading } = useGetInfo({ regSessionId });
   const { mutate, isPending } = useInfoConfirmation();
+  const [error, setError] = useState("");
   const disabled = true;
   const handleConfimed = () => {
+    setError("");
     mutate(
       {
         json: {
@@ -39,9 +33,18 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
         onSuccess: () => {
           onNext();
         },
+        onError: (err) => {
+          let e = err.message as string;
+          if (e == "INTERNAL_ERROR") {
+            setError("Failed! Try again");
+            return;
+          }
+          setError(e);
+        },
       },
     );
   };
+  const info = data?.data;
 
   return (
     <div className="flex flex-col justify-between flex-1 w-full  h-[90%]">
@@ -68,7 +71,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
               <div className="flex items-center justify-center size-16 rounded-full overflow-hidden transition border border-neutral-300">
                 <img
                   className="w-fit h-fit rounded-full object-cover"
-                  src={data?.imageUrl ?? ""}
+                  src={info?.imageUrl ?? ""}
                 />
               </div>
             </div>
@@ -85,7 +88,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                   className="w-full bg-accent disabled:opacity-100"
                   // onBlur={() => validateField("firstName")}
                   disabled={disabled}
-                  value={data?.fullName}
+                  value={info?.fullName}
                 />
               </div>
               <div className="space-y-2">
@@ -99,7 +102,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                   className="w-full bg-accent disabled:opacity-100"
                   // onBlur={() => validateField("firstName")}
                   disabled={disabled}
-                  value={data?.studentId ?? "NULL"}
+                  value={info?.studentId ?? "NULL"}
                 />
               </div>
               <div className="space-y-2">
@@ -113,7 +116,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                   className="w-full bg-accent disabled:opacity-100"
                   // onBlur={() => validateField("firstName")}
                   disabled={disabled}
-                  value={data?.department ?? "NULL"}
+                  value={info?.department ?? "NULL"}
                 />
               </div>
               <div className="space-y-2">
@@ -127,7 +130,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                   className="w-full bg-accent disabled:opacity-100"
                   // onBlur={() => validateField("firstName")}
                   disabled={disabled}
-                  value={data?.level ?? "NULL"}
+                  value={info?.level ?? "NULL"}
                 />
               </div>
 
@@ -142,7 +145,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                   className="w-full bg-accent disabled:opacity-100"
                   // onBlur={() => validateField("firstName")}
                   disabled={disabled}
-                  value={new Date(data?.dateOfBirth!).toLocaleDateString()}
+                  value={new Date(info?.dateOfBirth!).toLocaleDateString()}
                 />
               </div>
 
@@ -157,7 +160,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                   className="w-full bg-accent disabled:opacity-100"
                   // onBlur={() => validateField("firstName")}
                   disabled={disabled}
-                  value={data?.email}
+                  value={info?.email}
                 />
               </div>
               <div className="space-y-2">
@@ -171,7 +174,7 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                   className="w-full bg-accent disabled:opacity-100"
                   // onBlur={() => validateField("firstName")}
                   disabled={disabled}
-                  value={data?.phone ?? "NULL"}
+                  value={info?.phone ?? "NULL"}
                 />
               </div>
             </div>
@@ -188,6 +191,11 @@ const PersonalInfo = ({ onNext, regSessionId }: PersonalInfoProps) => {
                 </>
               )}
             </Button>
+            {error && (
+              <p className=" p-2 rounded text-center text-xs bg-red-300 text-red-700 mt-2">
+                {error}
+              </p>
+            )}
           </div>
         )}
       </div>

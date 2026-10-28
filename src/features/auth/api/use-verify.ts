@@ -1,16 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { InferRequestType, InferResponseType } from "hono";
 
 import { client } from "@/lib/rpc";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
-type ResponseType = InferResponseType<typeof client.api.register["verify-nin"]["$post"]>
+type ResponseType = InferResponseType<typeof client.api.register["verify-nin"]["$post"], 200>
 type RequestType = InferRequestType<typeof client.api.register["verify-nin"]["$post"]>
 
 
 export const useVerifyNin = () => {
-    const queryClient = useQueryClient()
 
     const mutation = useMutation<
         ResponseType,
@@ -18,21 +16,16 @@ export const useVerifyNin = () => {
         RequestType
     >({
         mutationFn: async ({ json }) => {
-            console.log("i rannn")
             const response = await client.api.register["verify-nin"]["$post"]({ json })
             const data = await response.json()
-            console.log("data", data)
             if (!data.success) {
-                // if (response.status == 500) {
-                //     throw new Error("")
-                // }
-                // @ts-ignore
-                throw new Error(data.error)
+                let err = data.error as string
+                if (err == "INTERNAL_ERROR") err = "Something is wrong. Try again";
+                throw new Error(err)
             }
             return data
         },
         onSuccess: (data) => {
-            // @ts-ignore
             const otp = data.data.otp
             if (otp) {
                 toast.success(`Your otp is ${otp}.`, {

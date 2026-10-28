@@ -63,6 +63,7 @@ model Otp {
   voterId   String     @db.Uuid
   otpHash   String     @map("otp_hash")
   purpose   OtpPurpose
+  attempts  Int        @default(0)
   expiresAt DateTime   @map("expires_at") @db.Timestamp(6)
   used      Boolean    @default(false)
   createdAt DateTime   @default(now())
@@ -170,23 +171,29 @@ model AcademicSession {
 }
 
 model Election {
-  id                String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title             String
+  code              String?
   description       String?
+  about             String?
   coverImage        String?
-  academicSessionId String                  @db.Uuid
+  academicSessionId String         @db.Uuid
   startsAt          DateTime
   endsAt            DateTime
-  status            ElectionStatus          @default(DRAFT)
-  createdAt         DateTime                @default(now())
-  updatedAt         DateTime                @updatedAt
-  ballots           Ballot[]
-  academicSession   AcademicSession         @relation(fields: [academicSessionId], references: [id])
-  participations    ElectionParticipation[]
-  positions         ElectionPosition[]
-  scopes            ElectionScope[]
-  issuedNonces      IssuedNonce[]
-  votingSessions    VotingSession[]
+  status            ElectionStatus @default(DRAFT)
+  resultsPublishAt  DateTime?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  ballots         Ballot[]
+  academicSession AcademicSession         @relation(fields: [academicSessionId], references: [id])
+  participations  ElectionParticipation[]
+  positions       ElectionPosition[]
+  scopes          ElectionScope[]
+  votingSessions  VotingSession[]
+  spentTokens     SpentToken[]
+  pendingBallots  PendingBallot[]
+  electionTallies ElectionTally[]
 }
 
 model ElectionScope {
@@ -206,12 +213,14 @@ model Position {
 }
 
 model ElectionPosition {
-  id         String      @id @default(uuid()) @db.Uuid
-  electionId String      @db.Uuid
-  positionId String      @db.Uuid
-  candidates Candidate[]
-  election   Election    @relation(fields: [electionId], references: [id], onDelete: Cascade)
-  position   Position    @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  id          String      @id @default(uuid()) @db.Uuid
+  description String?
+  electionId  String      @db.Uuid
+  positionId  String      @db.Uuid
+  candidates  Candidate[]
+  election    Election    @relation(fields: [electionId], references: [id], onDelete: Cascade)
+  position    Position    @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  votes       Vote[]
 
   @@unique([electionId, positionId])
 }
@@ -221,6 +230,7 @@ model Candidate {
   electionPositionId String           @db.Uuid
   voterId            String           @db.Uuid
   manifesto          String?
+  platform           String[]
   campaignSlogan     String?          @db.VarChar(255)
   imageUrl           String?
   cvUrl              String?
@@ -229,59 +239,69 @@ model Candidate {
   partyAffiliation   String?          @db.VarChar(100)
   electionPosition   ElectionPosition @relation(fields: [electionPositionId], references: [id])
   voter              VoterRoll        @relation(fields: [voterId], references: [id])
+  votes              Vote[]
 
   @@unique([electionPositionId, voterId])
 }
 
 model ElectionParticipation {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  electionId String    @db.Uuid
-  voterId    String    @db.Uuid
-  eligible   Boolean   @default(true)
-  hasVoted   Boolean   @default(false)
-  votedAt    DateTime?
-  createdAt  DateTime  @default(now())
-  election   Election  @relation(fields: [electionId], references: [id])
-  voter      VoterRoll @relation(fields: [voterId], references: [id])
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  electionId   String    @db.Uuid
+  voterId      String    @db.Uuid
+  eligible     Boolean   @default(true)
+  hasVoted     Boolean   @default(false)
+  votedAt      DateTime?
+  faceAttempts Int       @default(0)
+  createdAt    DateTime  @default(now())
+  election     Election  @relation(fields: [electionId], references: [id])
+  voter        VoterRoll @relation(fields: [voterId], references: [id])
 
   @@unique([electionId, voterId])
 }
 
 model VotingSession {
-  id         String              @id @default(cuid())
-  voterId    String              @db.Uuid
-  electionId String              @db.Uuid
-  status     VotingSessionStatus @default(PENDING)
-  createdAt  DateTime            @default(now())
-  updatedAt  DateTime            @updatedAt
-  expiresAt  DateTime
-  election   Election            @relation(fields: [electionId], references: [id])
-  voter      VoterRoll           @relation(fields: [voterId], references: [id])
+  id            String              @id @default(cuid())
+  voterId       String              @db.Uuid
+  electionId    String              @db.Uuid
+  status        VotingSessionStatus @default(PENDING)
+  authSessionId String
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  expiresAt     DateTime
+  election      Election            @relation(fields: [electionId], references: [id])
+  voter         VoterRoll           @relation(fields: [voterId], references: [id])
 
-  @@unique([voterId, electionId], map: "one_active_session_per_voter_election", where: raw("(status = ANY (ARRAY['PENDING'::\"VotingSessionStatus\", 'FACE_VERIFIED'::\"VotingSessionStatus\", 'TOKEN_ISSUED'::\"VotingSessionStatus\"]))"))
+  @@unique([voterId, electionId], map: "one_active_session_per_voter_election", where: raw("(status = ANY (ARRAY['PENDING'::\"VotingSessionStatus\", 'FACE_VERIFIED'::\"VotingSessionStatus\", 'TOKEN_ISSUED'::\"VotingSessionStatus\", 'COMPLETED'::\"VotingSessionStatus\"]))"))
   @@index([voterId, electionId])
   @@index([status, expiresAt])
-}
-
-model IssuedNonce {
-  id         String   @id @default(cuid())
-  token      String   @unique
-  electionId String   @db.Uuid
-  used       Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  expiresAt  DateTime
-  election   Election @relation(fields: [electionId], references: [id])
-
-  @@index([token, used, expiresAt])
 }
 
 model Ballot {
   id         String   @id @default(uuid()) @db.Uuid
   electionId String   @db.Uuid
-  castAt     DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  batchId    String   @db.Uuid
   election   Election @relation(fields: [electionId], references: [id])
   votes      Vote[]
+
+  @@index([electionId])
+  @@index([batchId])
+}
+
+model SpentToken {
+  tokenHash  String   @id
+  electionId String   @db.Uuid
+  election   Election @relation(fields: [electionId], references: [id])
+
+  @@index([electionId])
+}
+
+model PendingBallot {
+  id         String   @id @default(uuid()) @db.Uuid
+  electionId String   @db.Uuid
+  sealed     String
+  election   Election @relation(fields: [electionId], references: [id])
+
+  @@index([electionId])
 }
 
 model Vote {
@@ -290,6 +310,24 @@ model Vote {
   electionPositionId String @db.Uuid
   candidateId        String @db.Uuid
   ballot             Ballot @relation(fields: [ballotId], references: [id], onDelete: Cascade)
+
+  electionPosition ElectionPosition @relation(fields: [electionPositionId], references: [id])
+  candidate        Candidate        @relation(fields: [candidateId], references: [id])
+
+  @@unique([ballotId, electionPositionId])
+  @@index([electionPositionId, candidateId])
+}
+
+model ElectionTally {
+  id                 String   @id @default(uuid()) @db.Uuid
+  electionId         String   @db.Uuid
+  electionPositionId String   @db.Uuid
+  candidateId        String   @db.Uuid
+  votes              Int // zero-vote candidates have no row, on purpose (see computeResultHash)
+  election           Election @relation(fields: [electionId], references: [id])
+
+  @@unique([electionId, electionPositionId, candidateId])
+  @@index([electionId])
 }
 
 model BlockchainElection {
@@ -301,13 +339,25 @@ model BlockchainElection {
   createdAt       DateTime @default(now())
 }
 
+model BlockchainBatch {
+  id            String           @id @default(uuid()) @db.Uuid
+  electionId    String           @db.Uuid
+  batchId       String           @unique @db.Uuid // matches Ballot.batchId
+  ballotCount   Int
+  merkleRoot    String
+  polygonTxHash String?
+  status        BlockchainStatus @default(PENDING)
+  createdAt     DateTime         @default(now())
+
+  @@index([electionId])
+}
+
 model BlockchainBallot {
   id            String           @id @default(uuid())
   ballotId      String           @unique
   ballotHash    String
   polygonTxHash String?
   status        BlockchainStatus
-  createdAt     DateTime         @default(now())
 }
 
 model BlockchainResult {
@@ -319,10 +369,11 @@ model BlockchainResult {
 }
 
 model Admin {
-  id           String    @id @default(uuid()) @db.Uuid
-  email        String    @unique
+  id           String     @id @default(uuid()) @db.Uuid
+  email        String     @unique
   passwordHash String
   role         AdminRole
+  auditLogs    AuditLog[]
 }
 
 model AuditLog {
@@ -330,6 +381,23 @@ model AuditLog {
   adminId   String?  @db.Uuid
   action    String
   resource  String?
+  createdAt DateTime @default(now())
+
+  admin Admin? @relation(fields: [adminId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String           @id @default(uuid()) @db.Uuid
+  type      NotificationType
+  title     String
+  body      String
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+}
+
+model Announcement {
+  id        String   @id @default(uuid()) @db.Uuid
+  title     String
   createdAt DateTime @default(now())
 }
 
@@ -381,10 +449,12 @@ enum FaceReferenceStatus {
 
 enum ElectionStatus {
   DRAFT
-  PUBLISHED
-  OPEN
+  SCHEDULED
+  ACTIVE
+  COMPLETED
   CLOSED
   ARCHIVED
+  CANCELLED
 }
 
 enum ScopeField {
@@ -408,4 +478,12 @@ enum AdminRole {
 
 enum BlockchainStatus {
   PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum NotificationType {
+  REMINDER
+  ANNOUNCEMENT
+  SYSTEM
 }

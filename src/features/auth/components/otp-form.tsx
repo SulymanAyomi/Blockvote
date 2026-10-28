@@ -29,7 +29,6 @@ export function OTPForm({ data, prevStep, onNext }: LoginFormProps) {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setErrors("");
     mutate(
       {

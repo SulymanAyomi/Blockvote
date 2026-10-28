@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 interface ResultRejectedProps {
   onRetry: () => void;
 }
@@ -34,12 +36,12 @@ export function ResultRejected({ onRetry }: ResultRejectedProps) {
         sure your face is well-lit and centered, then try again.
       </p>
       <div className="flex flex-col items-center gap-2 sm:flex-row">
-        <button
+        <Button
           onClick={onRetry}
-          className="rounded-lg flex-1/2 bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-700"
+          className="rounded-lg flex-1/2 px-6 py-2.5 text-sm font-semibold  transition-colors"
         >
           Retry
-        </button>
+        </Button>
         <a
           href={COMMITTEE_CONTACT_URL}
           className="rounded-lg text-nowrap border border-slate-300 px-6 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"

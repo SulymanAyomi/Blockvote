@@ -70,10 +70,12 @@ export type FaceReferenceStatus = (typeof FaceReferenceStatus)[keyof typeof Face
 
 export const ElectionStatus = {
   DRAFT: 'DRAFT',
-  PUBLISHED: 'PUBLISHED',
-  OPEN: 'OPEN',
+  SCHEDULED: 'SCHEDULED',
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
   CLOSED: 'CLOSED',
-  ARCHIVED: 'ARCHIVED'
+  ARCHIVED: 'ARCHIVED',
+  CANCELLED: 'CANCELLED'
 } as const
 
 export type ElectionStatus = (typeof ElectionStatus)[keyof typeof ElectionStatus]
@@ -108,7 +110,18 @@ export type AdminRole = (typeof AdminRole)[keyof typeof AdminRole]
 
 
 export const BlockchainStatus = {
-  PENDING: 'PENDING'
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED'
 } as const
 
 export type BlockchainStatus = (typeof BlockchainStatus)[keyof typeof BlockchainStatus]
+
+
+export const NotificationType = {
+  REMINDER: 'REMINDER',
+  ANNOUNCEMENT: 'ANNOUNCEMENT',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

@@ -45,3 +45,6 @@ next-env.d.ts
 src/features/elections/new-poll/draft
 src/lib/face-verification
 /app/generated/prisma
+/keys
+/workers
+*.pem

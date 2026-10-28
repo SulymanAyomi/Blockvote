@@ -10,25 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  LoaderCircleIcon,
-  LucideArrowRight,
-  MoveRightIcon,
-  Vote,
-} from "lucide-react";
+import { LoaderCircleIcon, MoveRightIcon, Vote } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { idSelectionSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataType } from "../type";
-import { toast } from "sonner";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { useVerifyNin } from "../api/use-verify";
 
 interface RegisterComponentProps {
@@ -71,24 +60,8 @@ export const RegisterComponent = ({
       },
       {
         onSuccess: (data) => {
-          console.log(data);
-          // @ts-ignore
           value.regSessionId = data.data.regSessionId;
           handleData(value);
-          // toast("You submitted the following values:", {
-          //   description: (
-          //     <pre className="mt-2 w-[320px] overflow-x-auto rounded-md bg-code p-4 text-code-foreground">
-          //       <code>{JSON.stringify(value, null, 2)}</code>
-          //     </pre>
-          //   ),
-          //   position: "bottom-right",
-          //   classNames: {
-          //     content: "flex flex-col gap-2",
-          //   },
-          //   style: {
-          //     "--border-radius": "calc(var(--radius)  + 4px)",
-          //   } as React.CSSProperties,
-          // });
           onNext();
         },
         onError: async (error) => {

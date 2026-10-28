@@ -48,7 +48,24 @@ export function OTPForm() {
       },
       {
         onError: async (error) => {
-          setErrors(error.message);
+          let e = error.message as string;
+          if (e == "INTERNAL_ERROR") {
+            setErrors("Failed! Try again");
+            return;
+          }
+          if (e == "INVALID_REQUEST" || e == "Request failed") {
+            setErrors("Check OTP and try again.");
+            return;
+          }
+          if (e == "OTP_EXPIRED" || e == "OTP_INVALID") {
+            setErrors("OTP invalid or expired.");
+            return;
+          }
+          if (e == "ACCOUNT_LOCKED") {
+            setErrors("Account locked. Contact election comitee.");
+            return;
+          }
+          setErrors("Check otp and try again.");
         },
       },
     );

@@ -10,23 +10,44 @@ import { callPythonVerify } from "@/lib/verification/pythonServiceClient";
 import { THRESHOLDS, VerifyApiResponse } from "@/lib/verification/types";
 import { getSession } from "@/lib/session";
 import { ElectionStatus, ScopeType } from "@/generated/enums";
-// import { getSession } from '@/lib/session';
+import { onInvalid } from "@/lib/validation";
 
-// import { Ratelimit } from '@upstash/ratelimit';
-// import { Redis } from '@upstash/redis';
 
 
 
 const TOKEN_EXPIRATION_HOURS = 24
+const MAX_OTP_ATTEMPTS = 5;
+const MAX_FAILED_LOGINS = 5;          // match the password step
+const LOCK_MS = 15 * 60_000;           // match the password step
+const OTP_TTL_MS = 5 * 60_000;
+const OTP_WINDOW_MS = 15 * 60_000;
+const MAX_OTPS_PER_WINDOW = 3;
 
-function generateOTP() {
-    return Math.floor(100000 + Math.random() * 900000).toString()
-}
+const generateOTP = () => crypto.randomInt(0, 1_000_000).toString().padStart(6, "0");
+
 
 // const ratelimit = new Ratelimit({
 //   redis: Redis.fromEnv(),
 //   limiter: Ratelimit.slidingWindow(5, '15 m'),
 // });
+
+let dummyHash: string | undefined;
+const getDummyHash = async () => (dummyHash ??= await argon2.hash(crypto.randomUUID()));
+
+const maskEmail = (e: string) => {
+    const [user, domain] = e.split("@");
+    return `${user.slice(0, 1)}***@${domain}`;
+};
+
+async function deliverOtp(email: string, otp: string) {
+    if (process.env.NODE_ENV !== "production") {
+        console.log(`[dev] login code for ${maskEmail(email)}: ${otp}`);
+        return;
+    }
+    // await sendEmail(email, `Your login code: ${otp}`);
+}
+
+
 const app = new Hono()
 
     .post("/verify-nin", zValidator("json", verifyNINSchema), async (c) => {
@@ -39,6 +60,7 @@ const app = new Hono()
                     idNumber
                 }
             });
+
             if (!voter) return c.json(errorResponse('Id not found on eligible roll'), { status: 404 })
 
             if (voter.isRegistered) return c.json(errorResponse('Already registered'), { status: 409 });
@@ -54,10 +76,9 @@ const app = new Hono()
             // await sendEmail(voter.email, `Your registration code: ${otp}`);
             console.log("otp:", otp)
 
-            return c.json(successResponse({ message: 'OTP sent to registered email', regSessionId: regSession.id, otp }));
+            return c.json(successResponse({ message: 'OTP sent to registered email', regSessionId: regSession.id, otp }), 200);
         } catch (e) {
-            console.log(e)
-            return c.json(errorResponse("Something went wrong. Try again"), 500)
+            return c.json(errorResponse("INTERNAL_ERROR"), 500);
         }
     })
     .post("/verify-otp", zValidator("json", verifyOTPSchema), async (c) => {
@@ -95,7 +116,8 @@ const app = new Hono()
                 include: {
                     faceEmbedding: true
                 }
-            })
+            });
+
 
             // if (!voter || !voter.faceEmbeddings) {
             //     const body: VerifyApiResponse = {
@@ -108,14 +130,15 @@ const app = new Hono()
             // }
 
             // Strip a data URL prefix if the client sent one (e.g. "data:image/jpeg;base64,...").
-            const rawBase64 = imageBase64.includes(",") ? imageBase64.split(",")[1] : imageBase64;
-
-            const result = await callPythonVerify({
-                liveImageBase64: rawBase64,
-                voterId: regSession.voterId,
-            });
-
-            console.log("result: ", result)
+            const rawBase64 = imageBase64.replace(/^data:image\/(jpeg|png);base64,/, "");
+            const voterId = voter?.voterId as string
+            let result;
+            try {
+                result = await callPythonVerify({ liveImageBase64: rawBase64, voterId });
+            } catch (err) {
+                console.error("face-verify: service failure");
+                return c.json(errorResponse("FACE_SERVICE_UNAVAILABLE"), 503);
+            }
 
             if (!result.faceDetected) {
                 const body: VerifyApiResponse = {
@@ -176,15 +199,15 @@ const app = new Hono()
             const regSession = await requireStage(regSessionId, { faceVerified: true });
 
             if (!confirmed) {
-                return c.json(successResponse({ message: 'Please contact school admin to correct your record' }));
+                return c.json(errorResponse('Please contact school admin to correct your record'));
             }
             await prisma.registrationSession.update({ where: { id: regSessionId }, data: { infoConfirmed: true } });
 
             return c.json(successResponse({ message: 'Confirmed, proceed to set password' }));
 
         } catch (e) {
-            console.log(e)
-            return c.json(errorResponse("Something went wrong. Try again"), 500)
+            console.error("Confirmation failed", e instanceof Error ? e.name : "unknown", (e as any)?.code);
+            return c.json(errorResponse("INTERNAL_ERROR"), 500);
         }
     })
     .post("/set-password", zValidator("json", setPasswordSchema), async (c) => {
@@ -197,7 +220,6 @@ const app = new Hono()
                     voterId: regSession.voterId
                 }
             })
-            console.log("Account:", account)
 
             if (account) {
                 await prisma.account.update({
@@ -217,11 +239,9 @@ const app = new Hono()
             return c.json(successResponse({ message: 'Registration complete' }), 200);
 
         } catch (e) {
-            console.log(e)
-            // if (e instanceof RegistrationStageError) {
-            //     return c.json(errorResponse(e.message), e.status)
-            // }
-            return c.json(errorResponse("Something went wrong. Try again"), 500)
+            console.error("password creation failed", e instanceof Error ? e.name : "unknown", (e as any)?.code);
+            return c.json(errorResponse("INTERNAL_ERROR"), 500);
+
         }
     })
     .get("/confirm-info", zValidator("query", getInfoConfirmationSchema), async (c) => {
@@ -261,101 +281,207 @@ const app = new Hono()
     }).post("/login", zValidator("json", LoginSchema), async (c) => {
         try {
 
-            const { id, idNumber, password } = c.req.valid("json")
+            const { id: idType, idNumber, password } = c.req.valid("json")
 
-            // const { success } = await ratelimit.limit(nin);
+            //   const ip = c.req.header("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+            //   const [byIp, byId] = await Promise.all([
+            //     ratelimit.limit(`login:ip:${ip}`),
+            //     ratelimit.limit(`login:id:${idType}:${idNumber}`),
+            //   ]);
+            //   if (!byIp.success || !byId.success) return c.json(errorResponse("RATE_LIMITED"), 429);
 
-            // if (!success) return c.json(errorResponse('Too many attempts, try later'), { status: 429 });
-
-            const voter = await prisma.voterRoll.findFirst({
-                where: {
-                    idNumber,
-                    idType: id
-                }
+            const voter = await prisma.voterRoll.findUnique({
+                where: { idType_idNumber: { idType, idNumber } },
+                select: { id: true, email: true },
             });
 
-            if (!voter) {
-                return c.json(errorResponse('Id not found on roster list'), { status: 401 });
+            const account = voter ? await prisma.account.findUnique({ where: { voterId: voter.id } }) : null;
+
+
+            if (!voter || !account) {
+                await argon2.verify(await getDummyHash(), password);
+                return c.json(errorResponse("INVALID_CREDENTIALS"), 401);
             }
 
-            const account = await prisma.account.findFirst({ where: { voterId: voter?.id } });
-            if (!account) return c.json(errorResponse('Invalid credentials'), { status: 401 });
-
-            if (account.lockedUntil && account.lockedUntil > new Date()) {
-                return c.json(errorResponse('Account temporarily locked'), { status: 423 });
-            }
-            const valid = await argon2.verify(account.passwordHash, password);
-            if (!valid) {
-                const attempts = account.failedAttempts + 1;
-                await prisma.account.update({
-                    where: { voterId: voter?.id },
-                    data: {
-                        failedAttempts: attempts,
-                        lockedUntil: attempts >= 5 ? new Date(Date.now() + 15 * 60_000) : null,
-                    },
+            if (!(await argon2.verify(account.passwordHash, password))) {
+                const a = await prisma.account.update({
+                    where: { id: account.id },
+                    data: { failedAttempts: { increment: 1 } },
+                    select: { failedAttempts: true },
                 });
-                return c.json(errorResponse('Invalid credentials'), { status: 401 });
+                if (a.failedAttempts >= MAX_FAILED_LOGINS) {
+                    await prisma.account.update({
+                        where: { id: account.id },
+                        data: { lockedUntil: new Date(Date.now() + LOCK_MS), failedAttempts: 0 },
+                    });
+                    return c.json(errorResponse("ACCOUNT_LOCKED"), 401);
+
+                }
+                return c.json(errorResponse("INVALID_CREDENTIALS"), 401);
             }
-            await prisma.account.update({ where: { voterId: voter?.id }, data: { failedAttempts: 0 } });
+            if (!voter.email) return c.json(errorResponse("NO_EMAIL_ON_FILE"), 409);
+
+            const recent = await prisma.otp.count({
+                where: {
+                    voterId: voter.id,
+                    purpose: "LOGIN",
+                    createdAt: { gt: new Date(Date.now() - OTP_WINDOW_MS) },
+                },
+            });
+            if (recent >= MAX_OTPS_PER_WINDOW) return c.json(errorResponse("TOO_MANY_OTP_REQUESTS"), 429);
+
+
 
             const otp = generateOTP();
-            console.log("otp:", otp)
-            const vOtp = await prisma.otp.create({
-                data: { voterId: voter?.id, otpHash: await argon2.hash(otp), purpose: "LOGIN", expiresAt: new Date(Date.now() + 5 * 60_000) },
-            });
-            // await sendEmail(voter!.email, `Your login code: ${otp}`);
-            const data = {
-                vid: vOtp.id,
-                email: voter?.email,
-                otp
+            const otpHash = await argon2.hash(otp);
+
+            const [, vOtp] = await prisma.$transaction([
+                prisma.otp.updateMany({
+                    where: { voterId: voter.id, purpose: "LOGIN", used: false },
+                    data: { used: true },
+                }),
+                prisma.otp.create({
+                    data: { voterId: voter.id, otpHash, purpose: "LOGIN", expiresAt: new Date(Date.now() + OTP_TTL_MS) },
+                    select: { id: true },
+                }),
+            ]);
+
+            try {
+                await deliverOtp(voter.email, otp);
+            } catch {
+                // Don't claim a code was sent when it wasn't. Retire it so it can't be guessed.
+                await prisma.otp.updateMany({ where: { id: vOtp.id }, data: { used: true } });
+                return c.json(errorResponse("EMAIL_UNAVAILABLE"), 503);
             }
-            return c.json(successResponse(data, 'Registration complete'), 200);
+
+            c.header("Cache-Control", "no-store");
+            return c.json(successResponse({ vid: vOtp.id, emailHint: maskEmail(voter.email), otp }, "Verification code sent"));
 
         } catch (e) {
-            console.log(e)
-            return c.json(errorResponse("Something went wrong. Try again"), 500)
+            console.error("login failed", e instanceof Error ? e.name : "unknown", (e as any)?.code); // never the body
+            return c.json(errorResponse("INTERNAL_ERROR"), 500);
         }
     })
     .post("/login/confirm-otp", zValidator("json", LoginOtpSchema), async (c) => {
         try {
             const { vid, otp } = c.req.valid("json")
+            const now = new Date();
 
-            const record = await prisma.otp.findFirst({
-                where: { id: vid, purpose: 'LOGIN', used: false, expiresAt: { gt: new Date() } },
-                orderBy: { id: 'desc' },
-            });
-            if (!record || !(await argon2.verify(record.otpHash, otp))) {
-                return c.json(errorResponse('Invalid or expired OTP'), { status: 400 });
-            }
-            await prisma.otp.update({ where: { id: record.id }, data: { used: true } });
-            const voter = await prisma.voterRoll.findUnique({
+            // Atomically claim one guess. This also rejects used, expired and exhausted codes.
+            const claim = await prisma.otp.updateMany({
                 where: {
-                    id: record.voterId
+                    id: vid, purpose: "LOGIN", used: false,
+                    expiresAt: { gt: now }, attempts: { lt: MAX_OTP_ATTEMPTS },
                 },
-                select: {
-                    account: {
-                        select: {
-                            id: true
-                        }
-                    }
-                }
+                data: { attempts: { increment: 1 } },
             });
-            if (!voter || !voter.account?.id) {
-                return c.json(errorResponse('Invalid or expired OTP'), { status: 400 });
+
+            if (claim.count !== 1) return c.json(errorResponse("OTP_EXPIRED"), 400);
+            const record = await prisma.otp.findUnique({
+                where: { id: vid },
+                select: { otpHash: true, voterId: true },
+            });
+
+            if (!record) return c.json(errorResponse("OTP_EXPIRED"), 400);
+            const account = await prisma.account.findUnique({
+                where: { voterId: record.voterId },
+                select: { id: true, lockedUntil: true },
+            });
+
+            if (!account) return c.json(errorResponse("OTP_EXPIRED"), 400);
+
+            if (account.lockedUntil && account.lockedUntil > now)
+                return c.json(errorResponse("ACCOUNT_LOCKED"), 423);
+            const verify = await argon2.verify(record.otpHash, otp)
+            if (!verify) {
+                const a = await prisma.account.update({
+                    where: { id: account.id },
+                    data: { failedAttempts: { increment: 1 } },
+                    select: { failedAttempts: true },
+                });
+                if (a.failedAttempts >= MAX_FAILED_LOGINS) {
+                    await prisma.account.update({
+                        where: { id: account.id },
+                        data: { lockedUntil: new Date(Date.now() + LOCK_MS), failedAttempts: 0 },
+                    });
+                }
+                return c.json(errorResponse("OTP_INVALID"), 400);
             }
+
+            // Compare-and-set: only one concurrent request can consume the code
+            const consumed = await prisma.otp.updateMany({
+                where: { id: vid, used: false },
+                data: { used: true },
+            });
+            if (consumed.count !== 1) return c.json(errorResponse("OTP_EXPIRED"), 400);
+
+            // Retire every other outstanding login code and reset the counters
+            await prisma.otp.updateMany({
+                where: { voterId: record.voterId, purpose: "LOGIN", used: false },
+                data: { used: true },
+            });
+            await prisma.account.update({
+                where: { id: account.id },
+                data: { failedAttempts: 0, lockedUntil: null, lastLogin: now },
+            });
 
             const session = await getSession();
-            // set session id to account id
-            session.id = voter.account.id;
+            session.id = account.id;
+            session.sid = crypto.randomUUID();   // new per login, binds voting sessions to this login
             session.isLoggedIn = true;
             await session.save();
 
-            return c.json(successResponse({ message: 'Logged in' }));
+            c.header("Cache-Control", "no-store");
+            return c.json(successResponse({ message: "Logged in" }));
+
+        } catch (e) {
+            console.error("login-otp failed", e instanceof Error ? e.name : "unknown", (e as any)?.code);
+            return c.json(errorResponse("INTERNAL_ERROR"), 500);
+        }
+    })
+    .get("/user", async (c) => {
+        try {
+            const auth = await getSession();
+            if (!auth.isLoggedIn) return c.json(errorResponse("UNAUTHENTICATED"), 401);
+
+            const account = await prisma.account.findUnique({
+                where: { id: auth.id },
+                select: { voterId: true },
+            });
+            if (!account) return c.json(errorResponse("UNAUTHENTICATED"), 401);
+
+            const voter = await prisma.voterRoll.findUnique({
+                where: { id: account.voterId },
+                select: {
+                    fullName: true,
+                    phone: true,
+                    email: true,
+                    imageUrl: true,
+                    studentId: true,
+                    level: true,
+                    department: {
+                        select: {
+                            name: true
+                        },
+                    },
+                    faculty: {
+                        select: {
+                            name: true
+                        },
+                    }
+
+                },
+            });
+
+            const voterInfo = {
+                ...voter
+
+            }
+
+            return c.json(successResponse(voterInfo));
+
         } catch (e) {
             console.log(e)
-            // if (e instanceof RegistrationStageError) {
-            //     return c.json(errorResponse(e.message), e.status)
-            // }
             return c.json(errorResponse("Something went wrong. Try again"), 500)
         }
     })
@@ -595,103 +721,12 @@ const app = new Hono()
     })
     .get("/election-create", async (c) => {
         try {
-            const departments = await prisma.department.findMany({
-                where: {
-                    name: {
-                        in: ["Department of Computer Science", "Department of Accounting"]
-                    }
-                }
-            })
-
-            const positions = await prisma.position.findMany()
-
-            const positionMap: Record<string, string> = {};
-            positions.forEach(p => { positionMap[p.name] = p.id; });
-
-            const session2026 = await prisma.academicSession.findFirst({
-                where: { name: '2026/2027' }
-            })
-            if (!session2026) {
-                return c.json(errorResponse("weeee", 400))
-            }
-            const electionConfigs = [
-                {
-                    title: 'Student Union Election 2026/2027',
-                    description: 'University wide student government election.',
-                    session: session2026,
-                    scopeType: ScopeType.UNIVERSITY,
-                    scopeValue: 'all',
-                    positionNames: ['President', 'Vice President', 'Speaker', 'Treasurer', 'Social Director', 'Public Relations Officer (PRO)'],
-                    startsAt: new Date('2026-10-10T08:00:00'),
-                    endsAt: new Date('2026-10-12T17:00:00'),
-                    status: ElectionStatus.OPEN,
-                },
-                {
-                    title: 'NACOS Election 2026/2027',
-                    description: 'National Association of Computer Science Students election.',
-                    session: session2026,
-                    scopeType: ScopeType.DEPARTMENT,
-                    scopeValue: 'Department of Computer Science',
-                    positionNames: ['President', 'Vice President', 'Speaker', 'Treasurer', 'Social Director'],
-                    startsAt: new Date('2026-11-01T08:00:00'),
-                    endsAt: new Date('2026-11-02T17:00:00'),
-                    status: ElectionStatus.PUBLISHED,
-                },
-                {
-                    title: 'Accounting Department Election 2026/2027',
-                    description: 'Election for the Accounting Department student leaders.',
-                    session: session2026,
-                    scopeType: ScopeType.DEPARTMENT,
-                    scopeValue: 'Department of Accounting',
-                    positionNames: ['President', 'Vice President', 'Treasurer'],
-                    startsAt: new Date('2026-11-10T08:00:00'),
-                    endsAt: new Date('2026-11-11T17:00:00'),
-                    status: ElectionStatus.DRAFT,
-                },
-            ];
-
-            const createdElections: any[] = [];
-
-            for (const cfg of electionConfigs) {
-                let departmentId: string | undefined;
-                if (cfg.scopeType === ScopeType.DEPARTMENT) {
-                    const dept = departments.find(d => d.name === cfg.scopeValue);
-                    if (dept) departmentId = dept.id;
-                }
-
-                const election = await prisma.election.create({
-                    data: {
-                        title: cfg.title,
-                        description: cfg.description,
-                        academicSessionId: cfg.session.id,
-                        startsAt: cfg.startsAt,
-                        endsAt: cfg.endsAt,
-                        status: cfg.status,
-                        scopes: {
-                            create: {
-                                type: cfg.scopeType,
-                                value: cfg.scopeValue,
-                            },
-                        },
-                    },
-                });
-
-                createdElections.push(election);
-
-                for (const posName of cfg.positionNames) {
-                    const positionId = positionMap[posName];
-                    if (!positionId) continue;
-                    await prisma.electionPosition.create({
-                        data: {
-                            electionId: election.id,
-                            positionId: positionId,
-                        },
-                    });
-                }
-            }
 
 
-            return c.json(successResponse(createdElections));
+
+
+
+            return c.json(successResponse({}));
 
         } catch (e) {
             console.log(e)
@@ -815,14 +850,10 @@ const app = new Hono()
         }
     })
 
-// .onError((err, c) => {
-//     if (err instanceof RegistrationStageError) {
-//         return c.json(errorResponse(err.message), err.status)
-//     }
-// })
-
 
 export default app;
+export const errInfo = (e: unknown) => e instanceof Error ? `${e.name} ${(e as any).code ?? ""}`.trim() : "unknown"
+
 
 function randomItem<T>(arr: T[]): T {
     return arr[Math.floor(Math.random() * arr.length)];

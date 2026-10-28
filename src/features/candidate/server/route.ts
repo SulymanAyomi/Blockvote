@@ -22,8 +22,7 @@ const app = new Hono()
 
             const { electionId } = c.req.param()
 
-            const account = await prisma.account.findUnique({ where: { id } });
-            console.log("account: ", account)
+            const account = await prisma.account.findUnique({ where: { id: id } });
 
             const voter = await prisma.voterRoll.findUnique({
                 where: {

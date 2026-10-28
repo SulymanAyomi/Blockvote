@@ -9,16 +9,17 @@ export const departmentNameTruncate = (name: string) => {
   return name.replace(/^(Department of |faculty of )\s*/i, "");
 };
 
-export function formatDateLong(isoDate: string): string {
-  return new Date(`${isoDate}T00:00:00`).toLocaleDateString("en-US", {
+export function formatDateLong(isoDate: string | Date): string {
+  return new Date(isoDate).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
 }
 
-export function formatTime12h(time24: string): string {
-  const [h, m] = time24.split(":").map(Number);
+export function formatTime12h(time24: string | Date): string {
+  const newT = time24.toString()
+  const [h, m] = newT.split(":").map(Number);
   const period = h >= 12 ? "PM" : "AM";
   const hour12 = h % 12 === 0 ? 12 : h % 12;
   return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
@@ -51,4 +52,16 @@ export function formatRelativeToNow(targetIso: string): { label: string; isPast:
 
 export function scheduleToDateTime(dateIso: string, time24: string): string {
   return new Date(`${dateIso}T${time24}:00`).toISOString();
+}
+
+export function to12HourTime(d: Date | string): string {
+  const date = new Date(d)
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const period = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12 || 12; // 0 -> 12, 13 -> 1, etc.
+
+  const paddedMinutes = minutes.toString().padStart(2, "0");
+  return `${hours}:${paddedMinutes} ${period}`;
 }

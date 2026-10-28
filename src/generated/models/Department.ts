@@ -167,8 +167,8 @@ export type DepartmentWhereInput = {
   facultyId?: Prisma.UuidFilter<"Department"> | string
   name?: Prisma.StringFilter<"Department"> | string
   faculty?: Prisma.XOR<Prisma.FacultyScalarRelationFilter, Prisma.FacultyWhereInput>
-  voters?: Prisma.VoterRollListRelationFilter
   programmes?: Prisma.ProgrammeListRelationFilter
+  voters?: Prisma.VoterRollListRelationFilter
 }
 
 export type DepartmentOrderByWithRelationInput = {
@@ -176,8 +176,8 @@ export type DepartmentOrderByWithRelationInput = {
   facultyId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   faculty?: Prisma.FacultyOrderByWithRelationInput
-  voters?: Prisma.VoterRollOrderByRelationAggregateInput
   programmes?: Prisma.ProgrammeOrderByRelationAggregateInput
+  voters?: Prisma.VoterRollOrderByRelationAggregateInput
 }
 
 export type DepartmentWhereUniqueInput = Prisma.AtLeast<{
@@ -188,8 +188,8 @@ export type DepartmentWhereUniqueInput = Prisma.AtLeast<{
   facultyId?: Prisma.UuidFilter<"Department"> | string
   name?: Prisma.StringFilter<"Department"> | string
   faculty?: Prisma.XOR<Prisma.FacultyScalarRelationFilter, Prisma.FacultyWhereInput>
-  voters?: Prisma.VoterRollListRelationFilter
   programmes?: Prisma.ProgrammeListRelationFilter
+  voters?: Prisma.VoterRollListRelationFilter
 }, "id">
 
 export type DepartmentOrderByWithAggregationInput = {
@@ -214,32 +214,32 @@ export type DepartmentCreateInput = {
   id?: string
   name: string
   faculty: Prisma.FacultyCreateNestedOneWithoutDepartmentsInput
-  voters?: Prisma.VoterRollCreateNestedManyWithoutDepartmentInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutDepartmentInput
+  voters?: Prisma.VoterRollCreateNestedManyWithoutDepartmentInput
 }
 
 export type DepartmentUncheckedCreateInput = {
   id?: string
   facultyId: string
   name: string
-  voters?: Prisma.VoterRollUncheckedCreateNestedManyWithoutDepartmentInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutDepartmentInput
+  voters?: Prisma.VoterRollUncheckedCreateNestedManyWithoutDepartmentInput
 }
 
 export type DepartmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   faculty?: Prisma.FacultyUpdateOneRequiredWithoutDepartmentsNestedInput
-  voters?: Prisma.VoterRollUpdateManyWithoutDepartmentNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutDepartmentNestedInput
+  voters?: Prisma.VoterRollUpdateManyWithoutDepartmentNestedInput
 }
 
 export type DepartmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   facultyId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  voters?: Prisma.VoterRollUncheckedUpdateManyWithoutDepartmentNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutDepartmentNestedInput
+  voters?: Prisma.VoterRollUncheckedUpdateManyWithoutDepartmentNestedInput
 }
 
 export type DepartmentCreateManyInput = {
@@ -416,15 +416,15 @@ export type DepartmentUncheckedUpdateWithoutVotersInput = {
 export type DepartmentCreateWithoutFacultyInput = {
   id?: string
   name: string
-  voters?: Prisma.VoterRollCreateNestedManyWithoutDepartmentInput
   programmes?: Prisma.ProgrammeCreateNestedManyWithoutDepartmentInput
+  voters?: Prisma.VoterRollCreateNestedManyWithoutDepartmentInput
 }
 
 export type DepartmentUncheckedCreateWithoutFacultyInput = {
   id?: string
   name: string
-  voters?: Prisma.VoterRollUncheckedCreateNestedManyWithoutDepartmentInput
   programmes?: Prisma.ProgrammeUncheckedCreateNestedManyWithoutDepartmentInput
+  voters?: Prisma.VoterRollUncheckedCreateNestedManyWithoutDepartmentInput
 }
 
 export type DepartmentCreateOrConnectWithoutFacultyInput = {
@@ -514,15 +514,15 @@ export type DepartmentCreateManyFacultyInput = {
 export type DepartmentUpdateWithoutFacultyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  voters?: Prisma.VoterRollUpdateManyWithoutDepartmentNestedInput
   programmes?: Prisma.ProgrammeUpdateManyWithoutDepartmentNestedInput
+  voters?: Prisma.VoterRollUpdateManyWithoutDepartmentNestedInput
 }
 
 export type DepartmentUncheckedUpdateWithoutFacultyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  voters?: Prisma.VoterRollUncheckedUpdateManyWithoutDepartmentNestedInput
   programmes?: Prisma.ProgrammeUncheckedUpdateManyWithoutDepartmentNestedInput
+  voters?: Prisma.VoterRollUncheckedUpdateManyWithoutDepartmentNestedInput
 }
 
 export type DepartmentUncheckedUpdateManyWithoutFacultyInput = {
@@ -536,13 +536,13 @@ export type DepartmentUncheckedUpdateManyWithoutFacultyInput = {
  */
 
 export type DepartmentCountOutputType = {
-  voters: number
   programmes: number
+  voters: number
 }
 
 export type DepartmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voters?: boolean | DepartmentCountOutputTypeCountVotersArgs
   programmes?: boolean | DepartmentCountOutputTypeCountProgrammesArgs
+  voters?: boolean | DepartmentCountOutputTypeCountVotersArgs
 }
 
 /**
@@ -558,15 +558,15 @@ export type DepartmentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
 /**
  * DepartmentCountOutputType without action
  */
-export type DepartmentCountOutputTypeCountVotersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VoterRollWhereInput
+export type DepartmentCountOutputTypeCountProgrammesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgrammeWhereInput
 }
 
 /**
  * DepartmentCountOutputType without action
  */
-export type DepartmentCountOutputTypeCountProgrammesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProgrammeWhereInput
+export type DepartmentCountOutputTypeCountVotersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoterRollWhereInput
 }
 
 
@@ -575,8 +575,8 @@ export type DepartmentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   facultyId?: boolean
   name?: boolean
   faculty?: boolean | Prisma.FacultyDefaultArgs<ExtArgs>
-  voters?: boolean | Prisma.Department$votersArgs<ExtArgs>
   programmes?: boolean | Prisma.Department$programmesArgs<ExtArgs>
+  voters?: boolean | Prisma.Department$votersArgs<ExtArgs>
   _count?: boolean | Prisma.DepartmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["department"]>
 
@@ -603,8 +603,8 @@ export type DepartmentSelectScalar = {
 export type DepartmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "facultyId" | "name", ExtArgs["result"]["department"]>
 export type DepartmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   faculty?: boolean | Prisma.FacultyDefaultArgs<ExtArgs>
-  voters?: boolean | Prisma.Department$votersArgs<ExtArgs>
   programmes?: boolean | Prisma.Department$programmesArgs<ExtArgs>
+  voters?: boolean | Prisma.Department$votersArgs<ExtArgs>
   _count?: boolean | Prisma.DepartmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DepartmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -618,8 +618,8 @@ export type $DepartmentPayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "Department"
   objects: {
     faculty: Prisma.$FacultyPayload<ExtArgs>
-    voters: Prisma.$VoterRollPayload<ExtArgs>[]
     programmes: Prisma.$ProgrammePayload<ExtArgs>[]
+    voters: Prisma.$VoterRollPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1020,8 +1020,8 @@ readonly fields: DepartmentFieldRefs;
 export interface Prisma__DepartmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   faculty<T extends Prisma.FacultyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FacultyDefaultArgs<ExtArgs>>): Prisma.Prisma__FacultyClient<runtime.Types.Result.GetResult<Prisma.$FacultyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  voters<T extends Prisma.Department$votersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Department$votersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   programmes<T extends Prisma.Department$programmesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Department$programmesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgrammePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  voters<T extends Prisma.Department$votersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Department$votersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1455,30 +1455,6 @@ export type DepartmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Department.voters
- */
-export type Department$votersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the VoterRoll
-   */
-  select?: Prisma.VoterRollSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the VoterRoll
-   */
-  omit?: Prisma.VoterRollOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VoterRollInclude<ExtArgs> | null
-  where?: Prisma.VoterRollWhereInput
-  orderBy?: Prisma.VoterRollOrderByWithRelationInput | Prisma.VoterRollOrderByWithRelationInput[]
-  cursor?: Prisma.VoterRollWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VoterRollScalarFieldEnum | Prisma.VoterRollScalarFieldEnum[]
-}
-
-/**
  * Department.programmes
  */
 export type Department$programmesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1500,6 +1476,30 @@ export type Department$programmesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.ProgrammeScalarFieldEnum | Prisma.ProgrammeScalarFieldEnum[]
+}
+
+/**
+ * Department.voters
+ */
+export type Department$votersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VoterRoll
+   */
+  select?: Prisma.VoterRollSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VoterRoll
+   */
+  omit?: Prisma.VoterRollOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoterRollInclude<ExtArgs> | null
+  where?: Prisma.VoterRollWhereInput
+  orderBy?: Prisma.VoterRollOrderByWithRelationInput | Prisma.VoterRollOrderByWithRelationInput[]
+  cursor?: Prisma.VoterRollWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoterRollScalarFieldEnum | Prisma.VoterRollScalarFieldEnum[]
 }
 
 /**

@@ -43,5 +43,5 @@ export const LoginSchema = z.object({
 
 export const LoginOtpSchema = z.object({
     vid: z.string(),
-    otp: z.string()
+    otp: z.string().regex(/^\d{6}$/)
 });

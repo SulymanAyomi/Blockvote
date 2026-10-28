@@ -166,8 +166,8 @@ export type FacultyWhereInput = {
   id?: Prisma.UuidFilter<"Faculty"> | string
   institutionId?: Prisma.UuidFilter<"Faculty"> | string
   name?: Prisma.StringFilter<"Faculty"> | string
-  institution?: Prisma.XOR<Prisma.InstitutionScalarRelationFilter, Prisma.InstitutionWhereInput>
   departments?: Prisma.DepartmentListRelationFilter
+  institution?: Prisma.XOR<Prisma.InstitutionScalarRelationFilter, Prisma.InstitutionWhereInput>
   voters?: Prisma.VoterRollListRelationFilter
 }
 
@@ -175,8 +175,8 @@ export type FacultyOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   institutionId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  institution?: Prisma.InstitutionOrderByWithRelationInput
   departments?: Prisma.DepartmentOrderByRelationAggregateInput
+  institution?: Prisma.InstitutionOrderByWithRelationInput
   voters?: Prisma.VoterRollOrderByRelationAggregateInput
 }
 
@@ -187,8 +187,8 @@ export type FacultyWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.FacultyWhereInput | Prisma.FacultyWhereInput[]
   institutionId?: Prisma.UuidFilter<"Faculty"> | string
   name?: Prisma.StringFilter<"Faculty"> | string
-  institution?: Prisma.XOR<Prisma.InstitutionScalarRelationFilter, Prisma.InstitutionWhereInput>
   departments?: Prisma.DepartmentListRelationFilter
+  institution?: Prisma.XOR<Prisma.InstitutionScalarRelationFilter, Prisma.InstitutionWhereInput>
   voters?: Prisma.VoterRollListRelationFilter
 }, "id">
 
@@ -213,8 +213,8 @@ export type FacultyScalarWhereWithAggregatesInput = {
 export type FacultyCreateInput = {
   id?: string
   name: string
-  institution: Prisma.InstitutionCreateNestedOneWithoutFacultiesInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutFacultyInput
+  institution: Prisma.InstitutionCreateNestedOneWithoutFacultiesInput
   voters?: Prisma.VoterRollCreateNestedManyWithoutFacultyInput
 }
 
@@ -229,8 +229,8 @@ export type FacultyUncheckedCreateInput = {
 export type FacultyUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  institution?: Prisma.InstitutionUpdateOneRequiredWithoutFacultiesNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutFacultyNestedInput
+  institution?: Prisma.InstitutionUpdateOneRequiredWithoutFacultiesNestedInput
   voters?: Prisma.VoterRollUpdateManyWithoutFacultyNestedInput
 }
 
@@ -372,8 +372,8 @@ export type FacultyUpdateOneRequiredWithoutDepartmentsNestedInput = {
 export type FacultyCreateWithoutVotersInput = {
   id?: string
   name: string
-  institution: Prisma.InstitutionCreateNestedOneWithoutFacultiesInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutFacultyInput
+  institution: Prisma.InstitutionCreateNestedOneWithoutFacultiesInput
 }
 
 export type FacultyUncheckedCreateWithoutVotersInput = {
@@ -402,8 +402,8 @@ export type FacultyUpdateToOneWithWhereWithoutVotersInput = {
 export type FacultyUpdateWithoutVotersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  institution?: Prisma.InstitutionUpdateOneRequiredWithoutFacultiesNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutFacultyNestedInput
+  institution?: Prisma.InstitutionUpdateOneRequiredWithoutFacultiesNestedInput
 }
 
 export type FacultyUncheckedUpdateWithoutVotersInput = {
@@ -574,8 +574,8 @@ export type FacultySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   institutionId?: boolean
   name?: boolean
-  institution?: boolean | Prisma.InstitutionDefaultArgs<ExtArgs>
   departments?: boolean | Prisma.Faculty$departmentsArgs<ExtArgs>
+  institution?: boolean | Prisma.InstitutionDefaultArgs<ExtArgs>
   voters?: boolean | Prisma.Faculty$votersArgs<ExtArgs>
   _count?: boolean | Prisma.FacultyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["faculty"]>
@@ -602,8 +602,8 @@ export type FacultySelectScalar = {
 
 export type FacultyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "institutionId" | "name", ExtArgs["result"]["faculty"]>
 export type FacultyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  institution?: boolean | Prisma.InstitutionDefaultArgs<ExtArgs>
   departments?: boolean | Prisma.Faculty$departmentsArgs<ExtArgs>
+  institution?: boolean | Prisma.InstitutionDefaultArgs<ExtArgs>
   voters?: boolean | Prisma.Faculty$votersArgs<ExtArgs>
   _count?: boolean | Prisma.FacultyCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -617,8 +617,8 @@ export type FacultyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $FacultyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Faculty"
   objects: {
-    institution: Prisma.$InstitutionPayload<ExtArgs>
     departments: Prisma.$DepartmentPayload<ExtArgs>[]
+    institution: Prisma.$InstitutionPayload<ExtArgs>
     voters: Prisma.$VoterRollPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1019,8 +1019,8 @@ readonly fields: FacultyFieldRefs;
  */
 export interface Prisma__FacultyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  institution<T extends Prisma.InstitutionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InstitutionDefaultArgs<ExtArgs>>): Prisma.Prisma__InstitutionClient<runtime.Types.Result.GetResult<Prisma.$InstitutionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   departments<T extends Prisma.Faculty$departmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Faculty$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  institution<T extends Prisma.InstitutionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InstitutionDefaultArgs<ExtArgs>>): Prisma.Prisma__InstitutionClient<runtime.Types.Result.GetResult<Prisma.$InstitutionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   voters<T extends Prisma.Faculty$votersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Faculty$votersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.

@@ -20,8 +20,18 @@ export type OtpModel = runtime.Types.Result.DefaultSelection<Prisma.$OtpPayload>
 
 export type AggregateOtp = {
   _count: OtpCountAggregateOutputType | null
+  _avg: OtpAvgAggregateOutputType | null
+  _sum: OtpSumAggregateOutputType | null
   _min: OtpMinAggregateOutputType | null
   _max: OtpMaxAggregateOutputType | null
+}
+
+export type OtpAvgAggregateOutputType = {
+  attempts: number | null
+}
+
+export type OtpSumAggregateOutputType = {
+  attempts: number | null
 }
 
 export type OtpMinAggregateOutputType = {
@@ -29,6 +39,7 @@ export type OtpMinAggregateOutputType = {
   voterId: string | null
   otpHash: string | null
   purpose: $Enums.OtpPurpose | null
+  attempts: number | null
   expiresAt: Date | null
   used: boolean | null
   createdAt: Date | null
@@ -39,6 +50,7 @@ export type OtpMaxAggregateOutputType = {
   voterId: string | null
   otpHash: string | null
   purpose: $Enums.OtpPurpose | null
+  attempts: number | null
   expiresAt: Date | null
   used: boolean | null
   createdAt: Date | null
@@ -49,6 +61,7 @@ export type OtpCountAggregateOutputType = {
   voterId: number
   otpHash: number
   purpose: number
+  attempts: number
   expiresAt: number
   used: number
   createdAt: number
@@ -56,11 +69,20 @@ export type OtpCountAggregateOutputType = {
 }
 
 
+export type OtpAvgAggregateInputType = {
+  attempts?: true
+}
+
+export type OtpSumAggregateInputType = {
+  attempts?: true
+}
+
 export type OtpMinAggregateInputType = {
   id?: true
   voterId?: true
   otpHash?: true
   purpose?: true
+  attempts?: true
   expiresAt?: true
   used?: true
   createdAt?: true
@@ -71,6 +93,7 @@ export type OtpMaxAggregateInputType = {
   voterId?: true
   otpHash?: true
   purpose?: true
+  attempts?: true
   expiresAt?: true
   used?: true
   createdAt?: true
@@ -81,6 +104,7 @@ export type OtpCountAggregateInputType = {
   voterId?: true
   otpHash?: true
   purpose?: true
+  attempts?: true
   expiresAt?: true
   used?: true
   createdAt?: true
@@ -125,6 +149,18 @@ export type OtpAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: OtpAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: OtpSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: OtpMinAggregateInputType
@@ -155,6 +191,8 @@ export type OtpGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   _count?: OtpCountAggregateInputType | true
+  _avg?: OtpAvgAggregateInputType
+  _sum?: OtpSumAggregateInputType
   _min?: OtpMinAggregateInputType
   _max?: OtpMaxAggregateInputType
 }
@@ -164,10 +202,13 @@ export type OtpGroupByOutputType = {
   voterId: string
   otpHash: string
   purpose: $Enums.OtpPurpose
+  attempts: number
   expiresAt: Date
   used: boolean
   createdAt: Date
   _count: OtpCountAggregateOutputType | null
+  _avg: OtpAvgAggregateOutputType | null
+  _sum: OtpSumAggregateOutputType | null
   _min: OtpMinAggregateOutputType | null
   _max: OtpMaxAggregateOutputType | null
 }
@@ -195,10 +236,11 @@ export type OtpWhereInput = {
   voterId?: Prisma.UuidFilter<"Otp"> | string
   otpHash?: Prisma.StringFilter<"Otp"> | string
   purpose?: Prisma.EnumOtpPurposeFilter<"Otp"> | $Enums.OtpPurpose
+  attempts?: Prisma.IntFilter<"Otp"> | number
   expiresAt?: Prisma.DateTimeFilter<"Otp"> | Date | string
   used?: Prisma.BoolFilter<"Otp"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Otp"> | Date | string
-  voterRoll?: Prisma.XOR<Prisma.VoterRollNullableScalarRelationFilter, Prisma.VoterRollWhereInput> | null
+  voterRoll?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
 }
 
 export type OtpOrderByWithRelationInput = {
@@ -206,6 +248,7 @@ export type OtpOrderByWithRelationInput = {
   voterId?: Prisma.SortOrder
   otpHash?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
+  attempts?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   used?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -220,10 +263,11 @@ export type OtpWhereUniqueInput = Prisma.AtLeast<{
   voterId?: Prisma.UuidFilter<"Otp"> | string
   otpHash?: Prisma.StringFilter<"Otp"> | string
   purpose?: Prisma.EnumOtpPurposeFilter<"Otp"> | $Enums.OtpPurpose
+  attempts?: Prisma.IntFilter<"Otp"> | number
   expiresAt?: Prisma.DateTimeFilter<"Otp"> | Date | string
   used?: Prisma.BoolFilter<"Otp"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Otp"> | Date | string
-  voterRoll?: Prisma.XOR<Prisma.VoterRollNullableScalarRelationFilter, Prisma.VoterRollWhereInput> | null
+  voterRoll?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
 }, "id">
 
 export type OtpOrderByWithAggregationInput = {
@@ -231,12 +275,15 @@ export type OtpOrderByWithAggregationInput = {
   voterId?: Prisma.SortOrder
   otpHash?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
+  attempts?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   used?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.OtpCountOrderByAggregateInput
+  _avg?: Prisma.OtpAvgOrderByAggregateInput
   _max?: Prisma.OtpMaxOrderByAggregateInput
   _min?: Prisma.OtpMinOrderByAggregateInput
+  _sum?: Prisma.OtpSumOrderByAggregateInput
 }
 
 export type OtpScalarWhereWithAggregatesInput = {
@@ -247,6 +294,7 @@ export type OtpScalarWhereWithAggregatesInput = {
   voterId?: Prisma.UuidWithAggregatesFilter<"Otp"> | string
   otpHash?: Prisma.StringWithAggregatesFilter<"Otp"> | string
   purpose?: Prisma.EnumOtpPurposeWithAggregatesFilter<"Otp"> | $Enums.OtpPurpose
+  attempts?: Prisma.IntWithAggregatesFilter<"Otp"> | number
   expiresAt?: Prisma.DateTimeWithAggregatesFilter<"Otp"> | Date | string
   used?: Prisma.BoolWithAggregatesFilter<"Otp"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Otp"> | Date | string
@@ -256,10 +304,11 @@ export type OtpCreateInput = {
   id?: string
   otpHash: string
   purpose: $Enums.OtpPurpose
+  attempts?: number
   expiresAt: Date | string
   used?: boolean
   createdAt?: Date | string
-  voterRoll?: Prisma.VoterRollCreateNestedOneWithoutOtpsInput
+  voterRoll: Prisma.VoterRollCreateNestedOneWithoutOtpsInput
 }
 
 export type OtpUncheckedCreateInput = {
@@ -267,6 +316,7 @@ export type OtpUncheckedCreateInput = {
   voterId: string
   otpHash: string
   purpose: $Enums.OtpPurpose
+  attempts?: number
   expiresAt: Date | string
   used?: boolean
   createdAt?: Date | string
@@ -276,10 +326,11 @@ export type OtpUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   otpHash?: Prisma.StringFieldUpdateOperationsInput | string
   purpose?: Prisma.EnumOtpPurposeFieldUpdateOperationsInput | $Enums.OtpPurpose
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   used?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  voterRoll?: Prisma.VoterRollUpdateOneWithoutOtpsNestedInput
+  voterRoll?: Prisma.VoterRollUpdateOneRequiredWithoutOtpsNestedInput
 }
 
 export type OtpUncheckedUpdateInput = {
@@ -287,6 +338,7 @@ export type OtpUncheckedUpdateInput = {
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   otpHash?: Prisma.StringFieldUpdateOperationsInput | string
   purpose?: Prisma.EnumOtpPurposeFieldUpdateOperationsInput | $Enums.OtpPurpose
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   used?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -297,6 +349,7 @@ export type OtpCreateManyInput = {
   voterId: string
   otpHash: string
   purpose: $Enums.OtpPurpose
+  attempts?: number
   expiresAt: Date | string
   used?: boolean
   createdAt?: Date | string
@@ -306,6 +359,7 @@ export type OtpUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   otpHash?: Prisma.StringFieldUpdateOperationsInput | string
   purpose?: Prisma.EnumOtpPurposeFieldUpdateOperationsInput | $Enums.OtpPurpose
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   used?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -316,6 +370,7 @@ export type OtpUncheckedUpdateManyInput = {
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   otpHash?: Prisma.StringFieldUpdateOperationsInput | string
   purpose?: Prisma.EnumOtpPurposeFieldUpdateOperationsInput | $Enums.OtpPurpose
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   used?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -336,9 +391,14 @@ export type OtpCountOrderByAggregateInput = {
   voterId?: Prisma.SortOrder
   otpHash?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
+  attempts?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   used?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type OtpAvgOrderByAggregateInput = {
+  attempts?: Prisma.SortOrder
 }
 
 export type OtpMaxOrderByAggregateInput = {
@@ -346,6 +406,7 @@ export type OtpMaxOrderByAggregateInput = {
   voterId?: Prisma.SortOrder
   otpHash?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
+  attempts?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   used?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -356,9 +417,14 @@ export type OtpMinOrderByAggregateInput = {
   voterId?: Prisma.SortOrder
   otpHash?: Prisma.SortOrder
   purpose?: Prisma.SortOrder
+  attempts?: Prisma.SortOrder
   expiresAt?: Prisma.SortOrder
   used?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type OtpSumOrderByAggregateInput = {
+  attempts?: Prisma.SortOrder
 }
 
 export type OtpCreateNestedManyWithoutVoterRollInput = {
@@ -411,6 +477,7 @@ export type OtpCreateWithoutVoterRollInput = {
   id?: string
   otpHash: string
   purpose: $Enums.OtpPurpose
+  attempts?: number
   expiresAt: Date | string
   used?: boolean
   createdAt?: Date | string
@@ -420,6 +487,7 @@ export type OtpUncheckedCreateWithoutVoterRollInput = {
   id?: string
   otpHash: string
   purpose: $Enums.OtpPurpose
+  attempts?: number
   expiresAt: Date | string
   used?: boolean
   createdAt?: Date | string
@@ -459,6 +527,7 @@ export type OtpScalarWhereInput = {
   voterId?: Prisma.UuidFilter<"Otp"> | string
   otpHash?: Prisma.StringFilter<"Otp"> | string
   purpose?: Prisma.EnumOtpPurposeFilter<"Otp"> | $Enums.OtpPurpose
+  attempts?: Prisma.IntFilter<"Otp"> | number
   expiresAt?: Prisma.DateTimeFilter<"Otp"> | Date | string
   used?: Prisma.BoolFilter<"Otp"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Otp"> | Date | string
@@ -468,6 +537,7 @@ export type OtpCreateManyVoterRollInput = {
   id?: string
   otpHash: string
   purpose: $Enums.OtpPurpose
+  attempts?: number
   expiresAt: Date | string
   used?: boolean
   createdAt?: Date | string
@@ -477,6 +547,7 @@ export type OtpUpdateWithoutVoterRollInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   otpHash?: Prisma.StringFieldUpdateOperationsInput | string
   purpose?: Prisma.EnumOtpPurposeFieldUpdateOperationsInput | $Enums.OtpPurpose
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   used?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -486,6 +557,7 @@ export type OtpUncheckedUpdateWithoutVoterRollInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   otpHash?: Prisma.StringFieldUpdateOperationsInput | string
   purpose?: Prisma.EnumOtpPurposeFieldUpdateOperationsInput | $Enums.OtpPurpose
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   used?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -495,6 +567,7 @@ export type OtpUncheckedUpdateManyWithoutVoterRollInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   otpHash?: Prisma.StringFieldUpdateOperationsInput | string
   purpose?: Prisma.EnumOtpPurposeFieldUpdateOperationsInput | $Enums.OtpPurpose
+  attempts?: Prisma.IntFieldUpdateOperationsInput | number
   expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   used?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -507,10 +580,11 @@ export type OtpSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   voterId?: boolean
   otpHash?: boolean
   purpose?: boolean
+  attempts?: boolean
   expiresAt?: boolean
   used?: boolean
   createdAt?: boolean
-  voterRoll?: boolean | Prisma.Otp$voterRollArgs<ExtArgs>
+  voterRoll?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["otp"]>
 
 export type OtpSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -518,10 +592,11 @@ export type OtpSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   voterId?: boolean
   otpHash?: boolean
   purpose?: boolean
+  attempts?: boolean
   expiresAt?: boolean
   used?: boolean
   createdAt?: boolean
-  voterRoll?: boolean | Prisma.Otp$voterRollArgs<ExtArgs>
+  voterRoll?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["otp"]>
 
 export type OtpSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -529,10 +604,11 @@ export type OtpSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   voterId?: boolean
   otpHash?: boolean
   purpose?: boolean
+  attempts?: boolean
   expiresAt?: boolean
   used?: boolean
   createdAt?: boolean
-  voterRoll?: boolean | Prisma.Otp$voterRollArgs<ExtArgs>
+  voterRoll?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["otp"]>
 
 export type OtpSelectScalar = {
@@ -540,32 +616,34 @@ export type OtpSelectScalar = {
   voterId?: boolean
   otpHash?: boolean
   purpose?: boolean
+  attempts?: boolean
   expiresAt?: boolean
   used?: boolean
   createdAt?: boolean
 }
 
-export type OtpOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "voterId" | "otpHash" | "purpose" | "expiresAt" | "used" | "createdAt", ExtArgs["result"]["otp"]>
+export type OtpOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "voterId" | "otpHash" | "purpose" | "attempts" | "expiresAt" | "used" | "createdAt", ExtArgs["result"]["otp"]>
 export type OtpInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voterRoll?: boolean | Prisma.Otp$voterRollArgs<ExtArgs>
+  voterRoll?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }
 export type OtpIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voterRoll?: boolean | Prisma.Otp$voterRollArgs<ExtArgs>
+  voterRoll?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }
 export type OtpIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  voterRoll?: boolean | Prisma.Otp$voterRollArgs<ExtArgs>
+  voterRoll?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
 }
 
 export type $OtpPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Otp"
   objects: {
-    voterRoll: Prisma.$VoterRollPayload<ExtArgs> | null
+    voterRoll: Prisma.$VoterRollPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     voterId: string
     otpHash: string
     purpose: $Enums.OtpPurpose
+    attempts: number
     expiresAt: Date
     used: boolean
     createdAt: Date
@@ -963,7 +1041,7 @@ readonly fields: OtpFieldRefs;
  */
 export interface Prisma__OtpClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  voterRoll<T extends Prisma.Otp$voterRollArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Otp$voterRollArgs<ExtArgs>>): Prisma.Prisma__VoterRollClient<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  voterRoll<T extends Prisma.VoterRollDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRollDefaultArgs<ExtArgs>>): Prisma.Prisma__VoterRollClient<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -997,6 +1075,7 @@ export interface OtpFieldRefs {
   readonly voterId: Prisma.FieldRef<"Otp", 'String'>
   readonly otpHash: Prisma.FieldRef<"Otp", 'String'>
   readonly purpose: Prisma.FieldRef<"Otp", 'OtpPurpose'>
+  readonly attempts: Prisma.FieldRef<"Otp", 'Int'>
   readonly expiresAt: Prisma.FieldRef<"Otp", 'DateTime'>
   readonly used: Prisma.FieldRef<"Otp", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Otp", 'DateTime'>
@@ -1398,25 +1477,6 @@ export type OtpDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Limit how many Otps to delete.
    */
   limit?: number
-}
-
-/**
- * Otp.voterRoll
- */
-export type Otp$voterRollArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the VoterRoll
-   */
-  select?: Prisma.VoterRollSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the VoterRoll
-   */
-  omit?: Prisma.VoterRollOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VoterRollInclude<ExtArgs> | null
-  where?: Prisma.VoterRollWhereInput
 }
 
 /**

@@ -48,7 +48,34 @@ export default function SignInComponent() {
       },
       {
         onError: (error) => {
-          setError(error.message);
+          let e = error.message as string;
+          if (e == "INTERNAL_ERROR") {
+            setError("Failed! Try again");
+            return;
+          }
+          if (e == "INVALID_CREDENTIALS") {
+            setError("Invalid credentials");
+            return;
+          }
+          if (e == "RATE_LIMITED") {
+            setError("Too many request. Try again later.");
+            return;
+          }
+          if (e == "NO_EMAIL_ON_FILE") {
+            setError(
+              "Account does not have an email address. Contact the election commitee",
+            );
+            return;
+          }
+          if (e == "EMAIL_UNAVAILABLE") {
+            setError("Service not available. Try again later.");
+            return;
+          }
+          if (e == "ACCOUNT_LOCKED") {
+            setError("Account locked. Contact the election commitee.");
+            return;
+          }
+          setError(e);
         },
       },
     );

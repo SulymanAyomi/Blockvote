@@ -1,4 +1,5 @@
 "use client";
+import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
@@ -16,13 +17,16 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
     <main className="min-h-screen">
       <div className="mx-auto max-w-screen-2xl p-4">
         <nav className="flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-1">
-            <div className="rounded-full p-1 bg-primary-col w-fit">
-              <CheckIcon className="size-3 text-white" />
+          <Link href="/dashboard" className="flex items-center gap-3">
+            <Logo />
+            <div>
+              <b className="block font-serif text-base leading-tight text-slate-900">
+                Al-Hikmah University
+              </b>
+              <span className="block text-xs text-slate-600">
+                Student Election Portal
+              </span>
             </div>
-            <p className="text-brand1 font-semibold hidden lg:block">
-              BlockVote
-            </p>
           </Link>
           <Button variant="secondary">
             <Link href={isSignIn ? "/register" : "/login"}>

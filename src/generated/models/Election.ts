@@ -27,12 +27,15 @@ export type AggregateElection = {
 export type ElectionMinAggregateOutputType = {
   id: string | null
   title: string | null
+  code: string | null
   description: string | null
+  about: string | null
   coverImage: string | null
   academicSessionId: string | null
   startsAt: Date | null
   endsAt: Date | null
   status: $Enums.ElectionStatus | null
+  resultsPublishAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -40,12 +43,15 @@ export type ElectionMinAggregateOutputType = {
 export type ElectionMaxAggregateOutputType = {
   id: string | null
   title: string | null
+  code: string | null
   description: string | null
+  about: string | null
   coverImage: string | null
   academicSessionId: string | null
   startsAt: Date | null
   endsAt: Date | null
   status: $Enums.ElectionStatus | null
+  resultsPublishAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,12 +59,15 @@ export type ElectionMaxAggregateOutputType = {
 export type ElectionCountAggregateOutputType = {
   id: number
   title: number
+  code: number
   description: number
+  about: number
   coverImage: number
   academicSessionId: number
   startsAt: number
   endsAt: number
   status: number
+  resultsPublishAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -68,12 +77,15 @@ export type ElectionCountAggregateOutputType = {
 export type ElectionMinAggregateInputType = {
   id?: true
   title?: true
+  code?: true
   description?: true
+  about?: true
   coverImage?: true
   academicSessionId?: true
   startsAt?: true
   endsAt?: true
   status?: true
+  resultsPublishAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -81,12 +93,15 @@ export type ElectionMinAggregateInputType = {
 export type ElectionMaxAggregateInputType = {
   id?: true
   title?: true
+  code?: true
   description?: true
+  about?: true
   coverImage?: true
   academicSessionId?: true
   startsAt?: true
   endsAt?: true
   status?: true
+  resultsPublishAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,12 +109,15 @@ export type ElectionMaxAggregateInputType = {
 export type ElectionCountAggregateInputType = {
   id?: true
   title?: true
+  code?: true
   description?: true
+  about?: true
   coverImage?: true
   academicSessionId?: true
   startsAt?: true
   endsAt?: true
   status?: true
+  resultsPublishAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -180,12 +198,15 @@ export type ElectionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type ElectionGroupByOutputType = {
   id: string
   title: string
+  code: string | null
   description: string | null
+  about: string | null
   coverImage: string | null
   academicSessionId: string
   startsAt: Date
   endsAt: Date
   status: $Enums.ElectionStatus
+  resultsPublishAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: ElectionCountAggregateOutputType | null
@@ -214,41 +235,51 @@ export type ElectionWhereInput = {
   NOT?: Prisma.ElectionWhereInput | Prisma.ElectionWhereInput[]
   id?: Prisma.UuidFilter<"Election"> | string
   title?: Prisma.StringFilter<"Election"> | string
+  code?: Prisma.StringNullableFilter<"Election"> | string | null
   description?: Prisma.StringNullableFilter<"Election"> | string | null
+  about?: Prisma.StringNullableFilter<"Election"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Election"> | string | null
   academicSessionId?: Prisma.UuidFilter<"Election"> | string
   startsAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   endsAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   status?: Prisma.EnumElectionStatusFilter<"Election"> | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.DateTimeNullableFilter<"Election"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Election"> | Date | string
+  ballots?: Prisma.BallotListRelationFilter
   academicSession?: Prisma.XOR<Prisma.AcademicSessionScalarRelationFilter, Prisma.AcademicSessionWhereInput>
+  participations?: Prisma.ElectionParticipationListRelationFilter
   positions?: Prisma.ElectionPositionListRelationFilter
   scopes?: Prisma.ElectionScopeListRelationFilter
-  participations?: Prisma.ElectionParticipationListRelationFilter
-  ballots?: Prisma.BallotListRelationFilter
   votingSessions?: Prisma.VotingSessionListRelationFilter
-  issuedNonces?: Prisma.IssuedNonceListRelationFilter
+  spentTokens?: Prisma.SpentTokenListRelationFilter
+  pendingBallots?: Prisma.PendingBallotListRelationFilter
+  electionTallies?: Prisma.ElectionTallyListRelationFilter
 }
 
 export type ElectionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  code?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  about?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   academicSessionId?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   endsAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  resultsPublishAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  ballots?: Prisma.BallotOrderByRelationAggregateInput
   academicSession?: Prisma.AcademicSessionOrderByWithRelationInput
+  participations?: Prisma.ElectionParticipationOrderByRelationAggregateInput
   positions?: Prisma.ElectionPositionOrderByRelationAggregateInput
   scopes?: Prisma.ElectionScopeOrderByRelationAggregateInput
-  participations?: Prisma.ElectionParticipationOrderByRelationAggregateInput
-  ballots?: Prisma.BallotOrderByRelationAggregateInput
   votingSessions?: Prisma.VotingSessionOrderByRelationAggregateInput
-  issuedNonces?: Prisma.IssuedNonceOrderByRelationAggregateInput
+  spentTokens?: Prisma.SpentTokenOrderByRelationAggregateInput
+  pendingBallots?: Prisma.PendingBallotOrderByRelationAggregateInput
+  electionTallies?: Prisma.ElectionTallyOrderByRelationAggregateInput
 }
 
 export type ElectionWhereUniqueInput = Prisma.AtLeast<{
@@ -257,32 +288,40 @@ export type ElectionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ElectionWhereInput[]
   NOT?: Prisma.ElectionWhereInput | Prisma.ElectionWhereInput[]
   title?: Prisma.StringFilter<"Election"> | string
+  code?: Prisma.StringNullableFilter<"Election"> | string | null
   description?: Prisma.StringNullableFilter<"Election"> | string | null
+  about?: Prisma.StringNullableFilter<"Election"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Election"> | string | null
   academicSessionId?: Prisma.UuidFilter<"Election"> | string
   startsAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   endsAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   status?: Prisma.EnumElectionStatusFilter<"Election"> | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.DateTimeNullableFilter<"Election"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Election"> | Date | string
+  ballots?: Prisma.BallotListRelationFilter
   academicSession?: Prisma.XOR<Prisma.AcademicSessionScalarRelationFilter, Prisma.AcademicSessionWhereInput>
+  participations?: Prisma.ElectionParticipationListRelationFilter
   positions?: Prisma.ElectionPositionListRelationFilter
   scopes?: Prisma.ElectionScopeListRelationFilter
-  participations?: Prisma.ElectionParticipationListRelationFilter
-  ballots?: Prisma.BallotListRelationFilter
   votingSessions?: Prisma.VotingSessionListRelationFilter
-  issuedNonces?: Prisma.IssuedNonceListRelationFilter
+  spentTokens?: Prisma.SpentTokenListRelationFilter
+  pendingBallots?: Prisma.PendingBallotListRelationFilter
+  electionTallies?: Prisma.ElectionTallyListRelationFilter
 }, "id">
 
 export type ElectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  code?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  about?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   academicSessionId?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   endsAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  resultsPublishAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ElectionCountOrderByAggregateInput
@@ -296,12 +335,15 @@ export type ElectionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ElectionScalarWhereWithAggregatesInput | Prisma.ElectionScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Election"> | string
   title?: Prisma.StringWithAggregatesFilter<"Election"> | string
+  code?: Prisma.StringNullableWithAggregatesFilter<"Election"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Election"> | string | null
+  about?: Prisma.StringNullableWithAggregatesFilter<"Election"> | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Election"> | string | null
   academicSessionId?: Prisma.UuidWithAggregatesFilter<"Election"> | string
   startsAt?: Prisma.DateTimeWithAggregatesFilter<"Election"> | Date | string
   endsAt?: Prisma.DateTimeWithAggregatesFilter<"Election"> | Date | string
   status?: Prisma.EnumElectionStatusWithAggregatesFilter<"Election"> | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Election"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Election"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Election"> | Date | string
 }
@@ -309,88 +351,111 @@ export type ElectionScalarWhereWithAggregatesInput = {
 export type ElectionCreateInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
   academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUncheckedCreateInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   academicSessionId: string
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
   academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionCreateManyInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   academicSessionId: string
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -398,11 +463,14 @@ export type ElectionCreateManyInput = {
 export type ElectionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -410,12 +478,15 @@ export type ElectionUpdateManyMutationInput = {
 export type ElectionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -433,12 +504,15 @@ export type ElectionOrderByRelationAggregateInput = {
 export type ElectionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  code?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  about?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   academicSessionId?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   endsAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  resultsPublishAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -446,12 +520,15 @@ export type ElectionCountOrderByAggregateInput = {
 export type ElectionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  code?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  about?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   academicSessionId?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   endsAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  resultsPublishAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -459,12 +536,15 @@ export type ElectionMaxOrderByAggregateInput = {
 export type ElectionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  code?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  about?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   academicSessionId?: Prisma.SortOrder
   startsAt?: Prisma.SortOrder
   endsAt?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  resultsPublishAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -576,20 +656,6 @@ export type ElectionUpdateOneRequiredWithoutVotingSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ElectionUpdateToOneWithWhereWithoutVotingSessionsInput, Prisma.ElectionUpdateWithoutVotingSessionsInput>, Prisma.ElectionUncheckedUpdateWithoutVotingSessionsInput>
 }
 
-export type ElectionCreateNestedOneWithoutIssuedNoncesInput = {
-  create?: Prisma.XOR<Prisma.ElectionCreateWithoutIssuedNoncesInput, Prisma.ElectionUncheckedCreateWithoutIssuedNoncesInput>
-  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutIssuedNoncesInput
-  connect?: Prisma.ElectionWhereUniqueInput
-}
-
-export type ElectionUpdateOneRequiredWithoutIssuedNoncesNestedInput = {
-  create?: Prisma.XOR<Prisma.ElectionCreateWithoutIssuedNoncesInput, Prisma.ElectionUncheckedCreateWithoutIssuedNoncesInput>
-  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutIssuedNoncesInput
-  upsert?: Prisma.ElectionUpsertWithoutIssuedNoncesInput
-  connect?: Prisma.ElectionWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ElectionUpdateToOneWithWhereWithoutIssuedNoncesInput, Prisma.ElectionUpdateWithoutIssuedNoncesInput>, Prisma.ElectionUncheckedUpdateWithoutIssuedNoncesInput>
-}
-
 export type ElectionCreateNestedOneWithoutBallotsInput = {
   create?: Prisma.XOR<Prisma.ElectionCreateWithoutBallotsInput, Prisma.ElectionUncheckedCreateWithoutBallotsInput>
   connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutBallotsInput
@@ -604,40 +670,92 @@ export type ElectionUpdateOneRequiredWithoutBallotsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ElectionUpdateToOneWithWhereWithoutBallotsInput, Prisma.ElectionUpdateWithoutBallotsInput>, Prisma.ElectionUncheckedUpdateWithoutBallotsInput>
 }
 
+export type ElectionCreateNestedOneWithoutSpentTokensInput = {
+  create?: Prisma.XOR<Prisma.ElectionCreateWithoutSpentTokensInput, Prisma.ElectionUncheckedCreateWithoutSpentTokensInput>
+  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutSpentTokensInput
+  connect?: Prisma.ElectionWhereUniqueInput
+}
+
+export type ElectionUpdateOneRequiredWithoutSpentTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.ElectionCreateWithoutSpentTokensInput, Prisma.ElectionUncheckedCreateWithoutSpentTokensInput>
+  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutSpentTokensInput
+  upsert?: Prisma.ElectionUpsertWithoutSpentTokensInput
+  connect?: Prisma.ElectionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ElectionUpdateToOneWithWhereWithoutSpentTokensInput, Prisma.ElectionUpdateWithoutSpentTokensInput>, Prisma.ElectionUncheckedUpdateWithoutSpentTokensInput>
+}
+
+export type ElectionCreateNestedOneWithoutPendingBallotsInput = {
+  create?: Prisma.XOR<Prisma.ElectionCreateWithoutPendingBallotsInput, Prisma.ElectionUncheckedCreateWithoutPendingBallotsInput>
+  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutPendingBallotsInput
+  connect?: Prisma.ElectionWhereUniqueInput
+}
+
+export type ElectionUpdateOneRequiredWithoutPendingBallotsNestedInput = {
+  create?: Prisma.XOR<Prisma.ElectionCreateWithoutPendingBallotsInput, Prisma.ElectionUncheckedCreateWithoutPendingBallotsInput>
+  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutPendingBallotsInput
+  upsert?: Prisma.ElectionUpsertWithoutPendingBallotsInput
+  connect?: Prisma.ElectionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ElectionUpdateToOneWithWhereWithoutPendingBallotsInput, Prisma.ElectionUpdateWithoutPendingBallotsInput>, Prisma.ElectionUncheckedUpdateWithoutPendingBallotsInput>
+}
+
+export type ElectionCreateNestedOneWithoutElectionTalliesInput = {
+  create?: Prisma.XOR<Prisma.ElectionCreateWithoutElectionTalliesInput, Prisma.ElectionUncheckedCreateWithoutElectionTalliesInput>
+  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutElectionTalliesInput
+  connect?: Prisma.ElectionWhereUniqueInput
+}
+
+export type ElectionUpdateOneRequiredWithoutElectionTalliesNestedInput = {
+  create?: Prisma.XOR<Prisma.ElectionCreateWithoutElectionTalliesInput, Prisma.ElectionUncheckedCreateWithoutElectionTalliesInput>
+  connectOrCreate?: Prisma.ElectionCreateOrConnectWithoutElectionTalliesInput
+  upsert?: Prisma.ElectionUpsertWithoutElectionTalliesInput
+  connect?: Prisma.ElectionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ElectionUpdateToOneWithWhereWithoutElectionTalliesInput, Prisma.ElectionUpdateWithoutElectionTalliesInput>, Prisma.ElectionUncheckedUpdateWithoutElectionTalliesInput>
+}
+
 export type ElectionCreateWithoutAcademicSessionInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUncheckedCreateWithoutAcademicSessionInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionCreateOrConnectWithoutAcademicSessionInput = {
@@ -672,12 +790,15 @@ export type ElectionScalarWhereInput = {
   NOT?: Prisma.ElectionScalarWhereInput | Prisma.ElectionScalarWhereInput[]
   id?: Prisma.UuidFilter<"Election"> | string
   title?: Prisma.StringFilter<"Election"> | string
+  code?: Prisma.StringNullableFilter<"Election"> | string | null
   description?: Prisma.StringNullableFilter<"Election"> | string | null
+  about?: Prisma.StringNullableFilter<"Election"> | string | null
   coverImage?: Prisma.StringNullableFilter<"Election"> | string | null
   academicSessionId?: Prisma.UuidFilter<"Election"> | string
   startsAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   endsAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   status?: Prisma.EnumElectionStatusFilter<"Election"> | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.DateTimeNullableFilter<"Election"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Election"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Election"> | Date | string
 }
@@ -685,37 +806,47 @@ export type ElectionScalarWhereInput = {
 export type ElectionCreateWithoutScopesInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
-  positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
   ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
+  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUncheckedCreateWithoutScopesInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   academicSessionId: string
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
   ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionCreateOrConnectWithoutScopesInput = {
@@ -737,73 +868,93 @@ export type ElectionUpdateToOneWithWhereWithoutScopesInput = {
 export type ElectionUpdateWithoutScopesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
-  positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
   ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
+  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateWithoutScopesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
   ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionCreateWithoutPositionsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
-  scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
   ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
+  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUncheckedCreateWithoutPositionsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   academicSessionId: string
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
   ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionCreateOrConnectWithoutPositionsInput = {
@@ -825,73 +976,93 @@ export type ElectionUpdateToOneWithWhereWithoutPositionsInput = {
 export type ElectionUpdateWithoutPositionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
-  scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
   ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
+  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateWithoutPositionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
   ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionCreateWithoutParticipationsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
   academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
   positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUncheckedCreateWithoutParticipationsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   academicSessionId: string
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionCreateOrConnectWithoutParticipationsInput = {
@@ -913,73 +1084,93 @@ export type ElectionUpdateToOneWithWhereWithoutParticipationsInput = {
 export type ElectionUpdateWithoutParticipationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
   academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
   positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateWithoutParticipationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionCreateWithoutVotingSessionsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
   academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUncheckedCreateWithoutVotingSessionsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   academicSessionId: string
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionCreateOrConnectWithoutVotingSessionsInput = {
@@ -1001,161 +1192,93 @@ export type ElectionUpdateToOneWithWhereWithoutVotingSessionsInput = {
 export type ElectionUpdateWithoutVotingSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
   academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateWithoutVotingSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedUpdateManyWithoutElectionNestedInput
-}
-
-export type ElectionCreateWithoutIssuedNoncesInput = {
-  id?: string
-  title: string
-  description?: string | null
-  coverImage?: string | null
-  startsAt: Date | string
-  endsAt: Date | string
-  status?: $Enums.ElectionStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
-  positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
-  scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
-  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
-}
-
-export type ElectionUncheckedCreateWithoutIssuedNoncesInput = {
-  id?: string
-  title: string
-  description?: string | null
-  coverImage?: string | null
-  academicSessionId: string
-  startsAt: Date | string
-  endsAt: Date | string
-  status?: $Enums.ElectionStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
-  scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
-  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
-  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
-}
-
-export type ElectionCreateOrConnectWithoutIssuedNoncesInput = {
-  where: Prisma.ElectionWhereUniqueInput
-  create: Prisma.XOR<Prisma.ElectionCreateWithoutIssuedNoncesInput, Prisma.ElectionUncheckedCreateWithoutIssuedNoncesInput>
-}
-
-export type ElectionUpsertWithoutIssuedNoncesInput = {
-  update: Prisma.XOR<Prisma.ElectionUpdateWithoutIssuedNoncesInput, Prisma.ElectionUncheckedUpdateWithoutIssuedNoncesInput>
-  create: Prisma.XOR<Prisma.ElectionCreateWithoutIssuedNoncesInput, Prisma.ElectionUncheckedCreateWithoutIssuedNoncesInput>
-  where?: Prisma.ElectionWhereInput
-}
-
-export type ElectionUpdateToOneWithWhereWithoutIssuedNoncesInput = {
-  where?: Prisma.ElectionWhereInput
-  data: Prisma.XOR<Prisma.ElectionUpdateWithoutIssuedNoncesInput, Prisma.ElectionUncheckedUpdateWithoutIssuedNoncesInput>
-}
-
-export type ElectionUpdateWithoutIssuedNoncesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
-  positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
-  scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
-  votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
-}
-
-export type ElectionUncheckedUpdateWithoutIssuedNoncesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
-  scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
-  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionCreateWithoutBallotsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionUncheckedCreateWithoutBallotsInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   academicSessionId: string
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
   positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
   scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
-  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
   votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
 }
 
 export type ElectionCreateOrConnectWithoutBallotsInput = {
@@ -1177,47 +1300,384 @@ export type ElectionUpdateToOneWithWhereWithoutBallotsInput = {
 export type ElectionUpdateWithoutBallotsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateWithoutBallotsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
+}
+
+export type ElectionCreateWithoutSpentTokensInput = {
+  id?: string
+  title: string
+  code?: string | null
+  description?: string | null
+  about?: string | null
+  coverImage?: string | null
+  startsAt: Date | string
+  endsAt: Date | string
+  status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
+  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
+}
+
+export type ElectionUncheckedCreateWithoutSpentTokensInput = {
+  id?: string
+  title: string
+  code?: string | null
+  description?: string | null
+  about?: string | null
+  coverImage?: string | null
+  academicSessionId: string
+  startsAt: Date | string
+  endsAt: Date | string
+  status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
+}
+
+export type ElectionCreateOrConnectWithoutSpentTokensInput = {
+  where: Prisma.ElectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.ElectionCreateWithoutSpentTokensInput, Prisma.ElectionUncheckedCreateWithoutSpentTokensInput>
+}
+
+export type ElectionUpsertWithoutSpentTokensInput = {
+  update: Prisma.XOR<Prisma.ElectionUpdateWithoutSpentTokensInput, Prisma.ElectionUncheckedUpdateWithoutSpentTokensInput>
+  create: Prisma.XOR<Prisma.ElectionCreateWithoutSpentTokensInput, Prisma.ElectionUncheckedCreateWithoutSpentTokensInput>
+  where?: Prisma.ElectionWhereInput
+}
+
+export type ElectionUpdateToOneWithWhereWithoutSpentTokensInput = {
+  where?: Prisma.ElectionWhereInput
+  data: Prisma.XOR<Prisma.ElectionUpdateWithoutSpentTokensInput, Prisma.ElectionUncheckedUpdateWithoutSpentTokensInput>
+}
+
+export type ElectionUpdateWithoutSpentTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
+  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
+}
+
+export type ElectionUncheckedUpdateWithoutSpentTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
+}
+
+export type ElectionCreateWithoutPendingBallotsInput = {
+  id?: string
+  title: string
+  code?: string | null
+  description?: string | null
+  about?: string | null
+  coverImage?: string | null
+  startsAt: Date | string
+  endsAt: Date | string
+  status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
+  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyCreateNestedManyWithoutElectionInput
+}
+
+export type ElectionUncheckedCreateWithoutPendingBallotsInput = {
+  id?: string
+  title: string
+  code?: string | null
+  description?: string | null
+  about?: string | null
+  coverImage?: string | null
+  academicSessionId: string
+  startsAt: Date | string
+  endsAt: Date | string
+  status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  electionTallies?: Prisma.ElectionTallyUncheckedCreateNestedManyWithoutElectionInput
+}
+
+export type ElectionCreateOrConnectWithoutPendingBallotsInput = {
+  where: Prisma.ElectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.ElectionCreateWithoutPendingBallotsInput, Prisma.ElectionUncheckedCreateWithoutPendingBallotsInput>
+}
+
+export type ElectionUpsertWithoutPendingBallotsInput = {
+  update: Prisma.XOR<Prisma.ElectionUpdateWithoutPendingBallotsInput, Prisma.ElectionUncheckedUpdateWithoutPendingBallotsInput>
+  create: Prisma.XOR<Prisma.ElectionCreateWithoutPendingBallotsInput, Prisma.ElectionUncheckedCreateWithoutPendingBallotsInput>
+  where?: Prisma.ElectionWhereInput
+}
+
+export type ElectionUpdateToOneWithWhereWithoutPendingBallotsInput = {
+  where?: Prisma.ElectionWhereInput
+  data: Prisma.XOR<Prisma.ElectionUpdateWithoutPendingBallotsInput, Prisma.ElectionUncheckedUpdateWithoutPendingBallotsInput>
+}
+
+export type ElectionUpdateWithoutPendingBallotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
+  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
+}
+
+export type ElectionUncheckedUpdateWithoutPendingBallotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
+}
+
+export type ElectionCreateWithoutElectionTalliesInput = {
+  id?: string
+  title: string
+  code?: string | null
+  description?: string | null
+  about?: string | null
+  coverImage?: string | null
+  startsAt: Date | string
+  endsAt: Date | string
+  status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ballots?: Prisma.BallotCreateNestedManyWithoutElectionInput
+  academicSession: Prisma.AcademicSessionCreateNestedOneWithoutElectionsInput
+  participations?: Prisma.ElectionParticipationCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeCreateNestedManyWithoutElectionInput
+  votingSessions?: Prisma.VotingSessionCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotCreateNestedManyWithoutElectionInput
+}
+
+export type ElectionUncheckedCreateWithoutElectionTalliesInput = {
+  id?: string
+  title: string
+  code?: string | null
+  description?: string | null
+  about?: string | null
+  coverImage?: string | null
+  academicSessionId: string
+  startsAt: Date | string
+  endsAt: Date | string
+  status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  ballots?: Prisma.BallotUncheckedCreateNestedManyWithoutElectionInput
+  participations?: Prisma.ElectionParticipationUncheckedCreateNestedManyWithoutElectionInput
+  positions?: Prisma.ElectionPositionUncheckedCreateNestedManyWithoutElectionInput
+  scopes?: Prisma.ElectionScopeUncheckedCreateNestedManyWithoutElectionInput
+  votingSessions?: Prisma.VotingSessionUncheckedCreateNestedManyWithoutElectionInput
+  spentTokens?: Prisma.SpentTokenUncheckedCreateNestedManyWithoutElectionInput
+  pendingBallots?: Prisma.PendingBallotUncheckedCreateNestedManyWithoutElectionInput
+}
+
+export type ElectionCreateOrConnectWithoutElectionTalliesInput = {
+  where: Prisma.ElectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.ElectionCreateWithoutElectionTalliesInput, Prisma.ElectionUncheckedCreateWithoutElectionTalliesInput>
+}
+
+export type ElectionUpsertWithoutElectionTalliesInput = {
+  update: Prisma.XOR<Prisma.ElectionUpdateWithoutElectionTalliesInput, Prisma.ElectionUncheckedUpdateWithoutElectionTalliesInput>
+  create: Prisma.XOR<Prisma.ElectionCreateWithoutElectionTalliesInput, Prisma.ElectionUncheckedCreateWithoutElectionTalliesInput>
+  where?: Prisma.ElectionWhereInput
+}
+
+export type ElectionUpdateToOneWithWhereWithoutElectionTalliesInput = {
+  where?: Prisma.ElectionWhereInput
+  data: Prisma.XOR<Prisma.ElectionUpdateWithoutElectionTalliesInput, Prisma.ElectionUncheckedUpdateWithoutElectionTalliesInput>
+}
+
+export type ElectionUpdateWithoutElectionTalliesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
+  academicSession?: Prisma.AcademicSessionUpdateOneRequiredWithoutElectionsNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
+  votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+}
+
+export type ElectionUncheckedUpdateWithoutElectionTalliesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  academicSessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
+  positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
+  scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
+  votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionCreateManyAcademicSessionInput = {
   id?: string
   title: string
+  code?: string | null
   description?: string | null
+  about?: string | null
   coverImage?: string | null
   startsAt: Date | string
   endsAt: Date | string
   status?: $Enums.ElectionStatus
+  resultsPublishAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1225,47 +1685,60 @@ export type ElectionCreateManyAcademicSessionInput = {
 export type ElectionUpdateWithoutAcademicSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateWithoutAcademicSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
+  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
   positions?: Prisma.ElectionPositionUncheckedUpdateManyWithoutElectionNestedInput
   scopes?: Prisma.ElectionScopeUncheckedUpdateManyWithoutElectionNestedInput
-  participations?: Prisma.ElectionParticipationUncheckedUpdateManyWithoutElectionNestedInput
-  ballots?: Prisma.BallotUncheckedUpdateManyWithoutElectionNestedInput
   votingSessions?: Prisma.VotingSessionUncheckedUpdateManyWithoutElectionNestedInput
-  issuedNonces?: Prisma.IssuedNonceUncheckedUpdateManyWithoutElectionNestedInput
+  spentTokens?: Prisma.SpentTokenUncheckedUpdateManyWithoutElectionNestedInput
+  pendingBallots?: Prisma.PendingBallotUncheckedUpdateManyWithoutElectionNestedInput
+  electionTallies?: Prisma.ElectionTallyUncheckedUpdateManyWithoutElectionNestedInput
 }
 
 export type ElectionUncheckedUpdateManyWithoutAcademicSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endsAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumElectionStatusFieldUpdateOperationsInput | $Enums.ElectionStatus
+  resultsPublishAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1276,21 +1749,25 @@ export type ElectionUncheckedUpdateManyWithoutAcademicSessionInput = {
  */
 
 export type ElectionCountOutputType = {
+  ballots: number
+  participations: number
   positions: number
   scopes: number
-  participations: number
-  ballots: number
   votingSessions: number
-  issuedNonces: number
+  spentTokens: number
+  pendingBallots: number
+  electionTallies: number
 }
 
 export type ElectionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  ballots?: boolean | ElectionCountOutputTypeCountBallotsArgs
+  participations?: boolean | ElectionCountOutputTypeCountParticipationsArgs
   positions?: boolean | ElectionCountOutputTypeCountPositionsArgs
   scopes?: boolean | ElectionCountOutputTypeCountScopesArgs
-  participations?: boolean | ElectionCountOutputTypeCountParticipationsArgs
-  ballots?: boolean | ElectionCountOutputTypeCountBallotsArgs
   votingSessions?: boolean | ElectionCountOutputTypeCountVotingSessionsArgs
-  issuedNonces?: boolean | ElectionCountOutputTypeCountIssuedNoncesArgs
+  spentTokens?: boolean | ElectionCountOutputTypeCountSpentTokensArgs
+  pendingBallots?: boolean | ElectionCountOutputTypeCountPendingBallotsArgs
+  electionTallies?: boolean | ElectionCountOutputTypeCountElectionTalliesArgs
 }
 
 /**
@@ -1301,6 +1778,20 @@ export type ElectionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
    * Select specific fields to fetch from the ElectionCountOutputType
    */
   select?: Prisma.ElectionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ElectionCountOutputType without action
+ */
+export type ElectionCountOutputTypeCountBallotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BallotWhereInput
+}
+
+/**
+ * ElectionCountOutputType without action
+ */
+export type ElectionCountOutputTypeCountParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ElectionParticipationWhereInput
 }
 
 /**
@@ -1320,20 +1811,6 @@ export type ElectionCountOutputTypeCountScopesArgs<ExtArgs extends runtime.Types
 /**
  * ElectionCountOutputType without action
  */
-export type ElectionCountOutputTypeCountParticipationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ElectionParticipationWhereInput
-}
-
-/**
- * ElectionCountOutputType without action
- */
-export type ElectionCountOutputTypeCountBallotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.BallotWhereInput
-}
-
-/**
- * ElectionCountOutputType without action
- */
 export type ElectionCountOutputTypeCountVotingSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.VotingSessionWhereInput
 }
@@ -1341,41 +1818,63 @@ export type ElectionCountOutputTypeCountVotingSessionsArgs<ExtArgs extends runti
 /**
  * ElectionCountOutputType without action
  */
-export type ElectionCountOutputTypeCountIssuedNoncesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.IssuedNonceWhereInput
+export type ElectionCountOutputTypeCountSpentTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SpentTokenWhereInput
+}
+
+/**
+ * ElectionCountOutputType without action
+ */
+export type ElectionCountOutputTypeCountPendingBallotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PendingBallotWhereInput
+}
+
+/**
+ * ElectionCountOutputType without action
+ */
+export type ElectionCountOutputTypeCountElectionTalliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ElectionTallyWhereInput
 }
 
 
 export type ElectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  code?: boolean
   description?: boolean
+  about?: boolean
   coverImage?: boolean
   academicSessionId?: boolean
   startsAt?: boolean
   endsAt?: boolean
   status?: boolean
+  resultsPublishAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  ballots?: boolean | Prisma.Election$ballotsArgs<ExtArgs>
   academicSession?: boolean | Prisma.AcademicSessionDefaultArgs<ExtArgs>
+  participations?: boolean | Prisma.Election$participationsArgs<ExtArgs>
   positions?: boolean | Prisma.Election$positionsArgs<ExtArgs>
   scopes?: boolean | Prisma.Election$scopesArgs<ExtArgs>
-  participations?: boolean | Prisma.Election$participationsArgs<ExtArgs>
-  ballots?: boolean | Prisma.Election$ballotsArgs<ExtArgs>
   votingSessions?: boolean | Prisma.Election$votingSessionsArgs<ExtArgs>
-  issuedNonces?: boolean | Prisma.Election$issuedNoncesArgs<ExtArgs>
+  spentTokens?: boolean | Prisma.Election$spentTokensArgs<ExtArgs>
+  pendingBallots?: boolean | Prisma.Election$pendingBallotsArgs<ExtArgs>
+  electionTallies?: boolean | Prisma.Election$electionTalliesArgs<ExtArgs>
   _count?: boolean | Prisma.ElectionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["election"]>
 
 export type ElectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  code?: boolean
   description?: boolean
+  about?: boolean
   coverImage?: boolean
   academicSessionId?: boolean
   startsAt?: boolean
   endsAt?: boolean
   status?: boolean
+  resultsPublishAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   academicSession?: boolean | Prisma.AcademicSessionDefaultArgs<ExtArgs>
@@ -1384,12 +1883,15 @@ export type ElectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ElectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
+  code?: boolean
   description?: boolean
+  about?: boolean
   coverImage?: boolean
   academicSessionId?: boolean
   startsAt?: boolean
   endsAt?: boolean
   status?: boolean
+  resultsPublishAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   academicSession?: boolean | Prisma.AcademicSessionDefaultArgs<ExtArgs>
@@ -1398,25 +1900,30 @@ export type ElectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ElectionSelectScalar = {
   id?: boolean
   title?: boolean
+  code?: boolean
   description?: boolean
+  about?: boolean
   coverImage?: boolean
   academicSessionId?: boolean
   startsAt?: boolean
   endsAt?: boolean
   status?: boolean
+  resultsPublishAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ElectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "coverImage" | "academicSessionId" | "startsAt" | "endsAt" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["election"]>
+export type ElectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "code" | "description" | "about" | "coverImage" | "academicSessionId" | "startsAt" | "endsAt" | "status" | "resultsPublishAt" | "createdAt" | "updatedAt", ExtArgs["result"]["election"]>
 export type ElectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  ballots?: boolean | Prisma.Election$ballotsArgs<ExtArgs>
   academicSession?: boolean | Prisma.AcademicSessionDefaultArgs<ExtArgs>
+  participations?: boolean | Prisma.Election$participationsArgs<ExtArgs>
   positions?: boolean | Prisma.Election$positionsArgs<ExtArgs>
   scopes?: boolean | Prisma.Election$scopesArgs<ExtArgs>
-  participations?: boolean | Prisma.Election$participationsArgs<ExtArgs>
-  ballots?: boolean | Prisma.Election$ballotsArgs<ExtArgs>
   votingSessions?: boolean | Prisma.Election$votingSessionsArgs<ExtArgs>
-  issuedNonces?: boolean | Prisma.Election$issuedNoncesArgs<ExtArgs>
+  spentTokens?: boolean | Prisma.Election$spentTokensArgs<ExtArgs>
+  pendingBallots?: boolean | Prisma.Election$pendingBallotsArgs<ExtArgs>
+  electionTallies?: boolean | Prisma.Election$electionTalliesArgs<ExtArgs>
   _count?: boolean | Prisma.ElectionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ElectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1429,23 +1936,28 @@ export type ElectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $ElectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Election"
   objects: {
+    ballots: Prisma.$BallotPayload<ExtArgs>[]
     academicSession: Prisma.$AcademicSessionPayload<ExtArgs>
+    participations: Prisma.$ElectionParticipationPayload<ExtArgs>[]
     positions: Prisma.$ElectionPositionPayload<ExtArgs>[]
     scopes: Prisma.$ElectionScopePayload<ExtArgs>[]
-    participations: Prisma.$ElectionParticipationPayload<ExtArgs>[]
-    ballots: Prisma.$BallotPayload<ExtArgs>[]
     votingSessions: Prisma.$VotingSessionPayload<ExtArgs>[]
-    issuedNonces: Prisma.$IssuedNoncePayload<ExtArgs>[]
+    spentTokens: Prisma.$SpentTokenPayload<ExtArgs>[]
+    pendingBallots: Prisma.$PendingBallotPayload<ExtArgs>[]
+    electionTallies: Prisma.$ElectionTallyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
+    code: string | null
     description: string | null
+    about: string | null
     coverImage: string | null
     academicSessionId: string
     startsAt: Date
     endsAt: Date
     status: $Enums.ElectionStatus
+    resultsPublishAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["election"]>
@@ -1842,13 +2354,15 @@ readonly fields: ElectionFieldRefs;
  */
 export interface Prisma__ElectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  ballots<T extends Prisma.Election$ballotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$ballotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BallotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   academicSession<T extends Prisma.AcademicSessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AcademicSessionDefaultArgs<ExtArgs>>): Prisma.Prisma__AcademicSessionClient<runtime.Types.Result.GetResult<Prisma.$AcademicSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  participations<T extends Prisma.Election$participationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$participationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ElectionParticipationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   positions<T extends Prisma.Election$positionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$positionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ElectionPositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scopes<T extends Prisma.Election$scopesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$scopesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ElectionScopePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  participations<T extends Prisma.Election$participationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$participationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ElectionParticipationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  ballots<T extends Prisma.Election$ballotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$ballotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BallotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   votingSessions<T extends Prisma.Election$votingSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$votingSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VotingSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  issuedNonces<T extends Prisma.Election$issuedNoncesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$issuedNoncesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IssuedNoncePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  spentTokens<T extends Prisma.Election$spentTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$spentTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SpentTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pendingBallots<T extends Prisma.Election$pendingBallotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$pendingBallotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PendingBallotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  electionTallies<T extends Prisma.Election$electionTalliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Election$electionTalliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ElectionTallyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1880,12 +2394,15 @@ export interface Prisma__ElectionClient<T, Null = never, ExtArgs extends runtime
 export interface ElectionFieldRefs {
   readonly id: Prisma.FieldRef<"Election", 'String'>
   readonly title: Prisma.FieldRef<"Election", 'String'>
+  readonly code: Prisma.FieldRef<"Election", 'String'>
   readonly description: Prisma.FieldRef<"Election", 'String'>
+  readonly about: Prisma.FieldRef<"Election", 'String'>
   readonly coverImage: Prisma.FieldRef<"Election", 'String'>
   readonly academicSessionId: Prisma.FieldRef<"Election", 'String'>
   readonly startsAt: Prisma.FieldRef<"Election", 'DateTime'>
   readonly endsAt: Prisma.FieldRef<"Election", 'DateTime'>
   readonly status: Prisma.FieldRef<"Election", 'ElectionStatus'>
+  readonly resultsPublishAt: Prisma.FieldRef<"Election", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Election", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Election", 'DateTime'>
 }
@@ -2289,6 +2806,54 @@ export type ElectionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * Election.ballots
+ */
+export type Election$ballotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ballot
+   */
+  select?: Prisma.BallotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ballot
+   */
+  omit?: Prisma.BallotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BallotInclude<ExtArgs> | null
+  where?: Prisma.BallotWhereInput
+  orderBy?: Prisma.BallotOrderByWithRelationInput | Prisma.BallotOrderByWithRelationInput[]
+  cursor?: Prisma.BallotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BallotScalarFieldEnum | Prisma.BallotScalarFieldEnum[]
+}
+
+/**
+ * Election.participations
+ */
+export type Election$participationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ElectionParticipation
+   */
+  select?: Prisma.ElectionParticipationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ElectionParticipation
+   */
+  omit?: Prisma.ElectionParticipationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ElectionParticipationInclude<ExtArgs> | null
+  where?: Prisma.ElectionParticipationWhereInput
+  orderBy?: Prisma.ElectionParticipationOrderByWithRelationInput | Prisma.ElectionParticipationOrderByWithRelationInput[]
+  cursor?: Prisma.ElectionParticipationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ElectionParticipationScalarFieldEnum | Prisma.ElectionParticipationScalarFieldEnum[]
+}
+
+/**
  * Election.positions
  */
 export type Election$positionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2337,54 +2902,6 @@ export type Election$scopesArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Election.participations
- */
-export type Election$participationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the ElectionParticipation
-   */
-  select?: Prisma.ElectionParticipationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the ElectionParticipation
-   */
-  omit?: Prisma.ElectionParticipationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ElectionParticipationInclude<ExtArgs> | null
-  where?: Prisma.ElectionParticipationWhereInput
-  orderBy?: Prisma.ElectionParticipationOrderByWithRelationInput | Prisma.ElectionParticipationOrderByWithRelationInput[]
-  cursor?: Prisma.ElectionParticipationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ElectionParticipationScalarFieldEnum | Prisma.ElectionParticipationScalarFieldEnum[]
-}
-
-/**
- * Election.ballots
- */
-export type Election$ballotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Ballot
-   */
-  select?: Prisma.BallotSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Ballot
-   */
-  omit?: Prisma.BallotOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.BallotInclude<ExtArgs> | null
-  where?: Prisma.BallotWhereInput
-  orderBy?: Prisma.BallotOrderByWithRelationInput | Prisma.BallotOrderByWithRelationInput[]
-  cursor?: Prisma.BallotWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.BallotScalarFieldEnum | Prisma.BallotScalarFieldEnum[]
-}
-
-/**
  * Election.votingSessions
  */
 export type Election$votingSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2409,27 +2926,75 @@ export type Election$votingSessionsArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * Election.issuedNonces
+ * Election.spentTokens
  */
-export type Election$issuedNoncesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Election$spentTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the IssuedNonce
+   * Select specific fields to fetch from the SpentToken
    */
-  select?: Prisma.IssuedNonceSelect<ExtArgs> | null
+  select?: Prisma.SpentTokenSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the IssuedNonce
+   * Omit specific fields from the SpentToken
    */
-  omit?: Prisma.IssuedNonceOmit<ExtArgs> | null
+  omit?: Prisma.SpentTokenOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.IssuedNonceInclude<ExtArgs> | null
-  where?: Prisma.IssuedNonceWhereInput
-  orderBy?: Prisma.IssuedNonceOrderByWithRelationInput | Prisma.IssuedNonceOrderByWithRelationInput[]
-  cursor?: Prisma.IssuedNonceWhereUniqueInput
+  include?: Prisma.SpentTokenInclude<ExtArgs> | null
+  where?: Prisma.SpentTokenWhereInput
+  orderBy?: Prisma.SpentTokenOrderByWithRelationInput | Prisma.SpentTokenOrderByWithRelationInput[]
+  cursor?: Prisma.SpentTokenWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.IssuedNonceScalarFieldEnum | Prisma.IssuedNonceScalarFieldEnum[]
+  distinct?: Prisma.SpentTokenScalarFieldEnum | Prisma.SpentTokenScalarFieldEnum[]
+}
+
+/**
+ * Election.pendingBallots
+ */
+export type Election$pendingBallotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PendingBallot
+   */
+  select?: Prisma.PendingBallotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PendingBallot
+   */
+  omit?: Prisma.PendingBallotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PendingBallotInclude<ExtArgs> | null
+  where?: Prisma.PendingBallotWhereInput
+  orderBy?: Prisma.PendingBallotOrderByWithRelationInput | Prisma.PendingBallotOrderByWithRelationInput[]
+  cursor?: Prisma.PendingBallotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PendingBallotScalarFieldEnum | Prisma.PendingBallotScalarFieldEnum[]
+}
+
+/**
+ * Election.electionTallies
+ */
+export type Election$electionTalliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ElectionTally
+   */
+  select?: Prisma.ElectionTallySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ElectionTally
+   */
+  omit?: Prisma.ElectionTallyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ElectionTallyInclude<ExtArgs> | null
+  where?: Prisma.ElectionTallyWhereInput
+  orderBy?: Prisma.ElectionTallyOrderByWithRelationInput | Prisma.ElectionTallyOrderByWithRelationInput[]
+  cursor?: Prisma.ElectionTallyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ElectionTallyScalarFieldEnum | Prisma.ElectionTallyScalarFieldEnum[]
 }
 
 /**

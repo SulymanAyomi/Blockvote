@@ -4,11 +4,9 @@ import React, { useState } from "react";
 import { RegisterComponent } from "./register";
 import { OTPForm } from "./otp-form";
 import PersonalInfo from "./personal-info";
-import RegistrationComplete from "./registration-complete";
 import FaceVerification from "./face-verification";
 import { DataType } from "../type";
-import { PasswordComponent } from "./password";
-import BallotPasswordInput from "./p";
+import BallotPasswordInput from "./new-password";
 
 export const steps = [
   {

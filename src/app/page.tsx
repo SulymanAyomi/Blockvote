@@ -51,19 +51,3 @@ export default function Home() {
     </div>
   );
 }
-
-const HomeShow1 = () => {
-  return (
-    <main className="w-full max-w-3xl mx-auto p-4 bg-sec-col dark:bg-black rounded-md min-w-sm h-full">
-      <div className="flex flex-1 flex-col gap-4 items-center justify-center pb-8">
-        <div className="flex flex-col items-center justify-center gap-4 pt-8 pb-24">
-          <div className="rounded-full p-3 bg-primary-col w-fit">
-            <CheckIcon className="size-10 text-white" />
-          </div>
-          <p className="text-primary-col text-4xl font-semibold">Block Vote</p>
-        </div>
-        <p className="text-primary-col text-xl ">A Vote Anytime, Anywhere.</p>
-      </div>
-    </main>
-  );
-};

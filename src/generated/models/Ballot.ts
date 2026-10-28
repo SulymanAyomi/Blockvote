@@ -27,22 +27,19 @@ export type AggregateBallot = {
 export type BallotMinAggregateOutputType = {
   id: string | null
   electionId: string | null
-  castAt: Date | null
-  updatedAt: Date | null
+  batchId: string | null
 }
 
 export type BallotMaxAggregateOutputType = {
   id: string | null
   electionId: string | null
-  castAt: Date | null
-  updatedAt: Date | null
+  batchId: string | null
 }
 
 export type BallotCountAggregateOutputType = {
   id: number
   electionId: number
-  castAt: number
-  updatedAt: number
+  batchId: number
   _all: number
 }
 
@@ -50,22 +47,19 @@ export type BallotCountAggregateOutputType = {
 export type BallotMinAggregateInputType = {
   id?: true
   electionId?: true
-  castAt?: true
-  updatedAt?: true
+  batchId?: true
 }
 
 export type BallotMaxAggregateInputType = {
   id?: true
   electionId?: true
-  castAt?: true
-  updatedAt?: true
+  batchId?: true
 }
 
 export type BallotCountAggregateInputType = {
   id?: true
   electionId?: true
-  castAt?: true
-  updatedAt?: true
+  batchId?: true
   _all?: true
 }
 
@@ -144,8 +138,7 @@ export type BallotGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type BallotGroupByOutputType = {
   id: string
   electionId: string
-  castAt: Date
-  updatedAt: Date
+  batchId: string
   _count: BallotCountAggregateOutputType | null
   _min: BallotMinAggregateOutputType | null
   _max: BallotMaxAggregateOutputType | null
@@ -172,8 +165,7 @@ export type BallotWhereInput = {
   NOT?: Prisma.BallotWhereInput | Prisma.BallotWhereInput[]
   id?: Prisma.UuidFilter<"Ballot"> | string
   electionId?: Prisma.UuidFilter<"Ballot"> | string
-  castAt?: Prisma.DateTimeFilter<"Ballot"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Ballot"> | Date | string
+  batchId?: Prisma.UuidFilter<"Ballot"> | string
   election?: Prisma.XOR<Prisma.ElectionScalarRelationFilter, Prisma.ElectionWhereInput>
   votes?: Prisma.VoteListRelationFilter
 }
@@ -181,8 +173,7 @@ export type BallotWhereInput = {
 export type BallotOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
-  castAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   election?: Prisma.ElectionOrderByWithRelationInput
   votes?: Prisma.VoteOrderByRelationAggregateInput
 }
@@ -193,8 +184,7 @@ export type BallotWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.BallotWhereInput[]
   NOT?: Prisma.BallotWhereInput | Prisma.BallotWhereInput[]
   electionId?: Prisma.UuidFilter<"Ballot"> | string
-  castAt?: Prisma.DateTimeFilter<"Ballot"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Ballot"> | Date | string
+  batchId?: Prisma.UuidFilter<"Ballot"> | string
   election?: Prisma.XOR<Prisma.ElectionScalarRelationFilter, Prisma.ElectionWhereInput>
   votes?: Prisma.VoteListRelationFilter
 }, "id">
@@ -202,8 +192,7 @@ export type BallotWhereUniqueInput = Prisma.AtLeast<{
 export type BallotOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
-  castAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
   _count?: Prisma.BallotCountOrderByAggregateInput
   _max?: Prisma.BallotMaxOrderByAggregateInput
   _min?: Prisma.BallotMinOrderByAggregateInput
@@ -215,14 +204,12 @@ export type BallotScalarWhereWithAggregatesInput = {
   NOT?: Prisma.BallotScalarWhereWithAggregatesInput | Prisma.BallotScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Ballot"> | string
   electionId?: Prisma.UuidWithAggregatesFilter<"Ballot"> | string
-  castAt?: Prisma.DateTimeWithAggregatesFilter<"Ballot"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ballot"> | Date | string
+  batchId?: Prisma.UuidWithAggregatesFilter<"Ballot"> | string
 }
 
 export type BallotCreateInput = {
   id?: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
   election: Prisma.ElectionCreateNestedOneWithoutBallotsInput
   votes?: Prisma.VoteCreateNestedManyWithoutBallotInput
 }
@@ -230,15 +217,13 @@ export type BallotCreateInput = {
 export type BallotUncheckedCreateInput = {
   id?: string
   electionId: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
   votes?: Prisma.VoteUncheckedCreateNestedManyWithoutBallotInput
 }
 
 export type BallotUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
   election?: Prisma.ElectionUpdateOneRequiredWithoutBallotsNestedInput
   votes?: Prisma.VoteUpdateManyWithoutBallotNestedInput
 }
@@ -246,29 +231,25 @@ export type BallotUpdateInput = {
 export type BallotUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   electionId?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
   votes?: Prisma.VoteUncheckedUpdateManyWithoutBallotNestedInput
 }
 
 export type BallotCreateManyInput = {
   id?: string
   electionId: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
 }
 
 export type BallotUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BallotUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   electionId?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BallotListRelationFilter = {
@@ -284,22 +265,19 @@ export type BallotOrderByRelationAggregateInput = {
 export type BallotCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
-  castAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
 }
 
 export type BallotMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
-  castAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
 }
 
 export type BallotMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   electionId?: Prisma.SortOrder
-  castAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  batchId?: Prisma.SortOrder
 }
 
 export type BallotScalarRelationFilter = {
@@ -365,15 +343,13 @@ export type BallotUpdateOneRequiredWithoutVotesNestedInput = {
 
 export type BallotCreateWithoutElectionInput = {
   id?: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
   votes?: Prisma.VoteCreateNestedManyWithoutBallotInput
 }
 
 export type BallotUncheckedCreateWithoutElectionInput = {
   id?: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
   votes?: Prisma.VoteUncheckedCreateNestedManyWithoutBallotInput
 }
 
@@ -409,22 +385,19 @@ export type BallotScalarWhereInput = {
   NOT?: Prisma.BallotScalarWhereInput | Prisma.BallotScalarWhereInput[]
   id?: Prisma.UuidFilter<"Ballot"> | string
   electionId?: Prisma.UuidFilter<"Ballot"> | string
-  castAt?: Prisma.DateTimeFilter<"Ballot"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Ballot"> | Date | string
+  batchId?: Prisma.UuidFilter<"Ballot"> | string
 }
 
 export type BallotCreateWithoutVotesInput = {
   id?: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
   election: Prisma.ElectionCreateNestedOneWithoutBallotsInput
 }
 
 export type BallotUncheckedCreateWithoutVotesInput = {
   id?: string
   electionId: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
 }
 
 export type BallotCreateOrConnectWithoutVotesInput = {
@@ -445,42 +418,36 @@ export type BallotUpdateToOneWithWhereWithoutVotesInput = {
 
 export type BallotUpdateWithoutVotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
   election?: Prisma.ElectionUpdateOneRequiredWithoutBallotsNestedInput
 }
 
 export type BallotUncheckedUpdateWithoutVotesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   electionId?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type BallotCreateManyElectionInput = {
   id?: string
-  castAt?: Date | string
-  updatedAt?: Date | string
+  batchId: string
 }
 
 export type BallotUpdateWithoutElectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
   votes?: Prisma.VoteUpdateManyWithoutBallotNestedInput
 }
 
 export type BallotUncheckedUpdateWithoutElectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
   votes?: Prisma.VoteUncheckedUpdateManyWithoutBallotNestedInput
 }
 
 export type BallotUncheckedUpdateManyWithoutElectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  castAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  batchId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -517,8 +484,7 @@ export type BallotCountOutputTypeCountVotesArgs<ExtArgs extends runtime.Types.Ex
 export type BallotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   electionId?: boolean
-  castAt?: boolean
-  updatedAt?: boolean
+  batchId?: boolean
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
   votes?: boolean | Prisma.Ballot$votesArgs<ExtArgs>
   _count?: boolean | Prisma.BallotCountOutputTypeDefaultArgs<ExtArgs>
@@ -527,27 +493,24 @@ export type BallotSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type BallotSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   electionId?: boolean
-  castAt?: boolean
-  updatedAt?: boolean
+  batchId?: boolean
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ballot"]>
 
 export type BallotSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   electionId?: boolean
-  castAt?: boolean
-  updatedAt?: boolean
+  batchId?: boolean
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ballot"]>
 
 export type BallotSelectScalar = {
   id?: boolean
   electionId?: boolean
-  castAt?: boolean
-  updatedAt?: boolean
+  batchId?: boolean
 }
 
-export type BallotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "electionId" | "castAt" | "updatedAt", ExtArgs["result"]["ballot"]>
+export type BallotOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "electionId" | "batchId", ExtArgs["result"]["ballot"]>
 export type BallotInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   election?: boolean | Prisma.ElectionDefaultArgs<ExtArgs>
   votes?: boolean | Prisma.Ballot$votesArgs<ExtArgs>
@@ -569,8 +532,7 @@ export type $BallotPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     electionId: string
-    castAt: Date
-    updatedAt: Date
+    batchId: string
   }, ExtArgs["result"]["ballot"]>
   composites: {}
 }
@@ -998,8 +960,7 @@ export interface Prisma__BallotClient<T, Null = never, ExtArgs extends runtime.T
 export interface BallotFieldRefs {
   readonly id: Prisma.FieldRef<"Ballot", 'String'>
   readonly electionId: Prisma.FieldRef<"Ballot", 'String'>
-  readonly castAt: Prisma.FieldRef<"Ballot", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"Ballot", 'DateTime'>
+  readonly batchId: Prisma.FieldRef<"Ballot", 'String'>
 }
     
 

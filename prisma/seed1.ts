@@ -1,6 +1,7 @@
 // seed.ts
-import { PrismaClient, IdType, ScopeType, ElectionStatus } from "@/generated/client";
+import { PrismaClient, IdType, ScopeType, ElectionStatus, NotificationType } from "@/generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { lib2026, media2026, Nacos2025, Nacos2026, sug2025, sug2026 } from "./dept";
 
 
 const adapter = new PrismaPg({
@@ -67,29 +68,52 @@ function randomLevel(): number {
 function randomDate(start: Date, end: Date): Date {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
+export const d = (y: number, m: number, day: number, h: number = 0, mi: number = 0) => new Date(y, m - 1, day, h, mi);
+export const C = (id: string, name: string, dept: string, level: number, manifesto: string, platform: string[] = [],) => ({
+    id,
+    name,
+    dept,
+    level,
+    manifesto,
+    platform,
+});
 // ----------------------------------------------------------------------
 // Main seeding function 62242795804
 // ----------------------------------------------------------------------
 async function main() {
     // --- 1. Clear existing data (optional – remove if you want to keep) ---
     await prisma.$transaction([
+        // --- leaves: no cascade, must go first ---
+        prisma.vote.deleteMany(),                    // child of Ballot (cascade, but clear explicitly for safety)
+        prisma.blockchainBallot.deleteMany(),         // no enforced FK, but logically tied to Ballot
+        prisma.blockchainResult.deleteMany(),         // no enforced FK, but logically tied to Election
+        prisma.blockchainElection.deleteMany(),       // no enforced FK, but logically tied to Election
+        prisma.ballot.deleteMany(),                   // child of Election
+        prisma.votingSession.deleteMany(),            // child of VoterRoll + Election, NOT cascaded
+        prisma.candidate.deleteMany(),                // child of ElectionPosition + VoterRoll, NOT cascaded
+        prisma.electionParticipation.deleteMany(),    // child of Election + VoterRoll, NOT cascaded
+
+        // --- election structure ---
+        prisma.electionPosition.deleteMany(),         // child of Election + Position (cascade, cleared explicitly)
+        prisma.electionScope.deleteMany(),            // child of Election (cascade)
+        prisma.election.deleteMany(),                 // child of AcademicSession, NOT cascaded
         prisma.position.deleteMany(),
-        prisma.candidate.deleteMany(),
-        prisma.electionPosition.deleteMany(),
-        prisma.candidate.deleteMany(),
-        prisma.voterRoll.deleteMany(),
-        prisma.account.deleteMany(),
-        prisma.registrationSession.deleteMany(),
+
+        // --- voter identity chain ---
+        prisma.faceEmbedding.deleteMany(),            // child of FaceReference, NOT cascaded
+        prisma.faceReference.deleteMany(),            // child of VoterRoll (cascade)
+        prisma.otp.deleteMany(),                      // child of VoterRoll (cascade)
+        prisma.registrationSession.deleteMany(),      // child of VoterRoll (cascade)
+        prisma.account.deleteMany(),                  // child of VoterRoll (cascade)
+        prisma.voterRoll.deleteMany(),                // child of Campus + Faculty + Department, NOT cascaded
+
+        // --- academic + org structure ---
         prisma.academicSession.deleteMany(),
-        prisma.programme.deleteMany(),
-        prisma.department.deleteMany(),
-        prisma.faculty.deleteMany(),
-        prisma.campus.deleteMany(),
+        prisma.programme.deleteMany(),                // child of Department (cascade)
+        prisma.department.deleteMany(),               // child of Faculty (cascade)
+        prisma.faculty.deleteMany(),                  // child of Institution (cascade)
+        prisma.campus.deleteMany(),                   // child of Institution (cascade)
         prisma.institution.deleteMany(),
-        prisma.electionScope.deleteMany(),
-        prisma.election.deleteMany(),
-        prisma.election.deleteMany(),
-        prisma.academicSession.deleteMany(),
     ]);
 
     // --- 2. Create Campus -------------------------------------------------
@@ -130,12 +154,13 @@ async function main() {
     // --- 4. Create Departments -------------------------------------------
     const departmentData = [
         // Science
+        { name: 'Department of Computer Science', faculty: ictFaculty },
         { name: 'Department of Mathematics', faculty: scienceFaculty },
         { name: 'Department of Physics', faculty: scienceFaculty },
         { name: 'Department of Chemistry', faculty: scienceFaculty },
         { name: 'Department of Biology', faculty: scienceFaculty },
+        { name: 'Department of Biochemistry', faculty: scienceFaculty },
         // ICT
-        { name: 'Department of Computer Science', faculty: ictFaculty },
         { name: 'Department of Mass Communication', faculty: ictFaculty },
         { name: 'Department of Libary and Information Systems', faculty: ictFaculty },
         { name: 'Department of Cybersecurity', faculty: ictFaculty },
@@ -171,6 +196,7 @@ async function main() {
         'Department of Physics': ['B.Sc Physics', 'B.Sc Electronics'],
         'Department of Chemistry': ['B.Sc Chemistry', 'B.Sc Biochemistry'],
         'Department of Biology': ['B.Sc Biology', 'B.Sc Microbiology'],
+        'Department of Biochemistry': ['B.Sc Biochemistry'],
         'Department of Computer Science': ['B.Sc Computer Science', 'B.Sc Software Engineering', 'B.Sc Data Science'],
         'Department of Mass Communication': ['B.A Mass Communication', 'B.A Journalism'],
         'Department of Information Systems': ['B.Sc Information Systems', 'B.Sc Business Informatics'],
@@ -208,10 +234,7 @@ async function main() {
     const firstNames = ['John', 'Jane', 'Michael', 'Sarah', 'David', 'Emma', 'James', 'Lisa', 'Robert', 'Maria', 'William', 'Karen', 'Richard', 'Nancy', 'Joseph', 'Betty', 'Thomas', 'Helen', 'Charles', 'Sandra', 'Christopher', 'Donna', 'Daniel', 'Carol', 'Matthew', 'Ruth', 'Anthony', 'Sharon', 'Mark', 'Michelle', 'Donald', 'Laura', 'Steven', 'Sarah', 'Paul', 'Kimberly', 'Andrew', 'Deborah', 'Kenneth', 'Jessica'];
     const lastNames = ['Adebayo', 'Johnson', 'Olalokun', 'Folawiyo', 'Adebayo', 'Garcia', 'Miller', 'Davis', 'Rodriguez', 'Martinez', 'Hernandez', 'Lopez', 'Wilson', 'Anderson', 'Thomas', 'Taylor', 'Moore', 'Jackson', 'Martin', 'Lee', 'Perez', 'Thompson', 'White', 'Harris', 'Sanchez', 'Clark', 'Ramirez', 'Lewis', 'Robinson', 'Walker', 'Young', 'Allen', 'King', 'Wright', 'Scott', 'Torres', 'Nguyen', 'Hill', 'Flores', 'Green', 'Adams', 'Nelson', 'Baker', 'Hall', 'Rivera', 'Campbell'];
     const studentNames = [
-        "Abdulrahman Ibrahim Bello",
-        "Chiamaka Grace Okafor",
         "Oluwaseun David Adeyemi",
-        "Maryam Aisha Suleiman",
         "Emeka Chinedu Nwosu",
         "Esther Oluwatoyin Akinwale",
         "Daniel Chukwuemeka Eze",
@@ -221,81 +244,64 @@ async function main() {
         "Yusuf Abdulazeez Musa",
         "Mercy Nkem Obi",
         "Michael Tobi Ojo",
-        "Fatimah Aminat Mohammed",
         "Precious Ifeoma Ezeani",
         "Victor Ebuka Okoro",
         "Deborah Tolulope Ajayi",
         "Ibrahim Sani Abdullahi",
         "Cynthia Amarachi Umeh",
-        "Emmanuel Ayomide Adebayo",
         "Abdulrahman Musa Yusuf",
         "Chidera Joy Okafor",
         "Oluwaseun David Adeyemi",
         "Aisha Zainab Ibrahim",
         "Chukwuebuka Daniel Eze",
-        "Temiloluwa Grace Adebayo",
-        "Fatima Hauwa Bello",
         "Emmanuel Chinedu Okoro",
-        "Esther Oluwatoyin Olamide",
-        "Ibrahim Sani Musa",
-        "Precious Amarachi Nwankwo",
-        "Daniel Etim Akpan",
-        "Zainab Maryam Abdullahi",
         "Favour Chisom Eze",
-        "Samuel Oluwadamilare Oladipo",
-        "Maryam Aisha Sani",
-        "David Ekong Udo",
-        "Grace Ifeoma Nwachukwu",
         "Abdulaziz Ahmed Lawal",
-        "Victory Iniobong Ekanem",
     ];
 
-    // For each department, pick a random programme and create voters
-    for (const dept of departments) {
-        // Get programmes belonging to this department
+    let voterCount = 0
+
+    // For each student, pick a random programme and department, use it to create voters
+    const count = studentNames.length - 1
+    for (let i = 0; i < count; i++) {
+        const dept = randomItem(departments)
         const deptProgrammes = programmeRecords.filter(
             (p) => p.departmentId === dept.id
         );
+        const fullName = studentNames[i];
+        const parts = fullName.split(" ")
+        const firstName = parts[0];
+        const lastName = parts[2];
+        const imageUrl = `/${firstName.toLowerCase()}.png`
+        const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}@university.edu`;
+        const phone = randomPhone();
+        const level = randomItem([100, 200, 300, 400]);
+        const dateOfBirth = randomDateOfBirth();
+        const idType = randomItem(idTypes);
+        const idNumber = randomIdNumber();
+        const studentId = randomStudentId()
+        // Randomly assign a programme from the department
+        const programme = randomItem(deptProgrammes);
 
-        if (deptProgrammes.length === 0) continue;
+        await prisma.voterRoll.create({
+            data: {
+                idType,
+                idNumber,
+                studentId,
+                fullName,
+                email,
+                imageUrl,
+                phone,
+                campusId: campus.id,
+                facultyId: dept.facultyId,
+                departmentId: dept.id,
+                programmeId: programme.id,
+                level,
+                dateOfBirth,
+            },
+        });
 
-        const count = studentNames.length - 1 // 20–50
-
-        for (let i = 0; i < count; i++) {
-            const fullName = studentNames[i];
-            const parts = fullName.split(" ")
-            const firstName = parts[0];
-            const lastName = parts[2];
-            const imageUrl = `/${firstName.toLowerCase()}.png`
-            const email = `${firstName.toLowerCase()}.${lastName.toLowerCase()}${Math.floor(Math.random() * 1000)}@university.edu`;
-            const phone = randomPhone();
-            const level = randomItem([100, 200, 300, 400]);
-            const dateOfBirth = randomDateOfBirth();
-            const idType = randomItem(idTypes);
-            const idNumber = randomIdNumber();
-            const studentId = randomStudentId()
-
-            // Randomly assign a programme from this department
-            const programme = randomItem(deptProgrammes);
-
-            await prisma.voterRoll.create({
-                data: {
-                    idType,
-                    idNumber,
-                    studentId,
-                    fullName,
-                    email,
-                    imageUrl,
-                    phone,
-                    campusId: campus.id,
-                    facultyId: dept.facultyId,
-                    departmentId: dept.id,
-                    programmeId: programme.id,
-                    level,
-                    dateOfBirth,
-                },
-            });
-        }
+        voterCount++
     }
 
     // --- 6b. Create a specific voter: Muhammad Jamiu Soliu ---
@@ -319,6 +325,7 @@ async function main() {
             dateOfBirth: randomDateOfBirth(),
         },
     });
+    voterCount++
 
     // --- 7. (Optional) Create a few Academic Sessions and Elections ------
     const positionNames = [
@@ -329,6 +336,11 @@ async function main() {
         'Social Director',
         'Public Relations Officer (PRO)',
         'Deputy Speaker',
+        "Editor-in-Chief",
+        "Student Member",
+        "Academic Officer",
+        "Faculty Representative",
+        "Faculty Secretary"
     ];
 
     const positionLevelRequirement: Record<string, number> = {
@@ -351,6 +363,14 @@ async function main() {
     const sessions = await Promise.all([
         prisma.academicSession.create({
             data: {
+                name: '2025/2026',
+                startDate: new Date('2025-09-01'),
+                endDate: new Date('2026-07-31'),
+                isCurrent: true,
+            },
+        }),
+        prisma.academicSession.create({
+            data: {
                 name: '2026/2027',
                 startDate: new Date('2026-09-01'),
                 endDate: new Date('2027-07-31'),
@@ -366,103 +386,143 @@ async function main() {
             },
         }),
     ]);
-    const [session2026, session2027] = sessions;
-    // 9. Seed Elections
-    // We'll create 3 elections:
-    // - Student Union Election (UNIVERSITY scope)
-    // - NACOS Election (DEPARTMENT scope -> Computer Science)
-    // - Accounting Department Election (DEPARTMENT scope -> Accounting)
-    // For each, we define which positions are contested.
 
-    const electionConfigs = [
-        {
-            title: 'Student Union Election 2025/2026',
-            description: 'University wide student government election.',
-            session: session2026,
-            scopeType: ScopeType.UNIVERSITY,
-            scopeValue: 'all',
-            positionNames: ['President', 'Vice President', 'Speaker', 'Treasurer', 'Social Director', 'Public Relations Officer (PRO)'],
-            startsAt: new Date('2026-02-10T08:00:00'),
-            endsAt: new Date('2026-02-12T17:00:00'),
-            status: ElectionStatus.OPEN,
-        },
-        {
-            title: 'NACOS Election 2025/2026',
-            description: 'National Association of Computer Science Students election.',
-            session: session2026,
-            scopeType: ScopeType.DEPARTMENT,
-            scopeValue: 'Department of Computer Science',
-            positionNames: ['President', 'Vice President', 'Speaker', 'Treasurer', 'Social Director'],
-            startsAt: new Date('2026-03-01T08:00:00'),
-            endsAt: new Date('2026-03-02T17:00:00'),
-            status: ElectionStatus.PUBLISHED,
-        },
-        {
-            title: 'Accounting Department Election 2025/2026',
-            description: 'Election for the Accounting Department student leaders.',
-            session: session2026,
-            scopeType: ScopeType.DEPARTMENT,
-            scopeValue: 'Department of Accounting',
-            positionNames: ['President', 'Vice President', 'Treasurer'],
-            startsAt: new Date('2026-03-10T08:00:00'),
-            endsAt: new Date('2026-03-11T17:00:00'),
-            status: ElectionStatus.DRAFT,
-        },
-    ];
+    const [session2025, session2026, session2027] = sessions;
+
+    // 9. Seed Elections
+    const Elections = [Nacos2026(session2026.id), Nacos2025(session2025.id), lib2026(session2026.id), media2026(session2026.id), sug2025(session2025.id), sug2026(session2026.id)]
+
+    for (const election of Elections) {
+        const created = await prisma.$transaction(async (tx) => {
+            const newElection = await tx.election.create({
+                data: {
+                    title: election.title,
+                    code: `ELC-${new Date(election.startsAt).getFullYear()}-${String(election.id)}`,
+                    description: election.description,
+                    coverImage: null,
+                    academicSessionId: election.session,
+                    startsAt: election.startsAt,
+                    endsAt: election.endsAt,
+                    status: election.status,
+                    scopes: {
+                        create: {
+                            type: election.scopeType,
+                            value: election.scopeValue
+                        },
+                    },
+                },
+            });
+
+            const candidates = election.positions.flatMap((p) => {
+                const info = p.candidates.map((c) => ({ name: c.name, dept: c.dept, level: c.level, manifesto: c.manifesto, platform: c.platform, position: p.name }))
+                return info
+            })
+
+            const completedCandidates = [];
+
+            for (const candidate of candidates) {
+                const target = candidate.dept.trim().toLowerCase();
+                const dept = departments.find((d) => d.name.toLowerCase().includes(target));
+
+                if (!dept) {
+                    // Fail fast — a missing dept means we can't build a valid voter row.
+                    throw new Error(`Cannot find dept "${candidate.dept}" for candidate "${candidate.name}"`);
+                }
+
+                const prog = programmeRecords.find(p => p.departmentId === dept.id);
+
+                const fullName = candidate.name;
+                const parts = fullName.split(" ");
+                const firstName = parts[0];
+                const lastName = parts[2] ?? parts[1];
+                const imageUrl = `/${firstName.toLowerCase()}.png`;
+                const email =
+                    `${firstName.toLowerCase()}.${lastName.toLowerCase()}` +
+                    `${Math.floor(Math.random() * 1000)}@university.edu`;
+
+                const voterRecord = await tx.voterRoll.create({
+                    data: {
+                        idType: randomItem(idTypes),
+                        idNumber: randomIdNumber(),
+                        studentId: randomStudentId(),
+                        fullName,
+                        email,
+                        imageUrl,
+                        phone: randomPhone(),
+                        campusId: campus.id,
+                        facultyId: dept.facultyId,
+                        departmentId: dept.id,
+                        programmeId: prog?.id,
+                        level: candidate.level,
+                        dateOfBirth: randomDateOfBirth(),
+                    },
+                });
+
+                completedCandidates.push({
+                    ...candidate,
+                    voterId: voterRecord.id,
+                    imageUrl: voterRecord.imageUrl,
+                });
+            }
+
+
+            const positionEntries = election.positions.map((p) => ({
+                name: p.name,
+                description: p.description,
+            }));
+
+            for (const position of positionEntries) {
+                const positionId = positionMap[position.name];
+                if (!positionId) {
+                    console.log("position not found:", position.name);
+                    continue;
+                }
+
+                const positionCandidates = completedCandidates.filter(
+                    (cand) => cand.position === position.name
+                );
+                await tx.electionPosition.create({
+                    data: {
+                        electionId: newElection.id,
+                        positionId,
+                        description: position.description,
+                        candidates: {
+                            createMany: {
+                                data: positionCandidates.map((cand) => ({
+                                    voterId: cand.voterId,
+                                    manifesto: cand.manifesto,
+                                    platform: cand.platform,
+                                    imageUrl: cand.imageUrl,
+                                })),
+                            },
+                        },
+                    },
+                });
+            }
+            return completedCandidates;
+
+        })
+
+        voterCount += created.length;
+        console.log("election created ", created[0].name, " ", created.length)
+    }
+
 
     // We'll store created elections to later add candidates
     const createdElections: any[] = [];
 
-    for (const cfg of electionConfigs) {
-
-        // Find department id if scope is DEPARTMENT
-
-        let departmentId: string | undefined;
-        if (cfg.scopeType === ScopeType.DEPARTMENT) {
-            const dept = departments.find(d => d.name === cfg.scopeValue);
-            if (dept) departmentId = dept.id;
-        }
-
-        // Create election
-
-        const election = await prisma.election.create({
-            data: {
-                title: cfg.title,
-                description: cfg.description,
-                academicSessionId: cfg.session.id,
-                startsAt: cfg.startsAt,
-                endsAt: cfg.endsAt,
-                status: cfg.status,
-                scopes: {
-                    create: {
-                        type: cfg.scopeType,
-                        value: cfg.scopeValue,
-                    },
-                },
-            },
-        });
-
-        createdElections.push(election);
-
-        // Add ElectionPositions
-        for (const posName of cfg.positionNames) {
-            const positionId = positionMap[posName];
-            if (!positionId) continue;
-            await prisma.electionPosition.create({
-                data: {
-                    electionId: election.id,
-                    positionId: positionId,
-                },
-            });
-        }
-    }
-
-    // 7. Seed Candidates
+    // 7. Seed Eligbile voters for active election
     // For each election, for each position, pick 2–3 eligible voters from the scope.
     // Eligible: if scope is UNIVERSITY -> any voter; if DEPARTMENT -> voters in that department.
     // We'll create candidates with random manifestos and image URLs.
 
     const allElections = await prisma.election.findMany({
+        where: {
+            status: {
+                in: ["ACTIVE", "SCHEDULED"]
+            },
+            academicSessionId: session2026.id
+        },
         include: {
             scopes: true,
             positions: {
@@ -472,59 +532,147 @@ async function main() {
             },
         },
     });
-    const voters = await prisma.voterRoll.findMany()
+    // const voters = await prisma.voterRoll.findMany()
 
     for (const election of allElections) {
-        // Determine eligible voters
-        let eligibleVoterIds: string[] = [];
-        const scope = election.scopes[0]; // we only have one scope per election in our seed
+        let eligibleVoterIds: { id: string; }[] = [];
 
-        if (scope.type === ScopeType.UNIVERSITY) {
-            eligibleVoterIds = voters.map(v => v.id);
-        } else if (scope.type === ScopeType.DEPARTMENT) {
-            // scope.value is department name
-            const dept = departments.find(d => d.name === scope.value);
-            if (dept) {
-                eligibleVoterIds = voters.filter(v => v.departmentId === dept.id).map(v => v.id);
-            }
-        } else {
-            // other scope types not used in seed
-            eligibleVoterIds = voters.map(v => v.id);
-        }
-
-        // Insert all eligble voters
-        for (const vt of eligibleVoterIds) {
-            await prisma.electionParticipation.create({
-                data: {
-                    electionId: election.id,
-                    voterId: vt,
-                    eligible: true,
+        if (election.scopes[0].type === ScopeType.UNIVERSITY) {
+            eligibleVoterIds = await prisma.voterRoll.findMany({
+                select: {
+                    id: true
                 }
-            })
-
-        }
-
-        // For each ElectionPosition, pick 2–3 random eligible voters
-        for (const ep of election.positions) {
-            const count = Math.min(3, eligibleVoterIds.length);
-            if (count === 0) continue;
-
-            // Shuffle and pick
-            const shuffled = eligibleVoterIds.sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, count);
-
-            for (const voterId of selected) {
-                const imageUrl = voters.find((v) => v.id == voterId)?.imageUrl
-                await prisma.candidate.create({
-                    data: {
-                        electionPositionId: ep.id,
-                        voterId: voterId,
-                        manifesto: "I am committed to serving the student body. My vision is to improve welfare and academic excellence.",
-                        imageUrl
+            });
+        } else if (election.scopes[0].type === ScopeType.DEPARTMENT) {
+            // scope.value is department name
+            const dept = await prisma.department.findFirst({ where: { name: election.scopes[0].value } })
+            if (dept) {
+                eligibleVoterIds = await prisma.voterRoll.findMany({
+                    where: {
+                        departmentId: dept.id
                     },
+                    select: {
+                        id: true
+                    }
+                });
+            }
+        } else if (election.scopes[0].type === ScopeType.FACULTY) {
+            const faculty = await prisma.faculty.findFirst({ where: { name: election.scopes[0].value } })
+            if (faculty) {
+                eligibleVoterIds = await prisma.voterRoll.findMany({
+                    where: {
+                        departmentId: faculty.id
+                    },
+                    select: {
+                        id: true
+                    }
                 });
             }
         }
+    }
+
+
+    const ANNOUNCEMENTS = [
+        {
+            id: "an1",
+            at: d(2026, 9, 21, 8),
+            title:
+                "Voting for the 2026 Student Union Election is open until Friday, September 25 at 5:00 PM.",
+        },
+        {
+            id: "an2",
+            at: d(2026, 9, 20, 17),
+            title:
+                "Candidate campaign period ended September 20. Manifestos are on each election page.",
+        },
+        {
+            id: "an3",
+            at: d(2026, 9, 18, 9),
+            title: "Faculty of Sciences Representative voting begins September 28.",
+        },
+        {
+            id: "an4",
+            at: d(2026, 9, 17, 9),
+            title:
+                "Library Advisory Committee results will be published September 30 at 9:00 AM.",
+        },
+        {
+            id: "an5",
+            at: d(2026, 9, 10, 12),
+            title:
+                "Nominations for the Graduate Students Association election are now closed.",
+        },
+    ];
+
+    for (const a of ANNOUNCEMENTS) {
+        await prisma.announcement.create({
+            data: {
+                title: a.title,
+                createdAt: a.at
+            }
+        })
+    }
+
+    const NOTIFS_SEED = [
+        {
+            id: "n1",
+            type: NotificationType.REMINDER,
+            title: "You have not yet voted in the SUG Election.",
+            body: "Voting closes Friday, September 25 at 5:00 PM.",
+            at: d(2026, 9, 24, 9),
+            read: false,
+        },
+        {
+            id: "n2",
+            type: NotificationType.ANNOUNCEMENT,
+            title: "Voting for SUG Election 2026 is now open.",
+            body: "Open the election page to review candidates and vote.",
+            at: d(2026, 9, 21, 8),
+            read: false,
+        },
+        {
+            id: "n3",
+            type: NotificationType.REMINDER,
+            title: "Voting closes tomorrow at 5:00 PM.",
+            body: "Student Union Government Election 2026.",
+            at: d(2026, 9, 23, 17),
+            read: false,
+        },
+        {
+            id: "n4",
+            type: NotificationType.ANNOUNCEMENT,
+            title: "Faculty of Sciences voting begins September 28.",
+            body: "You are eligible to vote in this election.",
+            at: d(2026, 9, 18, 9),
+            read: true,
+        },
+        {
+            id: "n5",
+            type: NotificationType.SYSTEM,
+            title: "Scheduled maintenance on Sunday, 2:00–3:00 AM.",
+            body: "The portal will be briefly unavailable. Voting is not affected.",
+            at: d(2026, 9, 17, 15),
+            read: true,
+        },
+        {
+            id: "n6",
+            type: NotificationType.ANNOUNCEMENT,
+            title: "Library Advisory Committee results will be published September 30.",
+            body: "You will get a notification when they are available.",
+            at: d(2026, 9, 17, 9),
+            read: true,
+        },
+    ];
+
+    for (const n of NOTIFS_SEED) {
+        await prisma.notification.create({
+            data: {
+                type: n.type,
+                title: n.title,
+                body: n.body,
+                createdAt: n.at
+            }
+        })
     }
 
     console.log('✅ Seeding completed!');
@@ -532,7 +680,7 @@ async function main() {
     - ${faculties.length} Faculties
     - ${departments.length} Departments
     - ${programmeRecords.length} Programmes
-    - ${voters.length} Voters
+    - ${voterCount} Voters
     - ${sessions.length} Academic Sessions
     - ${createdElections.length} Elections
     - ${positions.length} Positions

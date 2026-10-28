@@ -53,6 +53,7 @@ export type CandidateCountAggregateOutputType = {
   electionPositionId: number
   voterId: number
   manifesto: number
+  platform: number
   campaignSlogan: number
   imageUrl: number
   cvUrl: number
@@ -92,6 +93,7 @@ export type CandidateCountAggregateInputType = {
   electionPositionId?: true
   voterId?: true
   manifesto?: true
+  platform?: true
   campaignSlogan?: true
   imageUrl?: true
   cvUrl?: true
@@ -178,6 +180,7 @@ export type CandidateGroupByOutputType = {
   electionPositionId: string
   voterId: string
   manifesto: string | null
+  platform: string[]
   campaignSlogan: string | null
   imageUrl: string | null
   cvUrl: string | null
@@ -212,6 +215,7 @@ export type CandidateWhereInput = {
   electionPositionId?: Prisma.UuidFilter<"Candidate"> | string
   voterId?: Prisma.UuidFilter<"Candidate"> | string
   manifesto?: Prisma.StringNullableFilter<"Candidate"> | string | null
+  platform?: Prisma.StringNullableListFilter<"Candidate">
   campaignSlogan?: Prisma.StringNullableFilter<"Candidate"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Candidate"> | string | null
   cvUrl?: Prisma.StringNullableFilter<"Candidate"> | string | null
@@ -220,6 +224,7 @@ export type CandidateWhereInput = {
   partyAffiliation?: Prisma.StringNullableFilter<"Candidate"> | string | null
   electionPosition?: Prisma.XOR<Prisma.ElectionPositionScalarRelationFilter, Prisma.ElectionPositionWhereInput>
   voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
+  votes?: Prisma.VoteListRelationFilter
 }
 
 export type CandidateOrderByWithRelationInput = {
@@ -227,6 +232,7 @@ export type CandidateOrderByWithRelationInput = {
   electionPositionId?: Prisma.SortOrder
   voterId?: Prisma.SortOrder
   manifesto?: Prisma.SortOrderInput | Prisma.SortOrder
+  platform?: Prisma.SortOrder
   campaignSlogan?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cvUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -235,6 +241,7 @@ export type CandidateOrderByWithRelationInput = {
   partyAffiliation?: Prisma.SortOrderInput | Prisma.SortOrder
   electionPosition?: Prisma.ElectionPositionOrderByWithRelationInput
   voter?: Prisma.VoterRollOrderByWithRelationInput
+  votes?: Prisma.VoteOrderByRelationAggregateInput
 }
 
 export type CandidateWhereUniqueInput = Prisma.AtLeast<{
@@ -246,6 +253,7 @@ export type CandidateWhereUniqueInput = Prisma.AtLeast<{
   electionPositionId?: Prisma.UuidFilter<"Candidate"> | string
   voterId?: Prisma.UuidFilter<"Candidate"> | string
   manifesto?: Prisma.StringNullableFilter<"Candidate"> | string | null
+  platform?: Prisma.StringNullableListFilter<"Candidate">
   campaignSlogan?: Prisma.StringNullableFilter<"Candidate"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Candidate"> | string | null
   cvUrl?: Prisma.StringNullableFilter<"Candidate"> | string | null
@@ -254,6 +262,7 @@ export type CandidateWhereUniqueInput = Prisma.AtLeast<{
   partyAffiliation?: Prisma.StringNullableFilter<"Candidate"> | string | null
   electionPosition?: Prisma.XOR<Prisma.ElectionPositionScalarRelationFilter, Prisma.ElectionPositionWhereInput>
   voter?: Prisma.XOR<Prisma.VoterRollScalarRelationFilter, Prisma.VoterRollWhereInput>
+  votes?: Prisma.VoteListRelationFilter
 }, "id" | "electionPositionId_voterId">
 
 export type CandidateOrderByWithAggregationInput = {
@@ -261,6 +270,7 @@ export type CandidateOrderByWithAggregationInput = {
   electionPositionId?: Prisma.SortOrder
   voterId?: Prisma.SortOrder
   manifesto?: Prisma.SortOrderInput | Prisma.SortOrder
+  platform?: Prisma.SortOrder
   campaignSlogan?: Prisma.SortOrderInput | Prisma.SortOrder
   imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   cvUrl?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,6 +290,7 @@ export type CandidateScalarWhereWithAggregatesInput = {
   electionPositionId?: Prisma.UuidWithAggregatesFilter<"Candidate"> | string
   voterId?: Prisma.UuidWithAggregatesFilter<"Candidate"> | string
   manifesto?: Prisma.StringNullableWithAggregatesFilter<"Candidate"> | string | null
+  platform?: Prisma.StringNullableListFilter<"Candidate">
   campaignSlogan?: Prisma.StringNullableWithAggregatesFilter<"Candidate"> | string | null
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Candidate"> | string | null
   cvUrl?: Prisma.StringNullableWithAggregatesFilter<"Candidate"> | string | null
@@ -291,6 +302,7 @@ export type CandidateScalarWhereWithAggregatesInput = {
 export type CandidateCreateInput = {
   id?: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
@@ -299,6 +311,7 @@ export type CandidateCreateInput = {
   partyAffiliation?: string | null
   electionPosition: Prisma.ElectionPositionCreateNestedOneWithoutCandidatesInput
   voter: Prisma.VoterRollCreateNestedOneWithoutCandidatesInput
+  votes?: Prisma.VoteCreateNestedManyWithoutCandidateInput
 }
 
 export type CandidateUncheckedCreateInput = {
@@ -306,17 +319,20 @@ export type CandidateUncheckedCreateInput = {
   electionPositionId: string
   voterId: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
   socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isIndependent?: boolean
   partyAffiliation?: string | null
+  votes?: Prisma.VoteUncheckedCreateNestedManyWithoutCandidateInput
 }
 
 export type CandidateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -325,6 +341,7 @@ export type CandidateUpdateInput = {
   partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   electionPosition?: Prisma.ElectionPositionUpdateOneRequiredWithoutCandidatesNestedInput
   voter?: Prisma.VoterRollUpdateOneRequiredWithoutCandidatesNestedInput
+  votes?: Prisma.VoteUpdateManyWithoutCandidateNestedInput
 }
 
 export type CandidateUncheckedUpdateInput = {
@@ -332,12 +349,14 @@ export type CandidateUncheckedUpdateInput = {
   electionPositionId?: Prisma.StringFieldUpdateOperationsInput | string
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  votes?: Prisma.VoteUncheckedUpdateManyWithoutCandidateNestedInput
 }
 
 export type CandidateCreateManyInput = {
@@ -345,6 +364,7 @@ export type CandidateCreateManyInput = {
   electionPositionId: string
   voterId: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
@@ -356,6 +376,7 @@ export type CandidateCreateManyInput = {
 export type CandidateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -369,6 +390,7 @@ export type CandidateUncheckedUpdateManyInput = {
   electionPositionId?: Prisma.StringFieldUpdateOperationsInput | string
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -387,6 +409,14 @@ export type CandidateOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type CandidateElectionPositionIdVoterIdCompoundUniqueInput = {
   electionPositionId: string
   voterId: string
@@ -397,6 +427,7 @@ export type CandidateCountOrderByAggregateInput = {
   electionPositionId?: Prisma.SortOrder
   voterId?: Prisma.SortOrder
   manifesto?: Prisma.SortOrder
+  platform?: Prisma.SortOrder
   campaignSlogan?: Prisma.SortOrder
   imageUrl?: Prisma.SortOrder
   cvUrl?: Prisma.SortOrder
@@ -427,6 +458,11 @@ export type CandidateMinOrderByAggregateInput = {
   cvUrl?: Prisma.SortOrder
   isIndependent?: Prisma.SortOrder
   partyAffiliation?: Prisma.SortOrder
+}
+
+export type CandidateScalarRelationFilter = {
+  is?: Prisma.CandidateWhereInput
+  isNot?: Prisma.CandidateWhereInput
 }
 
 export type CandidateCreateNestedManyWithoutVoterInput = {
@@ -513,9 +549,33 @@ export type CandidateUncheckedUpdateManyWithoutElectionPositionNestedInput = {
   deleteMany?: Prisma.CandidateScalarWhereInput | Prisma.CandidateScalarWhereInput[]
 }
 
+export type CandidateCreateplatformInput = {
+  set: string[]
+}
+
+export type CandidateUpdateplatformInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type CandidateCreateNestedOneWithoutVotesInput = {
+  create?: Prisma.XOR<Prisma.CandidateCreateWithoutVotesInput, Prisma.CandidateUncheckedCreateWithoutVotesInput>
+  connectOrCreate?: Prisma.CandidateCreateOrConnectWithoutVotesInput
+  connect?: Prisma.CandidateWhereUniqueInput
+}
+
+export type CandidateUpdateOneRequiredWithoutVotesNestedInput = {
+  create?: Prisma.XOR<Prisma.CandidateCreateWithoutVotesInput, Prisma.CandidateUncheckedCreateWithoutVotesInput>
+  connectOrCreate?: Prisma.CandidateCreateOrConnectWithoutVotesInput
+  upsert?: Prisma.CandidateUpsertWithoutVotesInput
+  connect?: Prisma.CandidateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CandidateUpdateToOneWithWhereWithoutVotesInput, Prisma.CandidateUpdateWithoutVotesInput>, Prisma.CandidateUncheckedUpdateWithoutVotesInput>
+}
+
 export type CandidateCreateWithoutVoterInput = {
   id?: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
@@ -523,18 +583,21 @@ export type CandidateCreateWithoutVoterInput = {
   isIndependent?: boolean
   partyAffiliation?: string | null
   electionPosition: Prisma.ElectionPositionCreateNestedOneWithoutCandidatesInput
+  votes?: Prisma.VoteCreateNestedManyWithoutCandidateInput
 }
 
 export type CandidateUncheckedCreateWithoutVoterInput = {
   id?: string
   electionPositionId: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
   socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isIndependent?: boolean
   partyAffiliation?: string | null
+  votes?: Prisma.VoteUncheckedCreateNestedManyWithoutCandidateInput
 }
 
 export type CandidateCreateOrConnectWithoutVoterInput = {
@@ -571,6 +634,7 @@ export type CandidateScalarWhereInput = {
   electionPositionId?: Prisma.UuidFilter<"Candidate"> | string
   voterId?: Prisma.UuidFilter<"Candidate"> | string
   manifesto?: Prisma.StringNullableFilter<"Candidate"> | string | null
+  platform?: Prisma.StringNullableListFilter<"Candidate">
   campaignSlogan?: Prisma.StringNullableFilter<"Candidate"> | string | null
   imageUrl?: Prisma.StringNullableFilter<"Candidate"> | string | null
   cvUrl?: Prisma.StringNullableFilter<"Candidate"> | string | null
@@ -582,6 +646,7 @@ export type CandidateScalarWhereInput = {
 export type CandidateCreateWithoutElectionPositionInput = {
   id?: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
@@ -589,18 +654,21 @@ export type CandidateCreateWithoutElectionPositionInput = {
   isIndependent?: boolean
   partyAffiliation?: string | null
   voter: Prisma.VoterRollCreateNestedOneWithoutCandidatesInput
+  votes?: Prisma.VoteCreateNestedManyWithoutCandidateInput
 }
 
 export type CandidateUncheckedCreateWithoutElectionPositionInput = {
   id?: string
   voterId: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
   socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isIndependent?: boolean
   partyAffiliation?: string | null
+  votes?: Prisma.VoteUncheckedCreateNestedManyWithoutCandidateInput
 }
 
 export type CandidateCreateOrConnectWithoutElectionPositionInput = {
@@ -629,10 +697,83 @@ export type CandidateUpdateManyWithWhereWithoutElectionPositionInput = {
   data: Prisma.XOR<Prisma.CandidateUpdateManyMutationInput, Prisma.CandidateUncheckedUpdateManyWithoutElectionPositionInput>
 }
 
+export type CandidateCreateWithoutVotesInput = {
+  id?: string
+  manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
+  campaignSlogan?: string | null
+  imageUrl?: string | null
+  cvUrl?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isIndependent?: boolean
+  partyAffiliation?: string | null
+  electionPosition: Prisma.ElectionPositionCreateNestedOneWithoutCandidatesInput
+  voter: Prisma.VoterRollCreateNestedOneWithoutCandidatesInput
+}
+
+export type CandidateUncheckedCreateWithoutVotesInput = {
+  id?: string
+  electionPositionId: string
+  voterId: string
+  manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
+  campaignSlogan?: string | null
+  imageUrl?: string | null
+  cvUrl?: string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isIndependent?: boolean
+  partyAffiliation?: string | null
+}
+
+export type CandidateCreateOrConnectWithoutVotesInput = {
+  where: Prisma.CandidateWhereUniqueInput
+  create: Prisma.XOR<Prisma.CandidateCreateWithoutVotesInput, Prisma.CandidateUncheckedCreateWithoutVotesInput>
+}
+
+export type CandidateUpsertWithoutVotesInput = {
+  update: Prisma.XOR<Prisma.CandidateUpdateWithoutVotesInput, Prisma.CandidateUncheckedUpdateWithoutVotesInput>
+  create: Prisma.XOR<Prisma.CandidateCreateWithoutVotesInput, Prisma.CandidateUncheckedCreateWithoutVotesInput>
+  where?: Prisma.CandidateWhereInput
+}
+
+export type CandidateUpdateToOneWithWhereWithoutVotesInput = {
+  where?: Prisma.CandidateWhereInput
+  data: Prisma.XOR<Prisma.CandidateUpdateWithoutVotesInput, Prisma.CandidateUncheckedUpdateWithoutVotesInput>
+}
+
+export type CandidateUpdateWithoutVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
+  campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  electionPosition?: Prisma.ElectionPositionUpdateOneRequiredWithoutCandidatesNestedInput
+  voter?: Prisma.VoterRollUpdateOneRequiredWithoutCandidatesNestedInput
+}
+
+export type CandidateUncheckedUpdateWithoutVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  electionPositionId?: Prisma.StringFieldUpdateOperationsInput | string
+  voterId?: Prisma.StringFieldUpdateOperationsInput | string
+  manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
+  campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
 export type CandidateCreateManyVoterInput = {
   id?: string
   electionPositionId: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
@@ -644,6 +785,7 @@ export type CandidateCreateManyVoterInput = {
 export type CandidateUpdateWithoutVoterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -651,24 +793,28 @@ export type CandidateUpdateWithoutVoterInput = {
   isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   electionPosition?: Prisma.ElectionPositionUpdateOneRequiredWithoutCandidatesNestedInput
+  votes?: Prisma.VoteUpdateManyWithoutCandidateNestedInput
 }
 
 export type CandidateUncheckedUpdateWithoutVoterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   electionPositionId?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  votes?: Prisma.VoteUncheckedUpdateManyWithoutCandidateNestedInput
 }
 
 export type CandidateUncheckedUpdateManyWithoutVoterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   electionPositionId?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -681,6 +827,7 @@ export type CandidateCreateManyElectionPositionInput = {
   id?: string
   voterId: string
   manifesto?: string | null
+  platform?: Prisma.CandidateCreateplatformInput | string[]
   campaignSlogan?: string | null
   imageUrl?: string | null
   cvUrl?: string | null
@@ -692,6 +839,7 @@ export type CandidateCreateManyElectionPositionInput = {
 export type CandidateUpdateWithoutElectionPositionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -699,24 +847,28 @@ export type CandidateUpdateWithoutElectionPositionInput = {
   isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   voter?: Prisma.VoterRollUpdateOneRequiredWithoutCandidatesNestedInput
+  votes?: Prisma.VoteUpdateManyWithoutCandidateNestedInput
 }
 
 export type CandidateUncheckedUpdateWithoutElectionPositionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   socialLinks?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   isIndependent?: Prisma.BoolFieldUpdateOperationsInput | boolean
   partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  votes?: Prisma.VoteUncheckedUpdateManyWithoutCandidateNestedInput
 }
 
 export type CandidateUncheckedUpdateManyWithoutElectionPositionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   voterId?: Prisma.StringFieldUpdateOperationsInput | string
   manifesto?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platform?: Prisma.CandidateUpdateplatformInput | string[]
   campaignSlogan?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   cvUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -725,6 +877,35 @@ export type CandidateUncheckedUpdateManyWithoutElectionPositionInput = {
   partyAffiliation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+
+/**
+ * Count Type CandidateCountOutputType
+ */
+
+export type CandidateCountOutputType = {
+  votes: number
+}
+
+export type CandidateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  votes?: boolean | CandidateCountOutputTypeCountVotesArgs
+}
+
+/**
+ * CandidateCountOutputType without action
+ */
+export type CandidateCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CandidateCountOutputType
+   */
+  select?: Prisma.CandidateCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CandidateCountOutputType without action
+ */
+export type CandidateCountOutputTypeCountVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VoteWhereInput
+}
 
 
 export type CandidateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -732,6 +913,7 @@ export type CandidateSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   electionPositionId?: boolean
   voterId?: boolean
   manifesto?: boolean
+  platform?: boolean
   campaignSlogan?: boolean
   imageUrl?: boolean
   cvUrl?: boolean
@@ -740,6 +922,8 @@ export type CandidateSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   partyAffiliation?: boolean
   electionPosition?: boolean | Prisma.ElectionPositionDefaultArgs<ExtArgs>
   voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
+  votes?: boolean | Prisma.Candidate$votesArgs<ExtArgs>
+  _count?: boolean | Prisma.CandidateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["candidate"]>
 
 export type CandidateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -747,6 +931,7 @@ export type CandidateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   electionPositionId?: boolean
   voterId?: boolean
   manifesto?: boolean
+  platform?: boolean
   campaignSlogan?: boolean
   imageUrl?: boolean
   cvUrl?: boolean
@@ -762,6 +947,7 @@ export type CandidateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   electionPositionId?: boolean
   voterId?: boolean
   manifesto?: boolean
+  platform?: boolean
   campaignSlogan?: boolean
   imageUrl?: boolean
   cvUrl?: boolean
@@ -777,6 +963,7 @@ export type CandidateSelectScalar = {
   electionPositionId?: boolean
   voterId?: boolean
   manifesto?: boolean
+  platform?: boolean
   campaignSlogan?: boolean
   imageUrl?: boolean
   cvUrl?: boolean
@@ -785,10 +972,12 @@ export type CandidateSelectScalar = {
   partyAffiliation?: boolean
 }
 
-export type CandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "electionPositionId" | "voterId" | "manifesto" | "campaignSlogan" | "imageUrl" | "cvUrl" | "socialLinks" | "isIndependent" | "partyAffiliation", ExtArgs["result"]["candidate"]>
+export type CandidateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "electionPositionId" | "voterId" | "manifesto" | "platform" | "campaignSlogan" | "imageUrl" | "cvUrl" | "socialLinks" | "isIndependent" | "partyAffiliation", ExtArgs["result"]["candidate"]>
 export type CandidateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   electionPosition?: boolean | Prisma.ElectionPositionDefaultArgs<ExtArgs>
   voter?: boolean | Prisma.VoterRollDefaultArgs<ExtArgs>
+  votes?: boolean | Prisma.Candidate$votesArgs<ExtArgs>
+  _count?: boolean | Prisma.CandidateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CandidateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   electionPosition?: boolean | Prisma.ElectionPositionDefaultArgs<ExtArgs>
@@ -804,12 +993,14 @@ export type $CandidatePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     electionPosition: Prisma.$ElectionPositionPayload<ExtArgs>
     voter: Prisma.$VoterRollPayload<ExtArgs>
+    votes: Prisma.$VotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     electionPositionId: string
     voterId: string
     manifesto: string | null
+    platform: string[]
     campaignSlogan: string | null
     imageUrl: string | null
     cvUrl: string | null
@@ -1212,6 +1403,7 @@ export interface Prisma__CandidateClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   electionPosition<T extends Prisma.ElectionPositionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ElectionPositionDefaultArgs<ExtArgs>>): Prisma.Prisma__ElectionPositionClient<runtime.Types.Result.GetResult<Prisma.$ElectionPositionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   voter<T extends Prisma.VoterRollDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VoterRollDefaultArgs<ExtArgs>>): Prisma.Prisma__VoterRollClient<runtime.Types.Result.GetResult<Prisma.$VoterRollPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  votes<T extends Prisma.Candidate$votesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Candidate$votesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1245,6 +1437,7 @@ export interface CandidateFieldRefs {
   readonly electionPositionId: Prisma.FieldRef<"Candidate", 'String'>
   readonly voterId: Prisma.FieldRef<"Candidate", 'String'>
   readonly manifesto: Prisma.FieldRef<"Candidate", 'String'>
+  readonly platform: Prisma.FieldRef<"Candidate", 'String[]'>
   readonly campaignSlogan: Prisma.FieldRef<"Candidate", 'String'>
   readonly imageUrl: Prisma.FieldRef<"Candidate", 'String'>
   readonly cvUrl: Prisma.FieldRef<"Candidate", 'String'>
@@ -1649,6 +1842,30 @@ export type CandidateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Candidates to delete.
    */
   limit?: number
+}
+
+/**
+ * Candidate.votes
+ */
+export type Candidate$votesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Vote
+   */
+  select?: Prisma.VoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Vote
+   */
+  omit?: Prisma.VoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VoteInclude<ExtArgs> | null
+  where?: Prisma.VoteWhereInput
+  orderBy?: Prisma.VoteOrderByWithRelationInput | Prisma.VoteOrderByWithRelationInput[]
+  cursor?: Prisma.VoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VoteScalarFieldEnum | Prisma.VoteScalarFieldEnum[]
 }
 
 /**

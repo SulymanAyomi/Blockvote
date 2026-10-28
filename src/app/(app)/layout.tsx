@@ -1,21 +1,30 @@
-import { Navbar } from "@/components/Navbar";
-import { PollDataProvider } from "@/context/pollData";
+import Header from "@/components/header";
+import Nav from "@/components/nav";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 const Layout = async ({ children }: DashboardLayoutProps) => {
   return (
-    <div className=" min-h-screen bg-bg-color1 overflow-x-hidden">
-      <div className="w-full">
-        <div className="w-full relative h-full z-50 flex flex-col">
-          <Navbar />
+    <div className="font-sans text-slate-900">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2.5 focus:font-semibold focus:text-blue-800"
+      >
+        Skip to main content
+      </a>
+      <div className="flex min-h-screen bg-slate-50 text-slate-900">
+        <Nav />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <Header />
+          <main
+            id="main"
+            tabIndex={-1}
+            className="mx-auto w-full max-w-5xl px-4 py-6 pb-28 outline-none lg:px-8 lg:py-8 lg:pb-16"
+          >
+            {children}
+          </main>
         </div>
-        <main className="min-h-[calc(100vh-65px)] flex">
-          <div className="flex-1">
-            <PollDataProvider>{children}</PollDataProvider>
-          </div>
-        </main>
       </div>
     </div>
   );

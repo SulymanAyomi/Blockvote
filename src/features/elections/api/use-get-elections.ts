@@ -1,30 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { client } from "@/lib/rpc";
+import { unwrap } from "@/lib/api";
 
-
-interface useGetInfoProps {
-    regSessionId: string;
+interface useGetElectionsProps {
+    status?: string;
+    page: string;
+    limit: string
 }
-
-export const useGetElections = () => {
+export const useGetElections = (filter: useGetElectionsProps) => {
     const query = useQuery({
-        queryKey: ["elections"],
-        queryFn: async () => {
-            console.log("I rannnnnn")
-            const response = await client.api.election.ongoing["$get"]({
-
-            })
-
-            if (!response.ok) {
-                throw new Error("Something went wrong")
+        queryKey: ["elections", filter],
+        queryFn: async () => unwrap(await client.api.election.all["$get"]({
+            query: {
+                ...filter
             }
-
-            const { data } = await response.json()
-
-            console.log("data", data)
-            return data
-        }
+        }))
     })
     return query
 }

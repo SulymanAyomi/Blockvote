@@ -10,4 +10,4 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
 }
 
-export const config = { matcher: ['/elections/:path*', '/api/elections/:path*', "/home"] };
+export const config = { matcher: ['/elections/:path*', '/api/elections/:path*', "/home", "/dashboard"] };

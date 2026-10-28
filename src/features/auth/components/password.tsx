@@ -1,34 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  LoaderCircleIcon,
-  LucideArrowRight,
-  MoveRightIcon,
-} from "lucide-react";
+import { LoaderCircleIcon, MoveRightIcon } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
-import { idSelectionSchema, setPasswordSchema } from "../schema";
+import { setPasswordSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DataType } from "../type";
-import { toast } from "sonner";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { useVerifyNin } from "../api/use-verify";
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { usePassword } from "../api/use-password";
 
 interface PasswordComponentProps {

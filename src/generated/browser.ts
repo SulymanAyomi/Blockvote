@@ -113,25 +113,40 @@ export type ElectionParticipation = Prisma.ElectionParticipationModel
  */
 export type VotingSession = Prisma.VotingSessionModel
 /**
- * Model IssuedNonce
- * 
- */
-export type IssuedNonce = Prisma.IssuedNonceModel
-/**
  * Model Ballot
  * 
  */
 export type Ballot = Prisma.BallotModel
+/**
+ * Model SpentToken
+ * 
+ */
+export type SpentToken = Prisma.SpentTokenModel
+/**
+ * Model PendingBallot
+ * 
+ */
+export type PendingBallot = Prisma.PendingBallotModel
 /**
  * Model Vote
  * 
  */
 export type Vote = Prisma.VoteModel
 /**
+ * Model ElectionTally
+ * 
+ */
+export type ElectionTally = Prisma.ElectionTallyModel
+/**
  * Model BlockchainElection
  * 
  */
 export type BlockchainElection = Prisma.BlockchainElectionModel
+/**
+ * Model BlockchainBatch
+ * 
+ */
+export type BlockchainBatch = Prisma.BlockchainBatchModel
 /**
  * Model BlockchainBallot
  * 
@@ -152,6 +167,16 @@ export type Admin = Prisma.AdminModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model Announcement
+ * 
+ */
+export type Announcement = Prisma.AnnouncementModel
 /**
  * Model SystemSetting
  * 

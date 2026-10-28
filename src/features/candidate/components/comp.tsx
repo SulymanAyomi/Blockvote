@@ -625,40 +625,40 @@
 //             </div>
 //           </div>
 
-//           <div className="flex items-center gap-5">
-//             <div className="text-[13px] text-slate-500">
-//               <span
-//                 className="mr-1 font-bold text-slate-800"
-//                 style={{ fontFamily: "JetBrains Mono, monospace" }}
-//               >
-//                 {totalAssigned}
-//               </span>
-//               {position.max != null ? (
-//                 <>
-//                   of{" "}
-//                   <span style={{ fontFamily: "JetBrains Mono, monospace" }}>
-//                     {position.max}
-//                   </span>{" "}
-//                   candidates assigned
-//                 </>
-//               ) : (
-//                 "candidates assigned"
-//               )}
-//             </div>
-//             {position.max != null && (
-//               <div className="h-1.5 w-28 overflow-hidden rounded-full bg-slate-100">
-//                 <div
-//                   className="h-full rounded-full transition-all"
-//                   style={{
-//                     width: `${Math.min(100, (totalAssigned / position.max) * 100)}%`,
-//                     background: limitReached ? "#C4291D" : "#2454E8",
-//                   }}
-//                 />
-//               </div>
-//             )}
-//             {limitReached && <Badge tone="amber">Limit reached</Badge>}
-//           </div>
-//         </div>
+//   <div className="flex items-center gap-5">
+//     <div className="text-[13px] text-slate-500">
+//       <span
+//         className="mr-1 font-bold text-slate-800"
+//         style={{ fontFamily: "JetBrains Mono, monospace" }}
+//       >
+//         {totalAssigned}
+//       </span>
+//       {position.max != null ? (
+//         <>
+//           of{" "}
+//           <span style={{ fontFamily: "JetBrains Mono, monospace" }}>
+//             {position.max}
+//           </span>{" "}
+//           candidates assigned
+//         </>
+//       ) : (
+//         "candidates assigned"
+//       )}
+//     </div>
+//     {position.max != null && (
+//       <div className="h-1.5 w-28 overflow-hidden rounded-full bg-slate-100">
+//         <div
+//           className="h-full rounded-full transition-all"
+//           style={{
+//             width: `${Math.min(100, (totalAssigned / position.max) * 100)}%`,
+//             background: limitReached ? "#C4291D" : "#2454E8",
+//           }}
+//         />
+//       </div>
+//     )}
+//     {limitReached && <Badge tone="amber">Limit reached</Badge>}
+//   </div>
+// </div>
 
 //         <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_320px]">
 //           {/* Left: search/filters + table */}

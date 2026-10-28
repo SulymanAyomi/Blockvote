@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/app/(app)/new/components/mockDb.jsx"  ],
   "exclude": ["node_modules"]
 }

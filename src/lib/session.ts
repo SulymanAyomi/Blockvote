@@ -3,8 +3,7 @@ import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 
 interface SessionData {
-    id: string;
-    isLoggedIn: boolean;
+    id: string; sid: string; isLoggedIn: boolean
 }
 
 export async function getSession() {
@@ -16,6 +15,7 @@ export async function getSession() {
             httpOnly: true,
             sameSite: 'strict',
             maxAge: 60 * 60, // 15 minutes
+            ttl: 60 * 60
         },
     });
 }
